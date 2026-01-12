@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>塔斯曼尼亞 + 悉尼 10 天自駕遊</title>
+    <title>2026 塔斯曼尼亞 10天自駕</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -16,12 +16,12 @@
     <style>
         body {
             font-family: 'Zen Maru Gothic', sans-serif;
-            background-color: #F3F4F6; /* 淺灰白 */
+            background-color: #F8FAFC; /* 極淺藍灰 */
             overscroll-behavior-y: none;
         }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        .soft-shadow { box-shadow: 0 4px 20px rgba(0, 106, 78, 0.15); }
+        .soft-shadow { box-shadow: 0 4px 25px rgba(37, 99, 235, 0.15); }
     </style>
     
     <script>
@@ -30,13 +30,13 @@
                 extend: {
                     colors: {
                         tas: {
-                            100: '#E8F5E9', 
-                            200: '#C8E6C9', 
-                            300: '#A5D6A7',
-                            500: '#4CAF50', 
-                            600: '#006A4E', // Tasmania Green
-                            700: '#1B5E20',
-                            gold: '#FFCC00', // Aussie Gold
+                            100: '#EFF6FF', // Blue 50
+                            200: '#BFDBFE', // Blue 200
+                            300: '#93C5FD', // Blue 300
+                            500: '#3B82F6', // Blue 500
+                            600: '#2563EB', // Blue 600 (Main Brand Color)
+                            700: '#1D4ED8', // Blue 700
+                            gold: '#F59E0B', // Amber 500 (Highlight)
                         }
                     }
                 }
@@ -50,7 +50,7 @@
 
         <div class="relative h-[250px] flex-shrink-0 bg-cover bg-center transition-all duration-500"
              style="background-image: url('./header.png'), url('./header.jpg');">
-            <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black/60"></div>
+            <div class="absolute inset-0 bg-gradient-to-b from-slate-900/40 to-slate-900/80"></div>
             
             <div class="absolute bottom-8 right-4 flex space-x-3 z-20">
                 <button @click="currentTab = 'itinerary'" :class="tabClass('itinerary')"><i class="fa-solid fa-map-location-dot text-lg"></i></button>
@@ -61,38 +61,38 @@
             
             <div class="absolute bottom-10 left-6 text-white text-shadow drop-shadow-md">
                 <h1 class="text-2xl font-bold tracking-widest">TASMANIA 2026</h1>
-                <p class="text-sm opacity-90"><i class="fa-solid fa-road mr-1 text-tas-gold"></i>Road Trip & Nature</p>
+                <p class="text-sm opacity-90"><i class="fa-solid fa-earth-oceania mr-1 text-tas-300"></i>10 Days Road Trip</p>
             </div>
         </div>
 
-        <div class="flex-1 bg-tas-100 rounded-t-[30px] -mt-6 relative z-10 overflow-hidden flex flex-col shadow-[0_-5px_20px_rgba(0,0,0,0.1)]">
+        <div class="flex-1 bg-white rounded-t-[30px] -mt-6 relative z-10 overflow-hidden flex flex-col shadow-[0_-5px_20px_rgba(0,0,0,0.05)]">
             <div class="flex-1 overflow-y-auto no-scrollbar p-5 pb-24">
 
                 <div v-if="currentTab === 'itinerary'">
                     <div class="flex space-x-3 overflow-x-auto no-scrollbar mb-6 py-2">
                         <div v-for="(day, index) in days" :key="index" @click="selectedDayIndex = index"
-                             class="flex-shrink-0 flex flex-col items-center justify-center w-16 h-20 rounded-2xl transition-all duration-300 snap-center cursor-pointer border border-white/50"
-                             :class="selectedDayIndex === index ? 'bg-tas-600 text-white shadow-lg scale-105' : 'bg-white text-gray-400'">
+                             class="flex-shrink-0 flex flex-col items-center justify-center w-16 h-20 rounded-2xl transition-all duration-300 snap-center cursor-pointer border border-gray-100"
+                             :class="selectedDayIndex === index ? 'bg-tas-600 text-white shadow-lg scale-105' : 'bg-white text-gray-400 border-gray-200'">
                             <span class="text-xs font-bold uppercase">{{ day.weekday }}</span>
                             <span class="text-xl font-bold">{{ day.date }}</span>
                             <span class="text-[10px] opacity-80">Day {{ day.dayNum }}</span>
                         </div>
                     </div>
 
-                    <div class="bg-gradient-to-r from-green-100 to-tas-200 rounded-2xl p-4 mb-12 flex items-center justify-between shadow-sm text-slate-700">
+                    <div class="bg-gradient-to-r from-blue-50 to-tas-100 rounded-2xl p-4 mb-12 flex items-center justify-between shadow-sm text-slate-700 border border-blue-100">
                         <div>
-                            <div class="text-xs opacity-70 flex items-center gap-1"><i class="fa-solid fa-location-dot"></i> {{ weather.city_name }}</div>
-                            <div class="text-2xl font-bold">{{ weather.temp }}°C <span class="text-sm font-normal text-gray-500">體感 {{ weather.feels_like }}°C</span></div>
+                            <div class="text-xs opacity-70 flex items-center gap-1"><i class="fa-solid fa-location-dot text-tas-500"></i> {{ weather.city_name }}</div>
+                            <div class="text-2xl font-bold text-tas-700">{{ weather.temp }}°C <span class="text-sm font-normal text-gray-500">體感 {{ weather.feels_like }}°C</span></div>
                         </div>
-                        <i :class="['fa-solid', weather.icon, 'text-4xl text-tas-gold drop-shadow-sm']"></i>
+                        <i :class="['fa-solid', weather.icon, 'text-4xl text-yellow-400 drop-shadow-sm']"></i>
                     </div>
 
                     <div class="space-y-0 relative">
-                        <div class="absolute left-[22px] top-4 bottom-4 w-0.5 bg-tas-300 opacity-50 z-0"></div>
+                        <div class="absolute left-[22px] top-4 bottom-4 w-0.5 bg-tas-200 opacity-50 z-0"></div>
 
                         <div v-for="(item, idx) in currentDayItinerary" :key="item.id" class="relative pl-12 pb-14 group">
                             <div v-if="idx > 0" class="absolute -top-9 left-12 right-0 flex items-center text-xs text-tas-600 mb-2 z-50">
-                                <span class="bg-tas-100 px-3 py-1 rounded-full border border-tas-200 flex items-center gap-1 shadow-sm font-bold whitespace-nowrap">
+                                <span class="bg-white px-3 py-1 rounded-full border border-tas-200 flex items-center gap-1 shadow-sm font-bold whitespace-nowrap text-tas-600">
                                     <i :class="getTransportIcon(item.transportType)"></i>
                                     {{ item.travelTime || '移動' }}
                                 </span>
@@ -100,11 +100,11 @@
                             <div class="absolute left-0 top-4 w-11 h-11 rounded-full bg-white border-4 border-tas-100 flex items-center justify-center z-10 shadow-sm text-tas-600 font-bold text-xs">
                                 {{ item.time.split(':')[0] }}
                             </div>
-                            <div class="bg-white rounded-2xl p-4 soft-shadow relative overflow-hidden transition-all active:scale-95"
-                                 :class="{'border-l-4 border-orange-300': item.category === 'flight', 'border-l-4 border-tas-500': item.category !== 'flight'}">
+                            <div class="bg-white rounded-2xl p-4 soft-shadow relative overflow-hidden transition-all active:scale-95 border border-gray-50"
+                                 :class="{'border-l-4 border-orange-400': item.category === 'flight', 'border-l-4 border-tas-500': item.category !== 'flight'}">
                                 <div @click="openMap(item.location)">
                                     <div class="flex justify-between items-start mb-1">
-                                        <div class="text-xs font-bold text-tas-600 uppercase tracking-wider">{{ item.time }} • {{ itemCategoryName(item.category) }}</div>
+                                        <div class="text-xs font-bold text-tas-500 uppercase tracking-wider">{{ item.time }} • {{ itemCategoryName(item.category) }}</div>
                                         <div class="flex gap-2">
                                             <button @click.stop="moveItem(idx, -1)" v-if="idx > 0" class="text-gray-300 hover:text-tas-600"><i class="fa-solid fa-chevron-up"></i></button>
                                             <button @click.stop="moveItem(idx, 1)" v-if="idx < currentDayItinerary.length - 1" class="text-gray-300 hover:text-tas-600"><i class="fa-solid fa-chevron-down"></i></button>
@@ -113,7 +113,7 @@
                                     </div>
                                     <h3 class="text-lg font-bold mb-1 leading-tight text-slate-800">{{ item.title }}</h3>
                                     <div class="text-sm text-gray-500 mb-2 flex items-start gap-1" v-if="item.desc">
-                                        <i class="fa-regular fa-note-sticky mt-0.5 text-xs flex-shrink-0 text-tas-500"></i>
+                                        <i class="fa-regular fa-note-sticky mt-0.5 text-xs flex-shrink-0 text-tas-400"></i>
                                         <span class="whitespace-pre-line text-xs">{{ item.desc }}</span>
                                     </div>
                                     
@@ -123,7 +123,7 @@
                                     </div>
                                     
                                     <div class="flex flex-wrap gap-2 mt-2">
-                                        <span v-if="item.transportType === 'car'" class="text-[10px] bg-blue-50 text-blue-500 px-2 py-1 rounded-md"><i class="fa-solid fa-car mr-1"></i>自駕</span>
+                                        <span v-if="item.transportType === 'car'" class="text-[10px] bg-blue-50 text-blue-600 px-2 py-1 rounded-md"><i class="fa-solid fa-car mr-1"></i>自駕</span>
                                         <span v-if="item.location" class="text-[10px] bg-gray-100 text-gray-500 px-2 py-1 rounded-md"><i class="fa-solid fa-location-arrow mr-1"></i>導航</span>
                                     </div>
                                 </div>
@@ -139,7 +139,7 @@
                 <div v-if="currentTab === 'info'" class="space-y-6">
                     
                     <div class="bg-white rounded-2xl p-0 soft-shadow overflow-hidden border-l-4 border-tas-600">
-                        <div class="bg-tas-100 p-3 text-tas-700 font-bold flex justify-between items-center">
+                        <div class="bg-tas-100 p-3 text-tas-800 font-bold flex justify-between items-center">
                             <span><i class="fa-solid fa-file-lines mr-2"></i>完整行程表</span>
                         </div>
                         <div class="p-4">
@@ -151,7 +151,7 @@
                     </div>
 
                     <div class="bg-white rounded-2xl p-4 soft-shadow">
-                        <h3 class="font-bold text-gray-600 mb-3"><i class="fa-solid fa-clipboard-check mr-2"></i>出發前 Checklist</h3>
+                        <h3 class="font-bold text-slate-700 mb-3"><i class="fa-solid fa-clipboard-check mr-2 text-tas-500"></i>出發前 Checklist</h3>
                         <div class="space-y-2 text-sm">
                             <div class="flex items-center gap-2"><input type="checkbox" class="accent-tas-600"> 簽證: ETA / eVisitor</div>
                             <div class="flex items-center gap-2"><input type="checkbox" class="accent-tas-600"> 租車: 全保 (Zero Excess) 🚗</div>
@@ -163,7 +163,7 @@
                     </div>
 
                     <div class="bg-white rounded-2xl p-0 soft-shadow overflow-hidden border-l-4 border-blue-500">
-                        <div class="bg-blue-50 p-3 text-blue-700 font-bold flex justify-between">
+                        <div class="bg-blue-50 p-3 text-blue-800 font-bold flex justify-between">
                             <span><i class="fa-solid fa-car-side mr-2"></i>自駕注意 (Hobart -> Launceston)</span>
                         </div>
                         <div class="p-4 text-sm space-y-2">
@@ -173,8 +173,8 @@
                         </div>
                     </div>
                     
-                    <div class="bg-white rounded-2xl p-0 soft-shadow overflow-hidden border-2 border-tas-200">
-                        <div class="bg-tas-50 p-3 text-tas-700 font-bold flex justify-between items-center">
+                    <div class="bg-white rounded-2xl p-0 soft-shadow overflow-hidden border-2 border-red-100">
+                        <div class="bg-red-50 p-3 text-red-700 font-bold flex justify-between items-center">
                             <span><i class="fa-regular fa-bell mr-2"></i>To-Book 預訂清單</span>
                         </div>
                         <div class="p-4 space-y-4 text-sm">
@@ -204,19 +204,19 @@
                         <div class="p-5">
                             <div class="mb-4">
                                 <div class="flex justify-between text-xs text-gray-400 mb-1"><span>5/21 HKG → SYD</span></div>
-                                <div class="flex justify-between text-sm font-bold bg-tas-50 text-tas-700 p-2 rounded-lg"><span>QF128</span><span>19:30 -> 06:55+1</span></div>
+                                <div class="flex justify-between text-sm font-bold bg-tas-100 text-tas-700 p-2 rounded-lg"><span>QF128</span><span>19:30 -> 06:55+1</span></div>
                             </div>
                             <div class="mb-4">
                                 <div class="flex justify-between text-xs text-gray-400 mb-1"><span>5/22 SYD → HBA</span></div>
-                                <div class="flex justify-between text-sm font-bold bg-tas-50 text-tas-700 p-2 rounded-lg"><span>QF1533</span><span>12:05 -> 13:55</span></div>
+                                <div class="flex justify-between text-sm font-bold bg-tas-100 text-tas-700 p-2 rounded-lg"><span>QF1533</span><span>12:05 -> 13:55</span></div>
                             </div>
                             <div class="mb-4">
                                 <div class="flex justify-between text-xs text-gray-400 mb-1"><span>5/30 LST → SYD</span></div>
-                                <div class="flex justify-between text-sm font-bold bg-tas-50 text-tas-700 p-2 rounded-lg"><span>QF5746</span><span>09:45 -> 11:25</span></div>
+                                <div class="flex justify-between text-sm font-bold bg-tas-100 text-tas-700 p-2 rounded-lg"><span>QF5746</span><span>09:45 -> 11:25</span></div>
                             </div>
                             <div>
                                 <div class="flex justify-between text-xs text-gray-400 mb-1"><span>5/31 SYD → HKG</span></div>
-                                <div class="flex justify-between text-sm font-bold bg-tas-50 text-tas-700 p-2 rounded-lg"><span>QF127</span><span>10:10 -> 17:55</span></div>
+                                <div class="flex justify-between text-sm font-bold bg-tas-100 text-tas-700 p-2 rounded-lg"><span>QF127</span><span>10:10 -> 17:55</span></div>
                             </div>
                         </div>
                     </div>
@@ -305,6 +305,12 @@
                 <button @click="confirmAdd" class="w-full bg-tas-600 text-white font-bold py-4 rounded-xl mt-6 shadow-lg hover:bg-tas-500 transition-all">確認新增</button>
             </div>
         </div>
+
+        <div v-if="showImageModal" class="fixed inset-0 z-[60] flex items-center justify-center bg-black/90 backdrop-blur-sm p-4" @click="showImageModal = false">
+            <img :src="currentImageSrc" class="max-w-full max-h-full rounded-lg shadow-2xl object-contain transition-transform duration-300 scale-100" @click.stop>
+            <button class="absolute top-4 right-4 text-white text-3xl opacity-80 hover:opacity-100"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
     </div>
 
     <script>
@@ -316,6 +322,8 @@
                     currentTab: 'itinerary',
                     selectedDayIndex: 0,
                     showModal: false,
+                    showImageModal: false,
+                    currentImageSrc: '',
                     exchangeRate: 5.2, // AUD to HKD
                     calcAud: '',
                     calcHkd: '',
@@ -481,6 +489,7 @@
                     else this.calcAud = (this.calcHkd / this.exchangeRate).toFixed(2);
                 },
                 openMap(loc) { if(loc) window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(loc)}`, '_blank'); },
+                openImage(src) { this.currentImageSrc = src; this.showImageModal = true; },
                 tabClass(tab) { return this.currentTab === tab ? 'bg-tas-600 text-white w-12 h-12 rounded-full shadow-lg flex items-center justify-center transform scale-110' : 'bg-white/90 text-tas-600 w-10 h-10 rounded-full shadow flex items-center justify-center'; },
                 getCategoryIcon(cat) { const map = { food: 'fa-utensils', transport: 'fa-car', shopping: 'fa-bag-shopping', ticket: 'fa-ticket', hotel: 'fa-bed' }; return `fa-solid ${map[cat] || 'fa-circle'}`; },
                 getTransportIcon(type) { const map = { walk: 'fa-person-walking', train: 'fa-train', car: 'fa-car', bus: 'fa-bus', flight: 'fa-plane', ship: 'fa-ship' }; return `fa-solid ${map[type] || 'fa-arrow-right'}`; },
