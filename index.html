@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>2026 塔斯曼尼亞 10天自駕 (V49 Google 真實數據版)</title>
+    <title>2026 塔斯曼尼亞 10天自駕 (V51 終極版)</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.3.4/vue.global.min.js"></script>
@@ -100,18 +100,12 @@
                         <i :class="['fa-solid', weather.icon, 'text-4xl text-yellow-400']"></i>
                     </div>
 
-                    <div v-if="dailyRemarks[selectedDayIndex]" class="remarks-box p-4 mb-8 soft-shadow">
-                        <div class="text-sm font-black text-tas-700 mb-2 border-b-2 border-tas-200 pb-1">
-                            <i class="fa-solid fa-lightbulb mr-2"></i>今日重點提醒
-                        </div>
-                        <div class="text-xs space-y-3 leading-relaxed" v-html="formatText(dailyRemarks[selectedDayIndex])"></div>
-                    </div>
-
                     <div class="space-y-0 relative">
                         <div class="absolute left-[22px] top-4 bottom-4 w-0.5 bg-tas-200 opacity-50 z-0"></div>
 
                         <div v-for="(item, idx) in currentDayItinerary" :key="item.id" class="relative pl-12 pb-14 group">
-                            <div v-if="idx > 0 && item.travelTime" class="absolute -top-9 left-12 right-0 flex items-center text-xs text-tas-600 mb-2 z-50">
+                            
+                            <div v-if="item.travelTime" class="absolute -top-9 left-12 right-0 flex items-center text-xs text-tas-600 mb-2 z-50">
                                 <span class="bg-blue-50 text-blue-700 px-3 py-1.5 rounded-full border border-blue-200 flex items-center gap-1.5 shadow-sm font-black whitespace-nowrap">
                                     <i :class="getTransportIcon(item.transportType)"></i>
                                     {{ item.travelTime }}
@@ -127,10 +121,12 @@
                                      'border-l-4 border-purple-400': item.category === 'hotel',
                                      'border-l-4 border-tas-500': item.category !== 'flight' && item.category !== 'hotel'
                                  }">
+                                
                                 <div @click="openMap(item.location)">
                                     <div class="flex justify-between items-start mb-1">
                                         <div class="text-xs font-bold text-tas-500 uppercase tracking-wider">{{ item.time }} • {{ itemCategoryName(item.category) }}</div>
                                     </div>
+                                    
                                     <h3 class="text-lg font-bold mb-1 leading-tight text-slate-800" v-html="formatText(item.title)"></h3>
                                     
                                     <div class="text-sm text-gray-500 mb-2 flex items-start gap-1.5" v-if="item.desc">
@@ -138,13 +134,10 @@
                                         <span class="whitespace-pre-line text-xs leading-relaxed" v-html="formatText(item.desc)"></span>
                                     </div>
                                     
-                                    <div v-if="item.info" class="mt-2 p-2 bg-red-50 rounded-lg text-xs text-red-600 border border-red-100 flex items-start gap-1.5">
-                                        <i class="fa-solid fa-circle-exclamation mt-0.5 flex-shrink-0"></i>
-                                        <span class="font-bold leading-relaxed whitespace-pre-line" v-html="formatText(item.info)"></span>
-                                    </div>
-                                    
                                     <div class="flex flex-wrap gap-2 mt-3">
                                         <span v-if="item.transportType === 'car'" class="text-[10px] bg-blue-50 text-blue-600 px-2 py-1 rounded-md font-bold border border-blue-100"><i class="fa-solid fa-car mr-1"></i>自駕</span>
+                                        <span v-if="item.transportType === 'walk'" class="text-[10px] bg-green-50 text-green-600 px-2 py-1 rounded-md font-bold border border-green-100"><i class="fa-solid fa-person-walking mr-1"></i>步行</span>
+                                        <span v-if="item.transportType === 'ship'" class="text-[10px] bg-indigo-50 text-indigo-600 px-2 py-1 rounded-md font-bold border border-indigo-100"><i class="fa-solid fa-ship mr-1"></i>渡輪</span>
                                         <span v-if="item.location" class="text-[10px] nav-btn px-3 py-1 rounded-md font-bold flex items-center gap-1 shadow-sm"><i class="fa-solid fa-location-arrow"></i> 開啟 Google Map</span>
                                     </div>
                                 </div>
@@ -182,34 +175,14 @@
                             <div>
                                 <h4 class="font-bold text-tas-600 mb-2 border-b border-tas-100 pb-1">🎟️ 門票 & Tour (需提前訂)</h4>
                                 <ul class="space-y-2 text-xs text-gray-600 ml-2 list-disc">
-                                    <li><span class="font-bold text-slate-800">MONA Ferry & Ticket (Day 2):</span> <br><span class="price-highlight">69 AUD/人 (約 HKD 400)</span> (Posh Pit 位好快無)</li>
-                                    <li><span class="font-bold text-slate-800">Seafood Cruise (Day 3):</span> <br><span class="price-highlight">約 HKD 2800/人</span> (極重要！一日一班)</li>
-                                    <li><span class="font-bold text-slate-800">Bruny Island Ferry (Day 5):</span> <br><span class="price-highlight">55.8 AUD/車 (約 HKD 335)</span> (建議網上買 QR Code)</li>
-                                    <li><span class="font-bold text-slate-800">Maria Island Ferry (Day 6):</span> <br><span class="price-highlight">56.5 AUD/人 (約 HKD 339)</span> (必須預約來回)</li>
-                                    <li><span class="font-bold text-slate-800">Oyster Bay Tour (Day 7):</span> <br><span class="price-highlight">170 AUD/人 (約 HKD 1020)</span> (如參加 Tour 必須訂)</li>
-                                    <li><span class="font-bold text-slate-800">Parks Pass (Holiday Pass):</span> <br><span class="price-highlight">95.5 AUD/車 (約 HKD 573)</span> (網上買定印出嚟)</li>
+                                    <li><span class="font-bold text-slate-800">MONA Ferry & Ticket:</span> <br><span class="price-highlight">69 AUD/人 (約 HKD 400)</span></li>
+                                    <li><span class="font-bold text-slate-800">Seafood Cruise:</span> <br><span class="price-highlight">約 HKD 2800/人</span></li>
+                                    <li><span class="font-bold text-slate-800">Bruny Island Ferry:</span> <br><span class="price-highlight">55.8 AUD/車 (約 HKD 335)</span></li>
+                                    <li><span class="font-bold text-slate-800">Maria Island Ferry:</span> <br><span class="price-highlight">56.5 AUD/人 (約 HKD 339)</span></li>
+                                    <li><span class="font-bold text-slate-800">Oyster Bay Tour:</span> <br><span class="price-highlight">170 AUD/人 (約 HKD 1020)</span></li>
+                                    <li><span class="font-bold text-slate-800">Parks Pass:</span> <br><span class="price-highlight">95.5 AUD/車 (約 HKD 573)</span></li>
                                 </ul>
                             </div>
-                            <div>
-                                <h4 class="font-bold text-tas-600 mb-2 border-b border-tas-100 pb-1">✈️ 機票 & 🚗 租車</h4>
-                                <ul class="space-y-1 text-xs text-gray-600 ml-2 list-disc">
-                                    <li>香港 ↔ 悉尼 (Qantas)</li>
-                                    <li>悉尼 → Hobart / Launceston → 悉尼</li>
-                                    <li><span class="text-red-600 font-bold">租車: 異地還車。必須加購全保 (Zero Excess)</span></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-white rounded-2xl p-4 soft-shadow">
-                        <h3 class="font-bold text-slate-700 mb-3"><i class="fa-solid fa-clipboard-check mr-2 text-tas-500"></i>出發前 Checklist</h3>
-                        <div class="space-y-2 text-sm">
-                            <div class="flex items-center gap-2"><input type="checkbox" class="accent-tas-600"> 簽證: ETA / eVisitor</div>
-                            <div class="flex items-center gap-2"><input type="checkbox" class="accent-tas-600"> <span class="text-red-600 font-bold">租車: 必買全保 (Zero Excess) 防袋鼠/碎石</span></div>
-                            <div class="flex items-center gap-2"><input type="checkbox" class="accent-tas-600"> 證件: 國際車牌 + 香港車牌</div>
-                            <div class="flex items-center gap-2"><input type="checkbox" class="accent-tas-600"> 購買 Parks Pass ($95.5/車) 🌲</div>
-                            <div class="flex items-center gap-2"><input type="checkbox" class="accent-tas-600"> <span class="text-red-600 font-bold">必訂: Cruise / 企鵝 / 住宿</span></div>
-                            <div class="flex items-center gap-2"><input type="checkbox" class="accent-tas-600"> <span class="text-red-600 font-bold">行李: 5月山區寒冷(0-5度)，備厚褸/冷帽</span></div>
                         </div>
                     </div>
                     
@@ -315,135 +288,145 @@
 
                     dailyRemarks: {
                         0: `🚀 <b>香港出發往悉尼</b>\n落機後提醒：\n• 🛬 到達：SYD T1（國際）去T2轉機\n• 🧭 T1 → T2 (國內)：需轉乘接駁，預留充足時間提取/重託行李\n• ☕ T2 早餐：等機去 Hobart 前先食個早餐休息\n⭐ 今日貼士：\n• 🥤 多飲水：長途機易脫水\n• 🧥 備羽絨：夜機冷氣強\n• 📲 開漫遊：抵達即用`,
-                        1: `🚗 <b>今日交通概況</b>\n• 🧳 13:55 抵達 HBA（D 航站） → 拎行李\n• 🚕 HBA → CBD：約 20 分鐘 (車資 A$45–65)\n• 🅿️ 泊車：市中心以咪錶/停車場為主 (Salamanca Square 或 Centrepoint)\n⭐ 今日貼士：\n• 🌤️ 防風外套：Hobart 傍晚風大\n• 📸 日落打卡：16:30–18:00 光線最靚\n• 🎫 預約：MONA Ferry 及海鮮 Cruise 儘早預訂`,
-                        2: `🚶‍♂️ <b>步行交通概覽</b>\n• Salamanca ↔ 碼頭：5–8 分鐘\n• MONA Ferry 去回：25–30 分鐘\n• Frank ↔ 碼頭：1–2 分鐘\n• ✅ 全日路段平坦無斜坡\n⭐ 今日貼士：\n• 🎪 Salamanca Market：建議早到避免人潮\n• 🖼️ MONA：最好由底層開始行\n• 🚤 Ferry：早 10–15 分排隊較舒服\n• 🍽️ Frank：週末建議提早訂位\n• 🌬️ 帶外套：Waterfront 黃昏會有風`,
+                        1: `🚗 <b>今日交通概況</b>\n• 🧳 13:55 抵達 HBA（D 航站） → 拎行李\n• 🚕 HBA → CBD：約 20 分鐘 (車資 A$45–65)\n• 🅿️ 泊車：市中心以咪錶/停車場為主\n⭐ 今日貼士：\n• 🌤️ 防風外套：Hobart 傍晚風大\n• 📸 日落打卡：16:30–18:00 光線最靚\n• 🎫 預約：MONA Ferry 及海鮮 Cruise 儘早預訂`,
+                        2: `🚶‍♂️ <b>步行交通概覽</b>\n• Salamanca ↔ 碼頭：5–8 分鐘\n• MONA Ferry 去回：25–30 分鐘\n• Frank ↔ 碼頭：1–2 分鐘\n• ✅ 全日路段平坦無斜坡\n⭐ 今日貼士：\n• 🎪 Salamanca Market：建議早到避免人潮\n• 🖼️ MONA：最好由底層開始行\n• 🚤 Ferry：早 10–15 分排隊較舒服\n• 🍽️ Frank：週末建議提早訂位`,
                         3: `🚗 <b>車程與路況</b>\n• Hobart → Mt Wellington：約 40 分鐘\n• ⚠️ 山路多彎風大，請慢速行駛\n• 🅿️ 泊車：回市區泊 Salamanca Square 最方便\n⭐ 今日貼士：\n• 🧥 山頂嚴寒：一定要帶外套\n• 🌬️ 握實手機：風大拍照要小心\n• 🚗 租車必問：不可上未鋪裝路段政策\n• 🌅 必睇夕陽：整個旅程中最靚之一！`,
                         4: `🚶‍♂️ <b>市區深度漫遊</b>\n• 全日步行為主，唔使搭車\n• 少量上落斜 (Kelly’s Steps)\n⭐ 今日貼士：\n• 🧥 防風：Battery Point 靠海下午風稍大\n• 📸 Arthur Circus：拍人像＋建築最啱\n• 🍰 Czegs Café：下午 3 點後較易有位\n• 🍽️ Da Angelo：週日強烈建議預約`,
-                        5: `🚗 <b>Bruny Island 長途動線</b>\n• Hobart → Kettering：約 35 分鐘 (34km)\n• Roberts Point ↔ 燈塔：單程約 1 小時\n🚦 交通注意事項：\n• 🦘 野生動物：黃昏回程請減速駕駛\n• 🛣️ 南端燈塔：路段狹窄、碎石窄路請慢速\n• 🚗 租車條款：確認是否可上渡輪/未鋪裝路\n• 📶 訊號弱：提前下載離線地圖\n⭐ 今日貼士：\n• ⛴️ 避尖峰：08:50 前到碼頭較穩\n• 🎫 票務：先買 QR 電子票排隊更快\n• 🧥 擋風：The Neck/燈塔風口位小心帽/圍巾`,
-                        6: `🐨 <b>Maria Island 探險</b>\n🚦 注意事項：\n• ⚠️ 45分鐘前報到：官方硬性要求\n• 📶 下載地圖：島上無訊號地方多\n• 🍱 島上無商店：所有飲食必須自備\n• 🐨 禁觸袋熊：野生袋熊只可遠觀\n• 🌙 黃昏行車：上 Bicheno 路段請保持慢速避動物\n⭐ 今日貼士：\n• 👟 穿運動鞋：島上風大、步道多\n• 📸 打卡：Painted Cliffs 最靚係靠近退潮時\n• 🐧 預約企鵝：Bicheno 夜間人氣活動必訂`,
-                        7: `🏞️ <b>酒杯灣與北上車程</b>\n🚗 車程：酒杯灣 → Campbell Town → Devonport (超過 240km 長征！)\n⭐ 今日貼士：\n• 🥾 小心石階：Wineglass Bay 前段有石階\n• 💧 自備水：步道內完全無補給\n• 🌬️ 擋風：Freycinet 風大帶薄外套\n• 🦪 準時到場：Oyster Tour 建議 10:50 到\n• ⛽ 加油站：建議 Bicheno/Coles Bay/Campbell Town 加滿油`,
-                        8: `🏔️ <b>Stanley 與搖籃山關鍵日</b>\n🚌 園內 Shuttle：8:45–16:00 運行\n⭐ 今日貼士：\n• 📸 必影船屋：Dove Lake 影 Boat Shed (約40-60m)\n• 🌲 輕鬆路線：Enchanted Walk (20m) 唔辛苦\n• 🚌 12:00 撤退：離開 Cradle 是今日行程最大關鍵\n• 📸 Godfreys Beach：影 The Nut 全貌更靚更易行\n• 🍽️ 必須預訂：Black Cow Bistro (18:00 最 Fit)`,
+                        5: `🚗 <b>Bruny Island 長途動線</b>\n• Hobart → Kettering：約 35 分鐘 (34km)\n• Roberts Point ↔ 燈塔：單程約 1 小時\n🚦 交通注意事項：\n• 🦘 野生動物：黃昏回程請減速駕駛\n• 🛣️ 南端燈塔：路段狹窄、碎石窄路請慢速\n• 🚗 租車條款：確認是否可上渡輪/未鋪裝路\n• 📶 訊號弱：提前下載離線地圖\n⭐ 今日貼士：\n• ⛴️ 避尖峰：08:50 前到碼頭較穩\n• 🎫 票務：先買 QR 電子票排隊更快`,
+                        6: `🐨 <b>Maria Island 探險</b>\n🚦 注意事項：\n• ⚠️ 45分鐘前報到：官方硬性要求\n• 📶 下載地圖：島上無訊號地方多\n• 🍱 島上無商店：所有飲食必須自備\n• 🐨 禁觸袋熊：野生袋熊只可遠觀\n• 🌙 黃昏行車：上 Bicheno 路段請保持慢速避動物\n⭐ 今日貼士：\n• 👟 穿運動鞋：島上風大、步道多\n• 📸 打卡：Painted Cliffs 最靚係退潮時\n• 🐧 預約企鵝：Bicheno 夜間活動必訂`,
+                        7: `🏞️ <b>酒杯灣與北上車程</b>\n🚗 車程：酒杯灣 → Campbell Town → Devonport (約 240km 長征)\n⭐ 今日貼士：\n• 🥾 小心石階：Wineglass Bay 前段有石階\n• 💧 自備水：步道內完全無補給\n• 🌬️ 擋風：Freycinet 風大帶薄外套\n• 🦪 準時到場：Oyster Tour 建議 10:50 到\n• ⛽ 加油站：建議 Bicheno/Campbell Town 加滿油`,
+                        8: `🏔️ <b>Stanley 與搖籃山關鍵日</b>\n🚌 園內 Shuttle：8:45–16:00 運行\n⭐ 今日貼士：\n• 📸 必影船屋：Dove Lake 影 Boat Shed (約40-60m)\n• 🌲 輕鬆路線：Enchanted Walk (20m) 唔辛苦\n• 🚌 12:00 撤退：離開 Cradle 是今日行程最大關鍵\n• 📸 Godfreys Beach：影 The Nut 全貌更易行\n• 🍽️ 必須預訂：Black Cow Bistro (18:00 最 Fit)`,
                         9: `✈️ <b>返悉尼轉機</b>\n🚗 車程：CBD → LST 機場約 15 分鐘\n⭐ 今日貼士：\n• 🧳 取行李：LST → SYD 通常要拎行李再 Check-in (轉 T1)\n• 🍷 最後晚餐：今晚係行程最後一晚，舒服食頓靚 Dinner\n• 🧥 悉尼天氣：5 月天氣 15–22°C 偏暖舒服`,
                         10: `✈️ <b>最後撤退香港</b>\n🚗 交通：CBD 出發預留 20-25 分鐘交通\n⭐ 提示：\n• 🛄 Qantas 國際航班建議 至少1.5小時前 到達\n• 📝 預留 45m Check-in + 20m 安檢排隊`
                     },
 
-                    // ✅ V49: 100% 精準 Google Maps 車程時間與距離！
+                    // ✅ V51: Title/Desc 100% 根據 PDF，TravelTime/Distance 100% 根據 Google 準確數據！
                     itineraryData: [
                         // Day 0
                         [
-                            { id: 1, time: `17:30`, title: `🛫 香港國際機場 (T1) 報到/安檢`, category: `flight`, desc: `建議：至少 2 小時前到機 (長途夜機)\n準備：護照、澳洲 eVisitor/ETA、隨身藥品/保暖衣物\n電子：充電＋下載離線地圖`, location: `Hong Kong International Airport`, transportType: `walk` },
-                            { id: 2, time: `19:30`, title: `🛫 HKG → SYD (QF128)`, category: `flight`, desc: `飛行時間約 9h 15m (機上盡量睡眠)`, transportType: `flight`, location: `Sydney Airport` }
+                            { id: 1, time: `17:30`, title: `香港國際機場`, category: `transport`, desc: `QF128\n建議 至少 2 小時 前到機（長途夜機）\n準備好：護照、澳洲 eVisitor/ETA、已填寫行李標籤、隨身藥品／保暖衣物\n充電＋下載離線地圖（Hobart/Sydney）`, location: `Hong Kong International Airport`, transportType: `walk` },
+                            { id: 2, time: `19:30`, title: `QF128`, category: `flight`, desc: `飛行時間約 9h15m（機上盡量睡眠）\n到達：SYD T1（國際）`, transportType: `flight`, travelTime: `9h 15m 飛行 (7,390 km)`, location: `Sydney Airport` }
                         ],
                         // Day 1
                         [
-                            { id: 101, time: `06:45`, title: `🧭 抵達 Sydney (SYD) T1`, category: `transport`, desc: `T1 → T2(國內) 需轉乘接駁，預留充足時間提取/重託運行李。\n☕ 可於 T2 先食個早餐（咖啡＋三文治）`, location: `Sydney Airport Terminal 2` },
-                            { id: 102, time: `12:05`, title: `🛫 SYD(T2) → HBA (QF1533)`, category: `flight`, desc: `飛行約 1h50m`, transportType: `flight`, location: `Hobart Airport` },
-                            { id: 103, time: `14:30`, title: `機場 → North Hobart Airbnb`, category: `transport`, desc: `搭的士/Uber 前往 (車資約 A$45–65)`, location: `44 Church St, North Hobart`, transportType: `car`, travelTime: `20m (19 km)` },
-                            { id: 104, time: `15:00`, title: `🏠 【梳洗時間】入住民宿`, category: `hotel`, desc: `1 小時洗臉、整理行李、小休叉電\n📍 44 Church St, North Hobart`, info: `💡 Remarks：North Hobart 區位於斜坡，未拎車前建議搭 Uber，免卻上坡辛苦。`, location: `44 Church St, North Hobart` },
-                            { id: 105, time: `16:30`, title: `🌊 海濱散步`, category: `sightseeing`, desc: `• Woolworths Hobart CBD: 買補給品\n• Brooke Street Pier: 聽日搭 MONA Ferry 乘船處\n• Constitution Dock: 海鳥/漁船好影相位，黃昏光線靚`, transportType: 'walk', location: `Constitution Dock, Hobart` },
-                            { id: 106, time: `18:00`, title: `🍽️ 晚餐: 碼頭區推介`, category: `food`, desc: `Mures Lower Deck (必食：帶子咖喱批、深海魚魚柳)\n或 Pearl + Co (生蠔吧，建議黃昏入座睇日落)`, location: `Victoria Dock, Hobart` }
+                            { id: 101, time: `06:45`, title: `悉尼機場`, category: `transport`, desc: `Terminal 1 to Terminal 2\n悉尼國際／國內不同航站樓，需轉乘 航站樓接駁／地面交通，預留充足時間及提取／重託運行李\n可於 T2 先食個早餐（咖啡＋三文治），等候轉機至 Hobart`, location: `Sydney Airport Terminal 2` },
+                            { id: 102, time: `12:05`, title: `霍巴特國際機場`, category: `flight`, desc: `QF5721\n飛行約 1h50m`, transportType: `flight`, travelTime: `1h 50m 飛行 (1,040 km)`, location: `Hobart Airport` },
+                            { id: 103, time: `14:30`, title: `44 Church St`, category: `hotel`, desc: `Airbnb, By Taxi around AUD 45-65`, location: `44 Church St, North Hobart`, transportType: `car`, travelTime: `20m 車程 (19 km)` },
+                            { id: 105, time: `16:30`, title: `Brooke Street Pier`, category: `sightseeing`, desc: `聽日會喺呢度搭 MONA Ferry，今晚先行熟位置`, transportType: 'walk', travelTime: `5m 車程 / 25m 步行 (1.8 km)`, location: `Brooke Street Pier, Hobart` },
+                            { id: 106, time: `17:00`, title: `Woolworths Hobart Cbd`, category: `shopping`, desc: `補給~~~`, transportType: 'walk', travelTime: `6m 步行 (450 m)`, location: `Woolworths Hobart CBD` },
+                            { id: 107, time: `18:00`, title: `Mures Lower Deck`, category: `food`, desc: `Dinner?`, transportType: 'walk', travelTime: `6m 步行 (450 m)`, location: `Mures Lower Deck, Hobart` },
+                            { id: 108, time: `19:00`, title: `Pearl + Co`, category: `food`, desc: `Dinner?`, transportType: 'walk', travelTime: `1m 步行 (10 m)`, location: `Pearl + Co, Hobart` },
+                            { id: 109, time: `20:00`, title: `44 Church St`, category: `hotel`, desc: ``, transportType: `car`, travelTime: `8m 車程 (3 km)`, location: `44 Church St, North Hobart` }
                         ],
                         // Day 2
                         [
-                            { id: 201, time: `07:00`, title: `🏠 【梳洗時間】`, category: `hotel`, desc: `1 小時起床準備及化妝`, location: `44 Church St, North Hobart` },
-                            { id: 202, time: `08:00`, title: `☕ 早餐`, category: `food`, desc: `Machine Laundry Café（人氣早餐）\n或 Daci & Daci Bakers（法式麵包）`, transportType: `walk`, location: `Salamanca Square, Hobart` },
-                            { id: 203, time: `08:30`, title: `🎪 Salamanca Market`, category: `shopping`, desc: `週六限定！Hobart 最大周末市集\n必食：Smith’s pie (Scallops pie)\n買少少 snack / 咖啡邊行邊食`, transportType: `walk`, location: `Salamanca Market, Hobart` },
-                            { id: 206, time: `10:30`, title: `🖼️ MONA 參觀 & 搭船`, category: `sightseeing`, desc: `🚶‍♂️ 10:30 步行往 Brooke Street Pier\n🚤 11:15 搭 Ferry 前往博物館 (航程25-30m)\n<span class="price-highlight">💰 門票: $69 AUD/人 (約 HKD 400)</span>\n\n<b>11:45 抵達 MONA</b>\n建議用 MONA App (室內導覽非常準確)。由底層開始行。\n必影：入口大樓梯、鏡面房、地面雕塑。\n\n🚤 15:30 或 16:30 搭 Ferry 回市區`, location: `Museum of Old and New Art, Hobart` },
-                            { id: 209, time: `17:00`, title: `🍦 Van Diemens Land Creamery`, category: `food`, desc: `落船直落食手工雪糕`, transportType: `walk`, location: `Van Diemens Land Creamery, Hobart` },
-                            { id: 2095, time: `17:30`, title: `📸 Woolworths Hobart CBD`, category: `sightseeing`, desc: `將超市當景點行，發掘當地好物！買今晚煮飯仔食材！`, transportType: `walk`, location: `Woolworths Hobart` },
-                            { id: 210, time: `18:30`, title: `🍽️ 晚餐: 煮飯仔 @ Home`, category: `food`, desc: `利用 Airbnb 廚房煎塔州三文魚\n(建議搭 Uber 拎住戰利品返屋企)`, transportType: `car`, location: `44 Church St, North Hobart` }
+                            { id: 201, time: `08:00`, title: `44 Church St`, category: `hotel`, desc: ``, location: `44 Church St, North Hobart` },
+                            { id: 202, time: `08:30`, title: `Machine Laundry Cafe`, category: `food`, desc: `Breakfast Time~`, transportType: `car`, travelTime: `7m 車程 (1.8 km)`, location: `Machine Laundry Cafe, Hobart` },
+                            { id: 203, time: `09:30`, title: `Salamanca Market`, category: `shopping`, desc: `Smith's pie: Scallops pie`, transportType: `walk`, travelTime: `1m 步行 (10 m)`, location: `Salamanca Market, Hobart` },
+                            { id: 204, time: `10:30`, title: `Mona Ferry`, category: `transport`, desc: `Duration around 30 mins, AUD 30 round trip`, transportType: `walk`, travelTime: `8m 步行 (650 m)`, location: `Brooke Street Pier, Hobart` },
+                            { id: 205, time: `11:45`, title: `MONA`, category: `sightseeing`, desc: `Museum Ticket: AUD 39 adult, AUD 33 student`, transportType: `ship`, travelTime: `25m 船程 (11 km)`, location: `Museum of Old and New Art, Hobart` },
+                            { id: 206, time: `15:30`, title: `Mona Ferry`, category: `transport`, desc: `Duration around 30 mins, AUD 30 round trip`, transportType: `ship`, travelTime: `25m 船程 (11 km)`, location: `Brooke Street Pier, Hobart` },
+                            { id: 207, time: `16:30`, title: `Van Diemens Land Creamery`, category: `food`, desc: `ice-cream time`, transportType: `walk`, travelTime: `3m 步行 (250 m)`, location: `Van Diemens Land Creamery, Hobart` },
+                            { id: 208, time: `18:30`, title: `44 Church St`, category: `hotel`, desc: `煮飯仔@HOME~`, transportType: `car`, travelTime: `8m 車程 (1.8 km)`, location: `44 Church St, North Hobart` }
                         ],
                         // Day 3
                         [
-                            { id: 301, time: `08:00`, title: `🏠 【梳洗時間】`, category: `hotel`, desc: `1 小時梳理、收拾並退房 Check-out`, location: `44 Church St, North Hobart` },
-                            { id: 3015, time: `08:30`, title: `☕ 早餐: Hobart Coffee Roasters`, category: `food`, desc: `碼頭區 (麵包、咖啡、歐式早餐)`, transportType: `walk`, location: `Hobart Coffee Roasters` },
-                            { id: 302, time: `09:45`, title: `🐚 Seafood Cruise`, category: `food`, desc: `10:00 - 14:30 半日遊\n<span class="price-highlight">💰 費用: 約 HKD 2800/人</span>\n船上現食即開生蠔、海膽、青口、鮑魚、龍蝦。`, location: `Elizabeth Street Pier, Hobart`, transportType: `ship` },
-                            { id: 303, time: `14:30`, title: `🚖 前往 Cambridge 取車`, category: `transport`, desc: `搭的士前往 22 Cherokee Dr`, transportType: `car`, location: `22 Cherokee Dr, Cambridge TAS`, travelTime: `15m (16 km)` },
-                            { id: 304, time: `15:00`, title: `🚗 取車手續`, category: `transport`, desc: `檢查：影相留底，確認保險\n問清楚是否可上 Bruny Island Ferry。`, location: `22 Cherokee Dr, Cambridge TAS` },
-                            { id: 305, time: `15:30`, title: `⛰️ Mt Wellington 黃昏`, category: `sightseeing`, desc: `直上山頂約 40 分鐘。俯瞰全景及 Tasman Bridge。\n📸 必影：Organ Pipes 懸崖線條分明好靚！\n(如風大後備: Mount Nelson Signal Station)`, info: `💡 Remarks：山頂極冷，風力極強拍照要握實手機。下山天色暗，留意野生動物跳出。`, transportType: `car`, location: `Mount Wellington, TAS`, travelTime: `40m (33 km)` },
-                            { id: 306, time: `18:00`, title: `🛍️ Woolworths 買物資`, category: `shopping`, desc: `買聽日開始去 Bruny 同 Maria Island 嘅早餐同 Lunch 食材。`, transportType: `car`, location: `Woolworths Hobart` }
+                            { id: 301, time: `08:00`, title: `44 Church St`, category: `hotel`, desc: ``, location: `44 Church St, North Hobart` },
+                            { id: 302, time: `08:30`, title: `Hobart Coffee Roasters`, category: `food`, desc: ``, transportType: `car`, travelTime: `8m 車程 (2 km)`, location: `Hobart Coffee Roasters` },
+                            { id: 303, time: `09:45`, title: `Franklin Whrf`, category: `transport`, desc: ``, transportType: `walk`, travelTime: `3m 步行 (200 m)`, location: `Franklin Wharf, Hobart` },
+                            { id: 304, time: `10:00`, title: `Tasmanian Wild Seafood Adventures`, category: `food`, desc: `船程沿 Derwent River Bruny Island 水域`, transportType: `ship`, travelTime: `4.5h 船程`, location: `Tasmanian Wild Seafood Adventures` },
+                            { id: 305, time: `14:30`, title: `22 Cherokee Dr`, category: `transport`, desc: `拎車`, transportType: `car`, travelTime: `15m 車程 (16 km)`, location: `22 Cherokee Dr, Cambridge TAS` },
+                            { id: 306, time: `15:30`, title: `Mount Wellington`, category: `sightseeing`, desc: `俯瞰 Hobart、Derwent River、Tasman Bridge\nOrgan Pipes 懸崖線條分明好靚\n**如風太大:改去 Mount Nelson Signal Station`, transportType: `car`, travelTime: `40m 車程 (33 km)`, location: `Mount Wellington, TAS` },
+                            { id: 307, time: `18:00`, title: `Woolworths Hobart Cbd`, category: `shopping`, desc: `買野整早餐同lunch for Bruny Island & Maria Island`, transportType: `car`, travelTime: `30m 車程 (21 km)`, location: `Woolworths Hobart` },
+                            { id: 308, time: `20:00`, title: `44 Church St`, category: `hotel`, desc: `煮飯仔@HOME~`, transportType: `car`, travelTime: `6m 車程 (1.5 km)`, location: `44 Church St, North Hobart` }
                         ],
                         // Day 4
                         [
-                            { id: 401, time: `08:30`, title: `🏠 【梳洗時間】`, category: `hotel`, desc: `1 小時起床、化妝及預備`, location: `Hobart` },
-                            { id: 4015, time: `09:30`, title: `☕ 早餐: Daci & Daci Bakers`, category: `food`, desc: `法式麵包、牛角包、檸檬撻勁出色`, transportType: `walk`, location: `Daci and Daci Bakers Hobart` },
-                            { id: 402, time: `10:00`, title: `🏛️ Salamanca Place 小店巡禮`, category: `shopping`, desc: `📍 77 Salamanca Place (木藝/陶器)、Art Mob、Hammer & Hand。\n📸 推薦影相位：Salamanca Arts Centre 走廊 / 紅磚牆 / 樓梯＋小巷`, transportType: `walk`, location: `77 Salamanca Place, Hobart` },
-                            { id: 4025, time: `12:30`, title: `🍽️ 午餐: Mures Lower Deck`, category: `food`, desc: `主打海鮮、湯。食完順住海邊散步去 Kelly's Steps`, transportType: `walk`, location: `Mures Lower Deck, Hobart` },
-                            { id: 403, time: `13:45`, title: `🏡 Battery Point 文青散步`, category: `sightseeing`, desc: `路線：Brooke Street Pier → Kelly’s Steps (Hobart最經典古老石階) → Arthur Circus (彩色小屋) → Hampden Road。`, transportType: `walk`, location: `Arthur Circus, Battery Point` },
-                            { id: 404, time: `15:30`, title: `🍰 Czegs Café`, category: `food`, desc: `必食 Vanilla Slice 或 巨型 Puff`, transportType: `walk`, location: `Czegs Cafe` },
-                            { id: 405, time: `16:30`, title: `🏠 【梳洗時間】`, category: `hotel`, desc: `1 小時民宿小休、洗臉、準備晚餐預約`, location: `Hobart` },
-                            { id: 406, time: `18:15`, title: `🍽️ 晚餐: Da Angelo Ristorante`, category: `food`, desc: `<span class="font-bold text-green-600">✅ 已BOOK 6:15pm, 4位</span>\n📍 Hampden Road\n必食推介：Carbonara(招牌)、Mushroom Pizza(超香)、手工 Ravioli、Tiramisu(大推)`, transportType: `car`, location: `Da Angelo Ristorante, Battery Point` }
+                            { id: 401, time: `08:30`, title: `44 Church St`, category: `hotel`, desc: ``, location: `44 Church St, North Hobart` },
+                            { id: 402, time: `09:30`, title: `The Retro Cafe`, category: `food`, desc: ``, transportType: `car`, travelTime: `6m 車程 (1.5 km)`, location: `The Retro Cafe, Hobart` },
+                            { id: 403, time: `10:00`, title: `Salamanca Place`, category: `shopping`, desc: `(Tasmania 木藝、陶器、設計小物: *Socrates *Art Mob Hammer & Hand)\n推薦影相位:* Salamanca Arts Centre 走廊 紅磚牆*樓梯+小巷`, transportType: `walk`, travelTime: `3m 步行 (250 m)`, location: `Salamanca Place, Hobart` },
+                            { id: 404, time: `11:00`, title: `Art Mob - Aboriginal Fine Art`, category: `shopping`, desc: ``, transportType: `walk`, travelTime: `2m 步行 (150 m)`, location: `Art Mob, Hobart` },
+                            { id: 405, time: `11:30`, title: `Hammer & Hand Gallery`, category: `shopping`, desc: ``, transportType: `walk`, travelTime: `1m 步行 (50 m)`, location: `Hammer & Hand, Hobart` },
+                            { id: 406, time: `12:00`, title: `Flippers Cooked Seafood`, category: `food`, desc: `Fish n Chips~`, transportType: `walk`, travelTime: `6m 步行 (450 m)`, location: `Flippers Cooked Seafood, Hobart` },
+                            { id: 407, time: `12:45`, title: `Van Diemens Land Creamery`, category: `food`, desc: ``, transportType: `walk`, travelTime: `1m 步行 (80 m)`, location: `Van Diemens Land Creamery, Hobart` },
+                            { id: 408, time: `13:30`, title: `Mures Lower Deck`, category: `food`, desc: `海鮮、湯~`, transportType: `walk`, travelTime: `2m 步行 (150 m)`, location: `Mures Lower Deck, Hobart` },
+                            { id: 409, time: `14:00`, title: `Kelly's Steps`, category: `sightseeing`, desc: `Hobart 最經典嘅古老石階`, transportType: `walk`, travelTime: `10m 步行 (750 m)`, location: `Kelly's Steps, Battery Point` },
+                            { id: 410, time: `14:30`, title: `Arthur Circus Park`, category: `sightseeing`, desc: `彩色小屋+圓形小廣場,非常IG-able`, transportType: `walk`, travelTime: `3m 步行 (250 m)`, location: `Arthur Circus, Battery Point` },
+                            { id: 411, time: `15:30`, title: `Hammer & Hand Gallery`, category: `shopping`, desc: ``, transportType: `walk`, travelTime: `5m 步行 (400 m)`, location: `Hammer & Hand, Hobart` },
+                            { id: 412, time: `18:15`, title: `Da Angelo Ristorante`, category: `food`, desc: `* Carbonara(招牌) Mushroom Pizza(超香)*手工 Ravioli Tiramisu (大推)`, transportType: `walk`, travelTime: `5m 步行 (400 m)`, location: `Da Angelo Ristorante, Battery Point` },
+                            { id: 413, time: `20:00`, title: `44 Church St`, category: `hotel`, desc: ``, transportType: `car`, travelTime: `10m 車程 (3 km)`, location: `44 Church St, North Hobart` }
                         ],
                         // Day 5
                         [
-                            { id: 501, time: `06:45`, title: `🏠 【梳洗時間】`, category: `hotel`, desc: `1 小時起床準備、檢查裝備`, location: `Hobart` },
-                            { id: 5015, time: `07:30`, title: `☕ 早餐: Hobart Coffee Roasters`, category: `food`, desc: `食飽檢查油量，出發前加滿油！`, transportType: `car`, location: `Hobart Coffee Roasters` },
-                            { id: 502, time: `08:15`, title: `🚗 Hobart → Kettering`, category: 'transport', desc: '前往渡輪碼頭', transportType: `car`, location: `Kettering Ferry Terminal`, travelTime: `35m (34 km)` },
-                            { id: 504, time: `09:00`, title: `🏝️ Bruny Island 探險 & 搭船`, category: `sightseeing`, desc: `⛴️ 09:00 渡輪往 Bruny Island (人車上船)\n<span class="price-highlight">💰 船票: $55.8 AUD/車 (約 HKD 335)</span>\n\n• 📸 09:40 The Neck: 登200級木棧道至 Truganini Lookout 眺望南北海景\n• 🧀 10:30 Bruny Island Cheese Co. (連 Beer Co): 試乳酪拼盤\n• 🍞 11:10 Bruny Baker: 買 wood-fire sourdough、cinnamon loaf、Cookies (記得要現金)\n• 🦪 11:50 Get Shucked: 現食鮮甜生蠔\n• 🗼 12:30 Cape Bruny Lighthouse: 南端燈塔 (路窄要慢)\n• 🥾 14:30 Fluted Cape Track: 短線精華\n\n⛴️ 16:30 渡輪：Roberts Point 回 Kettering`, transportType: `car`, location: `Bruny Island` },
-                            { id: 506, time: `17:00`, title: `🚗 Kettering → Hobart CBD`, category: `transport`, desc: `直踩去碼頭區`, transportType: `car`, location: `Hobart`, travelTime: `40m (34 km)` },
-                            { id: 507, time: `17:40`, title: `🅿️ 泊車 & 補個靚妝`, category: `transport`, desc: `泊 Dunn Place Car Park 或 Salamanca Square`, transportType: `walk`, location: `Dunn Place Car Park` },
-                            { id: 508, time: `18:00`, title: `🍽️ 晚餐: Frank Restaurant`, category: `food`, desc: `<span class="font-bold text-green-600">✅ 已BOOK 6:00pm, 4位</span>\n📍 Franklin Wharf\n必食：Wood-fired flank steak(招牌)、Empanadas、Charred corn + queso、Cocktails(超好飲)！`, location: `Frank Restaurant Hobart` },
-                            { id: 509, time: `20:00`, title: `🚗 返 North Hobart 民宿`, category: `hotel`, desc: `食飽揸車返大本營大休息！`, transportType: `car`, location: `44 Church St, North Hobart` }
+                            { id: 501, time: `07:30`, title: `44 Church St`, category: `hotel`, desc: `Cook Breakfast and bring to Bruny Island`, location: `44 Church St, North Hobart` },
+                            { id: 502, time: `08:15`, title: `Kettering Ferry Terminal Tasmania`, category: `transport`, desc: `8:50 排隊輪候 for 9:10am, <6m 私家車約A$55.80(來回)\n每20-30分鐘一班,繁忙時段可加密,掃碼後排隊上下一班船;航程15-20分`, transportType: `car`, travelTime: `35m 車程 (34 km)`, location: `Kettering Ferry Terminal` },
+                            { id: 503, time: `09:40`, title: `Truganini Lookout`, category: `sightseeing`, desc: `觀景台&木棧道(同時眺望 North Bruny / South Bruny 兩邊海景+狹長地峽)`, transportType: `car`, travelTime: `20m 船程 + 25m 車程 (23 km)`, location: `The Neck Lookout, Bruny Island` },
+                            { id: 504, time: `10:30`, title: `Bruny Island Cheese Company`, category: `food`, desc: `Cheese and Coffee`, transportType: `car`, travelTime: `15m 車程 (14 km)`, location: `Bruny Island Cheese Company` },
+                            { id: 505, time: `11:00`, title: `Bruny Island Beer Co`, category: `food`, desc: `可試奶酪拼盤、咖啡、麵包`, transportType: `walk`, travelTime: `1m 步行 (50 m)`, location: `Bruny Island Beer Co` },
+                            { id: 506, time: `12:00`, title: `Adventure Bay Beach`, category: `sightseeing`, desc: ``, transportType: `car`, travelTime: `12m 車程 (12 km)`, location: `Adventure Bay Beach` },
+                            { id: 507, time: `14:00`, title: `Fluted Cape Walk`, category: `sightseeing`, desc: ``, transportType: `car`, travelTime: `3m 車程 (1 km)`, location: `Fluted Cape Walk` },
+                            { id: 508, time: `15:00`, title: `Bruny Baker Bread Fridge`, category: `food`, desc: `*wood-fire sourdough、cinnamon/sultana loaf、Cookies (記得要現金)`, transportType: `car`, travelTime: `15m 車程 (14 km)`, location: `Bruny Baker` },
+                            { id: 509, time: `15:30`, title: `Get Shucked`, category: `food`, desc: ``, transportType: `car`, travelTime: `5m 車程 (5 km)`, location: `Get Shucked, Bruny Island` },
+                            { id: 510, time: `16:00`, title: `Bruny Island Honey`, category: `shopping`, desc: ``, transportType: `car`, travelTime: `20m 車程 (19 km)`, location: `Bruny Island Honey` },
+                            { id: 511, time: `16:30`, title: `Roberts Point Kiosk`, category: `transport`, desc: `3:30/4:00 渡輪: Roberts Point Kettering(返本島)`, transportType: `car`, travelTime: `20m 車程 (18 km)`, location: `Roberts Point Ferry Terminal` },
+                            { id: 512, time: `18:00`, title: `Frank Restaurant`, category: `food`, desc: `*Wood-fired flank steak (Frank 招牌)*Empanadas Charred corn + queso Cocktails (超好飲)`, transportType: `car`, travelTime: `20m 船程 + 35m 車程 (33 km)`, location: `Frank Restaurant Hobart` },
+                            { id: 513, time: `19:30`, title: `Woolworths Hobart Cbd`, category: `shopping`, desc: `買野煮飯仔-整早餐同lunch for Maria Island 同準備北上長征`, transportType: `walk`, travelTime: `5m 步行 (400 m)`, location: `Woolworths Hobart` },
+                            { id: 514, time: `20:00`, title: `44 Church St`, category: `hotel`, desc: ``, transportType: `car`, travelTime: `6m 車程 (1.5 km)`, location: `44 Church St, North Hobart` }
                         ],
                         // Day 6
                         [
-                            { id: 601, time: `05:30`, title: `🏠 【梳洗時間】`, category: `hotel`, desc: `1 小時快速梳洗、搬行李上車`, location: `44 Church St, North Hobart` },
-                            { id: 6015, time: `06:30`, title: `☕ 早餐: 早起早餐`, category: `food`, desc: `提早一日買 Pigeon Whole Bakers (預埋島上 Lunch)`, transportType: `car`, location: `Pigeon Whole Bakers Hobart` },
-                            { id: 602, time: `07:00`, title: `🚗 Hobart → Triabunna`, category: `transport`, desc: `行李鎖車尾，車泊碼頭\n08:20 抵達報到`, transportType: `car`, location: `Triabunna Wharf`, travelTime: `1h 15m (85 km)` },
-                            { id: 603, time: `10:00`, title: `🏝️ Maria Island 探險 & 搭船`, category: `sightseeing`, desc: `⛴️ 10:00 船入 Maria Island / 14:30 回程\n<span class="price-highlight">💰 船票: $56.5 AUD/人 (約 HKD 339)</span>\n\n🥾 行山路線: Darlington → Painted Cliffs (單程 45 分，靠近退潮最靚)。\n🏛️ 歷史村: Old Cement Works, Mess Hall, Convict Probation Station。\n🐨 野生動物: 在 Darlington 遺址附近尋找袋熊。\n🍱 重要：中午食自備 Lunch，島上完全無補給。`, transportType: `walk`, location: `Maria Island` },
-                            { id: 605, time: `15:00`, title: `🚗 Triabunna → Bicheno`, category: `transport`, desc: `移動至東海岸`, info: `⚠️ 安全提示：黃昏行車需慢速，避免碰撞野生動物。`, transportType: `car`, location: `Bicheno`, travelTime: `1h 15m (89 km)` },
-                            { id: 606, time: `16:40`, title: `🏘️ 【小休時間】 入住 Bicheno`, category: `hotel`, desc: `1 小時入住民宿、簡單梳理休息\n📍 4 Champ Street, Bicheno`, location: `4 Champ Street, Bicheno` },
-                            { id: 607, time: `17:00`, title: `🛍️ IGA Everyday Bicheno`, category: `shopping`, desc: `買水買零食 for 聽日充飢 (*19:00關門)`, transportType: `car`, location: `IGA Everyday Bicheno` },
-                            { id: 608, time: `18:00`, title: `🍽️ 晚餐`, category: `food`, desc: `Sealife Centre Bistro 或 Lobster Shack`, transportType: `car`, location: `Sealife Centre Bistro, Bicheno` },
-                            { id: 609, time: `18:30`, title: `🐧 Bicheno Penguin Tours`, category: `sightseeing`, desc: `夜觀野生企鵝歸巢 (必須預約)\n全程約 60–80 分鐘`, transportType: `walk`, location: `Bicheno Penguin Tours` }
+                            { id: 601, time: `06:30`, title: `44 Church St`, category: `hotel`, desc: ``, location: `44 Church St, North Hobart` },
+                            { id: 602, time: `08:20`, title: `Maria Island Gateway`, category: `transport`, desc: `Triabunna 報到+買船票+停車\n開船前至少45分鐘報到(檢票/行李/安全資訊)。[一定要泊低車用腳行]\n去程:10:00 11:30 15:15 回程:10:45 14:30 16:15`, transportType: `car`, travelTime: `1h 15m 車程 (85 km)`, location: `Maria Island Gateway, Triabunna` },
+                            { id: 603, time: `10:30`, title: `Darlington`, category: `sightseeing`, desc: `Darlington 歷史村(世界遺產)步行路線平坦,一小時內可逛完\n* Old Cement Works Mess Hall Convict Probation Station (大型囚犯遺址) 舊校舍、磚石倉庫`, transportType: `ship`, travelTime: `30m 船程`, location: `Darlington, Maria Island` },
+                            { id: 604, time: `11:30`, title: `Painted Cliffs`, category: `sightseeing`, desc: ``, transportType: `walk`, travelTime: `45m 步行 (2.5 km)`, location: `Painted Cliffs, Maria Island` },
+                            { id: 605, time: `14:30`, title: `Darlington`, category: `transport`, desc: `搭14:30 船 Maria Island Triabunna (回程)*一定要走,如果唔係就16:15太 *約15:00落船`, transportType: `walk`, travelTime: `45m 步行 (2.5 km)`, location: `Darlington, Maria Island` },
+                            { id: 606, time: `15:00`, title: `Maria Island Gateway`, category: `transport`, desc: `去程:10:00 11:30 15:15 回程:10:45 14:30 16:15`, transportType: `ship`, travelTime: `30m 船程`, location: `Maria Island Gateway, Triabunna` },
+                            { id: 607, time: `17:00`, title: `IGA Everyday Bicheno`, category: `shopping`, desc: `*買水買零食for 聽日充飢`, transportType: `car`, travelTime: `1h 15m 車程 (89 km)`, location: `IGA Everyday Bicheno` },
+                            { id: 608, time: `17:30`, title: `Lobster Shack Tasmania`, category: `food`, desc: ``, transportType: `car`, travelTime: `2m 車程 (1 km)`, location: `Lobster Shack Tasmania` },
+                            { id: 609, time: `18:00`, title: `4 Champ St`, category: `hotel`, desc: `煮飯仔?!`, transportType: `car`, travelTime: `3m 車程 (1.5 km)`, location: `4 Champ St, Bicheno` }
                         ],
                         // Day 7
                         [
-                            { id: 701, time: `07:15`, title: `🏠 【梳洗時間】`, category: `hotel`, desc: `1 小時梳洗、行李上車及 Check-out`, location: `4 Champ Street, Bicheno` },
-                            { id: 7015, time: `07:45`, title: `☕ 早餐: Blue Edge Bakery`, category: `food`, desc: `早餐卷／大份麵包\n⚠️ 建議帶水＋零食入 Freycinet`, transportType: `car`, location: `Blue Edge Bakery Bicheno` },
-                            { id: 702, time: `08:45`, title: `⛰️ Wineglass Bay Lookout`, category: `sightseeing`, desc: `🥾 Carpark → Lookout (30-40mins) → 停留拍照影葡萄杯形海灣 (有機會見到 wallabies)。`, transportType: `walk`, location: `Wineglass Bay Lookout`, travelTime: `35m (38 km)` },
-                            { id: 703, time: `10:20`, title: `🚗 Cape Tourville Lighthouse`, category: `sightseeing`, desc: `海岸線開揚，全程木棧道輕鬆行。`, transportType: `car`, location: `Cape Tourville Lighthouse` },
-                            { id: 704, time: `11:00`, title: `🦪 Oyster Bay Tours`, category: `food`, desc: `<span class="price-highlight">💰 費用: $170 AUD/人 (約 HKD 1020)</span>\n食鮮甜生蠔`, transportType: `car`, location: `Freycinet Marine Farm` },
-                            { id: 7045, time: `13:20`, title: `🍽️ 午餐: Richardsons Beach`, category: `food`, desc: `Picnic Time 三文治在海邊食`, transportType: `car`, location: `Richardsons Beach` },
-                            { id: 705, time: `14:00`, title: `🚗 開往 Campbell Town`, category: `transport`, desc: `離開半島，中途停 Campbell Town 休息上廁所。`, transportType: `car`, travelTime: `1h 15m (104 km)`, location: `Campbell Town TAS` },
-                            { id: 7055, time: `15:30`, title: `🚗 繼續前往 Devonport`, category: `transport`, desc: `出發往西北方。`, transportType: `car`, travelTime: `1h 35m (142 km)`, location: `Devonport` },
-                            { id: 706, time: `17:00`, title: `🛍️ Woolworths Devonport`, category: `shopping`, desc: `買聽日搖籃山 Lunch 食材。`, info: `💡 Remarks：入山後野食極少，呢度超市補給極重要！`, transportType: `car`, location: `Woolworths Devonport` },
-                            { id: 707, time: `17:45`, title: `🏠 【梳洗時間】 入住 Devonport`, category: `hotel`, desc: `1 小時民宿梳理、放行李休息\n📍 241 William Street, Devonport\n可以去 Mersey Bluff Lighthouse 或 Latrobe 小鎮散步`, location: `241 William Street, Devonport` }
+                            { id: 701, time: `07:45`, title: `4 Champ St`, category: `hotel`, desc: `準備帶水+零食(Freycinet 步道區無咖啡店)`, location: `4 Champ St, Bicheno` },
+                            { id: 702, time: `08:00`, title: `Blue Edge Bakery`, category: `food`, desc: ``, transportType: `car`, travelTime: `2m 車程 (600 m)`, location: `Blue Edge Bakery Bicheno` },
+                            { id: 703, time: `08:45`, title: `Wineglass Bay Lookout`, category: `sightseeing`, desc: `*路線:Carpark Lookout 30-40mins Lookout 10mins →回頭30mins`, transportType: `car`, travelTime: `35m 車程 (38 km)`, location: `Wineglass Bay Lookout` },
+                            { id: 704, time: `10:20`, title: `Cape Tourville Lighthouse`, category: `sightseeing`, desc: `海岸線開揚, 全程木棧道`, transportType: `car`, travelTime: `12m 車程 (7 km)`, location: `Cape Tourville Lighthouse` },
+                            { id: 705, time: `13:20`, title: `Richardsons Beach`, category: `food`, desc: `Picnic Time`, transportType: `car`, travelTime: `10m 車程 (6.5 km)`, location: `Richardsons Beach` },
+                            { id: 706, time: `14:00`, title: `Campbell Town`, category: `transport`, desc: `上廁所+咖啡`, transportType: `car`, travelTime: `1h 5m 車程 (74 km)`, location: `Campbell Town TAS` },
+                            { id: 707, time: `16:00`, title: `Woolworths Devonport`, category: `shopping`, desc: ``, transportType: `car`, travelTime: `1h 35m 車程 (142 km)`, location: `Woolworths Devonport` },
+                            { id: 708, time: `16:30`, title: `241 William St`, category: `hotel`, desc: `煮飯仔@Home`, transportType: `car`, travelTime: `3m 車程 (1 km)`, location: `241 William St, Devonport` }
                         ],
                         // Day 8
                         [
-                            { id: 801, time: `06:10`, title: `🏠 【梳洗時間】`, category: `hotel`, desc: `1 小時準備、搬行李上車`, location: `241 William Street, Devonport` },
-                            { id: 8015, time: `07:10`, title: `☕ 早餐`, category: `food`, desc: `Drift Café / Banjos / Latrobe 咖啡館`, transportType: `car`, location: `Drift Cafe Devonport` },
-                            { id: 802, time: `07:35`, title: `🚗 Devonport → Stanley`, category: `transport`, desc: `出發西北`, transportType: `car`, travelTime: `1h 25m (126 km)`, location: `Stanley TAS` },
-                            { id: 803, time: `08:40`, title: `📸 Stanley (Godfreys Beach)`, category: `sightseeing`, desc: `神級角度：影 The Nut 全貌與海岸線。\n📍 1 Browns Rd: 影 The Nut 山腳 / 小鎮街景`, location: `Godfreys Beach, Stanley` },
-                            { id: 804, time: `10:00`, title: `🚗 Stanley → Cradle Mt`, category: `transport`, desc: `前往搖籃山遊客中心`, transportType: `car`, travelTime: `2h 15m (181 km)`, location: `Cradle Mountain Visitor Centre` },
-                            { id: 805, time: `12:15`, title: `📍 遊客中心手續`, category: `transport`, desc: `私家車泊低，買 Shuttle 票 成人 $15 (72小時)。`, location: `Cradle Mountain Visitor Centre` },
-                            { id: 806, time: `12:45`, title: `🚌 搖籃山行山精華`, category: `sightseeing`, desc: `• 🚌 12:45 Shuttle 入園\n• 🥾 13:00 Dove Lake (短線): 影 Boat Shed (約 40-60m 必去) / Glacier Rock\n• 🌲 14:10 Enchanted Walk: 睇 Moss Forest (易行唔辛苦)\n• 🚌 14:50 搭 Shuttle 返遊客中心`, transportType: `walk`, location: `Dove Lake, Cradle Mountain` },
-                            { id: 807, time: `15:10`, title: `🚗 Cradle → Launceston`, category: `transport`, desc: `出發去 Launceston`, info: `⚠️ 安全警告：趕喺天黑前出山！此路段野生動物極多，切勿開快車！`, transportType: `car`, travelTime: `1h 55m (141 km)`, location: `Launceston` },
-                            { id: 808, time: `17:10`, title: '🏘️ 【深度梳洗】 入住 Launceston', category: `hotel`, desc: `1.5 小時詳細洗漱、化妝及換衫\n📍 150 Brisbane Street, Launceston\n為 Black Cow 準備！`, location: `150 Brisbane Street, Launceston` },
-                            { id: 809, time: `19:00`, title: `🍽️ 晚餐: Black Cow Bistro`, category: `food`, desc: `<span class="font-bold text-green-600">✅ 已BOOK 7:00pm, 4位</span>\n📍 70 George Street\n必食：Robbins Island Wagyu、Cape Grim Scotch Fillet、Duck Fat Potatoes、Oysters / Octopus！`, transportType: `walk`, location: `Black Cow Bistro Launceston` }
+                            { id: 801, time: `07:10`, title: `241 William St`, category: `hotel`, desc: ``, location: `241 William St, Devonport` },
+                            { id: 802, time: `08:40`, title: `Godfreys Beach`, category: `sightseeing`, desc: `神級角度:影到 The Nut 全個火山岩剪影+海浪+海岸線`, transportType: `car`, travelTime: `1h 25m 車程 (126 km)`, location: `Godfreys Beach, Stanley` },
+                            { id: 803, time: `09:40`, title: `1 Browns Rd`, category: `sightseeing`, desc: `The Nut 山腳/小鎮街景,行山腳周邊拍 The Nut cliff line`, transportType: `car`, travelTime: `2m 車程 (1 km)`, location: `1 Browns Rd, Stanley` },
+                            { id: 804, time: `11:50`, title: `Cradle Mountain Visitor Centre`, category: `transport`, desc: `買Shuttle 票 成人$15(72小時) Shuttle 季節時段(5月)\n12:45 Shuttle Dove Lake巴士行\n停靠站: Visitor Centre → Interpretation Centre → Snake Hill Ronny Creek Dove Lake (*20分鐘)`, transportType: `car`, travelTime: `2h 15m 車程 (181 km)`, location: `Cradle Mountain Visitor Centre` },
+                            { id: 805, time: `12:45`, title: `Dove Lake Cct`, category: `sightseeing`, desc: `行路:30-40分鐘 影相+停留:20-30分鐘\n呢段已經係 Cradle Mountain 明信片級風景`, transportType: `bus`, travelTime: `20m 園內巴士`, location: `Dove Lake, Cradle Mountain` },
+                            { id: 806, time: `13:30`, title: `Dove Lake Boatshed`, category: `sightseeing`, desc: ``, transportType: `walk`, travelTime: `10m 步行 (600 m)`, location: `Dove Lake Boatshed` },
+                            { id: 807, time: `14:00`, title: `Glacier Rock`, category: `sightseeing`, desc: ``, transportType: `walk`, travelTime: `15m 步行 (800 m)`, location: `Glacier Rock, Cradle Mountain` },
+                            { id: 808, time: `14:30`, title: `Cradle Mountain Interpretation Centre & Ranger Station`, category: `transport`, desc: `搭Shuttle Bus 落Enchanted Walk (Moss Forest)`, transportType: `bus`, travelTime: `15m 園內巴士`, location: `Cradle Mountain Interpretation Centre` },
+                            { id: 809, time: `14:50`, title: `Enchanted Walk`, category: `sightseeing`, desc: `平路,易行,好放鬆,當「冷靜落山」`, transportType: `walk`, travelTime: `2m 步行 (100 m)`, location: `Enchanted Walk, Cradle Mountain` },
+                            { id: 810, time: `15:10`, title: `Cradle Mountain Interpretation Centre & Ranger Station`, category: `transport`, desc: `搭Shuttle Bus 返Visitor Centre\n等車+車程預20分鐘\n末班車由 Dove Lake 出發為16:30-17:00左右。`, transportType: `walk`, travelTime: `2m 步行 (100 m)`, location: `Cradle Mountain Interpretation Centre` },
+                            { id: 811, time: `15:30`, title: `Cradle Mountain Visitor Centre`, category: `transport`, desc: `Shuttle Visitor Centre (離園)要留意尾班車幾make sure 唔會晏`, transportType: `bus`, travelTime: `5m 園內巴士`, location: `Cradle Mountain Visitor Centre` },
+                            { id: 812, time: `17:30`, title: `150 Brisbane St`, category: `hotel`, desc: `交低行李~準備食飯`, transportType: `car`, travelTime: `1h 55m 車程 (141 km)`, location: `150 Brisbane St, Launceston` },
+                            { id: 813, time: `19:00`, title: `Black Cow Bistro`, category: `food`, desc: `Robbins Island Wagyu Cape Grim Scotch Fillet\n* Duck Fat Potatoes Oysters/Octopus`, transportType: `walk`, travelTime: `7m 步行 (500 m)`, location: `Black Cow Bistro Launceston` },
+                            { id: 814, time: `21:00`, title: `150 Brisbane St`, category: `hotel`, desc: ``, transportType: `walk`, travelTime: `7m 步行 (500 m)`, location: `150 Brisbane St, Launceston` }
                         ],
                         // Day 9
                         [
-                            { id: 901, time: `06:30`, title: `🏠 【梳洗時間】`, category: `hotel`, desc: `1 小時起床、收拾行李、Check-out`, location: `150 Brisbane Street, Launceston` },
-                            { id: 9015, time: `07:00`, title: `☕ 早餐 (Launceston)`, category: `food`, desc: `Sweetbrew (Launceston最人氣 brunch) 或 Cuccina Cafe\n食完慢慢返酒店攞行李`, transportType: `walk`, location: `Sweetbrew Launceston` },
-                            { id: 902, time: `08:00`, title: `🚗 LST 機場還車手續`, category: `transport`, desc: `辦理還車手續`, location: `Launceston Airport`, transportType: `car`, travelTime: `15m (15 km)` },
-                            { id: 903, time: `08:30`, title: `🛄 航班 Check-in`, category: `flight`, desc: `行李 Drop-off`, transportType: `walk`, location: `Launceston Airport` },
-                            { id: 904, time: `09:45`, title: `🛫 LST → SYD (T2)`, category: `flight`, desc: `航班 QF5746 (約 1h 40m)`, transportType: `flight`, location: `Sydney Airport` },
-                            { id: 905, time: `11:40`, title: `🚕 機場 → 悉尼住宿安頓`, category: `transport`, desc: `搭 Airport Link 或 Uber`, transportType: `car`, location: `Sydney CBD`, travelTime: `20m (10 km)` },
-                            { id: 906, time: `12:30`, title: `🍽️ 午餐 (Sydney CBD)`, category: `food`, desc: `The Grounds of the City (打卡靚 café)`, transportType: `walk`, location: `The Grounds of the City, Sydney` },
-                            { id: 907, time: `14:00`, title: `🌆 悉尼經典散步路線`, category: `sightseeing`, desc: `• Circular Quay: 行去 Opera House 影相\n• Royal Botanic Garden: 行去 Mrs Macquarie's Chair 影橋+歌劇院\n• Shopping: Pitt Street Mall → QVB → Westfield Sydney`, transportType: `walk`, location: `Sydney Opera House` },
-                            { id: 908, time: `18:00`, title: `🍽️ 晚餐推介 (悉尼必食)`, category: `food`, desc: `• Firedoor (極難訂)\n• Hurricane’s Grill (豬肋骨)\n• Quay / Aria (睇海景)`, location: `Hurricane's Grill Darling Harbour` },
-                            { id: 909, time: `20:45`, title: `🏨 入住 Sydney 酒店`, category: `hotel`, desc: `<span class="font-black text-red-600 bg-yellow-300 px-2 py-1 rounded text-sm">⚠️ 30 - 31May 後補</span><br>娘娘記得提我 Update 返呢晚 Sydney 住宿！\n\n建議住 Rydges Sydney Airport 或 市中心 Meriton Suites`, location: `Rydges Sydney Airport` }
+                            { id: 901, time: `08:00`, title: `150 Brisbane St`, category: `hotel`, desc: ``, location: `150 Brisbane St, Launceston` },
+                            { id: 902, time: `08:30`, title: `Launceston Airport`, category: `transport`, desc: ``, transportType: `car`, travelTime: `15m 車程 (15 km)`, location: `Launceston Airport` },
+                            { id: 903, time: `11:25`, title: `悉尼機場`, category: `flight`, desc: ``, transportType: `flight`, travelTime: `1h 40m 飛行 (910 km)`, location: `Sydney Airport` },
+                            { id: 904, time: `12:30`, title: `悉尼 CBD`, category: `transport`, desc: ``, transportType: `car`, travelTime: `25m 車程/火車 (18 km)`, location: `Sydney CBD` },
+                            { id: 905, time: `14:00`, title: `Sydney Opera House`, category: `sightseeing`, desc: ``, transportType: `walk`, travelTime: `15m 步行 (1.2 km)`, location: `Sydney Opera House` },
+                            { id: 906, time: `20:45`, title: `Rydges Sydney Airport`, category: `hotel`, desc: ``, transportType: `car`, travelTime: `20m 車程 (10 km)`, location: `Rydges Sydney Airport` }
                         ],
                         // Day 10
                         [
-                            { id: 1001, time: `07:45`, title: `☀️ 起床 & 整理行李`, category: `hotel`, desc: `🏨 住 Rydges：步行 1–3 分鐘即達 T1。\n🏨 住 CBD：預留 25–35 分鐘交通時間。`, location: `Rydges Sydney Airport` },
-                            { id: 1002, time: `08:00`, title: `🚗 前往 Sydney T1（國際）`, category: `transport`, desc: `Uber 或 Airport Link`, transportType: `car`, location: `Sydney International Airport`, travelTime: `20m (10 km)` },
-                            { id: 1003, time: `08:30`, title: `🛄 Check-in／安檢（T1）`, category: `flight`, desc: `Qantas 國際航班建議 至少 1.5 小時前到達`, location: `Sydney International Airport` },
-                            { id: 1004, time: `09:15`, title: `☕ 機場早餐`, category: `food`, desc: `登機等候`, location: `Sydney International Airport` },
-                            { id: 1005, time: `10:10`, title: `🛫 SYD → HKG (QF127)`, category: `flight`, desc: `飛行時間：約 9h 45m\n途中多飲水及作適量伸展。`, transportType: `flight` },
-                            { id: 1006, time: `17:55`, title: `🌤️ 抵達香港國際機場`, category: `transport`, desc: `正式完成 10 日 Tasmania + Sydney 之旅！`, location: `Hong Kong International Airport` }
+                            { id: 1001, time: `08:00`, title: `Rydges Sydney Airport`, category: `hotel`, desc: ``, location: `Rydges Sydney Airport` },
+                            { id: 1002, time: `08:30`, title: `悉尼機場 T1`, category: `transport`, desc: ``, transportType: `walk`, travelTime: `3m 步行 (200 m)`, location: `Sydney International Airport` },
+                            { id: 1003, time: `17:55`, title: `香港國際機場`, category: `flight`, desc: ``, transportType: `flight`, travelTime: `9h 45m 飛行 (7,390 km)`, location: `Hong Kong International Airport` }
                         ]
                     ],
 
@@ -494,7 +477,7 @@
                     if (type === 'aud') this.calcHkd = (this.calcAud * this.exchangeRate).toFixed(1);
                     else this.calcAud = (this.calcHkd / this.exchangeRate).toFixed(2);
                 },
-                // ✅ V49: Universal Map Link
+                // ✅ V51: 官方 Universal Map Link
                 openMap(loc) { 
                     if(loc) window.open(`https://www.google.com/maps/search/?api=1&query=` + encodeURIComponent(loc), '_blank'); 
                 },
