@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>2026 塔斯曼尼亞 10天自駕 (V54 緩衝足本版)</title>
+    <title>2026 塔斯曼尼亞 10天自駕 (V57 全時段滿血版)</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.3.4/vue.global.min.js"></script>
@@ -11,90 +11,35 @@
     <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap" rel="stylesheet">
 
     <style>
-        body {
-            font-family: 'Zen Maru Gothic', sans-serif;
-            background-color: #F8FAFC; 
-            overscroll-behavior-y: none;
-            margin: 0; padding: 0;
-            width: 100vw; height: 100vh; height: 100dvh;
-            overflow: hidden;
-        }
+        body { font-family: 'Zen Maru Gothic', sans-serif; background-color: #F8FAFC; overscroll-behavior-y: none; margin: 0; padding: 0; width: 100vw; height: 100vh; height: 100dvh; overflow: hidden; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         .soft-shadow { box-shadow: 0 4px 25px rgba(37, 99, 235, 0.15); }
         [v-cloak] { display: none !important; }
-        
-        .remarks-box {
-            background: linear-gradient(135deg, #ffffff 0%, #f0f7ff 100%);
-            border: 2px dashed #BFDBFE;
-            border-radius: 20px;
-        }
-        .price-highlight {
-            color: #C62828;
-            font-weight: 900;
-            background-color: #FFEBEE;
-            padding: 2px 6px;
-            border-radius: 6px;
-        }
-        
-        .nav-btn-google {
-            background: linear-gradient(to right, #3B82F6, #2563EB);
-            color: white;
-            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
-        }
-        .nav-btn-apple {
-            background: linear-gradient(to right, #374151, #111827);
-            color: white;
-            box-shadow: 0 2px 8px rgba(17, 24, 39, 0.3);
-        }
-        .daily-title-box {
-            background-color: #1E3A8A;
-            color: white;
-            border-radius: 16px;
-            padding: 12px 16px;
-            box-shadow: 0 4px 15px rgba(30, 58, 138, 0.2);
-            margin-bottom: 16px;
-        }
+        .remarks-box { background: linear-gradient(135deg, #ffffff 0%, #f0f7ff 100%); border: 2px dashed #BFDBFE; border-radius: 20px; }
+        .price-highlight { color: #C62828; font-weight: 900; background-color: #FFEBEE; padding: 2px 6px; border-radius: 6px; }
+        .nav-btn-google { background: linear-gradient(to right, #3B82F6, #2563EB); color: white; box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3); }
+        .nav-btn-apple { background: linear-gradient(to right, #374151, #111827); color: white; box-shadow: 0 2px 8px rgba(17, 24, 39, 0.3); }
+        .daily-title-box { background-color: #1E3A8A; color: white; border-radius: 16px; padding: 12px 16px; box-shadow: 0 4px 15px rgba(30, 58, 138, 0.2); margin-bottom: 16px; }
     </style>
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        tas: { 100: '#EFF6FF', 200: '#BFDBFE', 300: '#93C5FD', 500: '#3B82F6', 600: '#2563EB', 700: '#1D4ED8', gold: '#F59E0B' }
-                    }
-                }
-            }
-        }
-    </script>
 </head>
 <body class="text-slate-700 antialiased">
-
-    <div id="error-log" style="color: red; padding: 20px; font-weight: bold; background: #FFEBEE; display: none; position: absolute; z-index: 99999; top: 0; left: 0; width: 100%; height: 100%;"></div>
-
     <div id="app" v-cloak class="h-full flex flex-col relative">
-
-        <div class="relative h-[220px] flex-shrink-0 bg-cover bg-center transition-all duration-500 shadow-md"
-             style="background-image: url('./header.png'), url('./header.jpg');">
+        <div class="relative h-[220px] flex-shrink-0 bg-cover bg-center shadow-md" style="background-image: url('./header.png'), url('./header.jpg');">
             <div class="absolute inset-0 bg-gradient-to-b from-slate-900/30 to-slate-900/70"></div>
-            
             <div class="absolute bottom-6 right-4 flex space-x-3 z-20">
                 <button @click="currentTab = 'itinerary'" :class="tabClass('itinerary')"><i class="fa-solid fa-map-location-dot"></i></button>
                 <button @click="currentTab = 'info'" :class="tabClass('info')"><i class="fa-solid fa-circle-info"></i></button>
                 <button @click="currentTab = 'shopping'" :class="tabClass('shopping')"><i class="fa-solid fa-basket-shopping"></i></button>
                 <button @click="currentTab = 'expenses'" :class="tabClass('expenses')"><i class="fa-solid fa-dollar-sign"></i></button>
             </div>
-            
             <div class="absolute bottom-8 left-6 text-white drop-shadow-md">
                 <h1 class="text-2xl font-bold tracking-widest">TASMANIA 2026</h1>
-                <p class="text-sm opacity-90"><i class="fa-solid fa-earth-oceania mr-1 text-tas-300"></i>家姐專屬 10 天緩衝版</p>
+                <p class="text-sm opacity-90"><i class="fa-solid fa-earth-oceania mr-1 text-tas-300"></i>家姐專屬 10 天滿血版</p>
             </div>
         </div>
 
         <div class="flex-1 bg-white rounded-t-[30px] -mt-6 relative z-10 overflow-hidden flex flex-col shadow-[0_-5px_20px_rgba(0,0,0,0.05)]">
             <div class="flex-1 overflow-y-auto no-scrollbar p-5 pb-24">
-
                 <div v-if="currentTab === 'itinerary'">
                     <div class="flex space-x-3 overflow-x-auto no-scrollbar mb-6 py-2">
                         <div v-for="(day, index) in days" :key="index" @click="selectedDayIndex = index"
@@ -115,238 +60,107 @@
                     </div>
 
                     <div v-if="dailyMainTitles[selectedDayIndex]" class="daily-title-box">
-                        <h2 class="text-[15px] font-bold leading-tight" v-html="dailyMainTitles[selectedDayIndex]"></h2>
+                        <h2 class="text-[14px] font-bold leading-tight" v-html="dailyMainTitles[selectedDayIndex]"></h2>
                     </div>
 
                     <div v-if="dailyRemarks[selectedDayIndex]" class="remarks-box p-4 mb-8 soft-shadow">
-                        <div class="text-sm font-black text-tas-700 mb-2 border-b-2 border-tas-200 pb-1">
-                            <i class="fa-solid fa-lightbulb mr-2"></i>今日重點提醒
-                        </div>
+                        <div class="text-sm font-black text-tas-700 mb-2 border-b-2 border-tas-200 pb-1">今日重點提醒</div>
                         <div class="text-xs space-y-3 leading-relaxed" v-html="formatText(dailyRemarks[selectedDayIndex])"></div>
                     </div>
 
                     <div class="space-y-0 relative">
                         <div class="absolute left-[22px] top-4 bottom-4 w-0.5 bg-tas-200 opacity-50 z-0"></div>
-
                         <div v-for="(item, idx) in currentDayItinerary" :key="item.id" class="relative pl-12 pb-14 group">
-                            
                             <div v-if="item.travelTime" class="absolute -top-9 left-12 right-0 flex items-center text-xs text-tas-600 mb-2 z-50">
-                                <span class="bg-blue-50 text-blue-700 px-3 py-1.5 rounded-full border border-blue-200 flex items-center gap-1.5 shadow-sm font-black">
-                                    <i :class="getTransportIcon(item.transportType)"></i>
-                                    {{ item.travelTime }}
+                                <span class="bg-blue-50 text-blue-700 px-3 py-1.5 rounded-full border border-blue-200 flex items-center gap-1.5 shadow-sm font-black whitespace-nowrap">
+                                    <i :class="getTransportIcon(item.transportType)"></i> {{ item.travelTime }}
                                 </span>
                             </div>
-                            
-                            <div class="absolute left-0 top-4 w-11 h-11 rounded-full bg-white border-4 border-tas-100 flex items-center justify-center z-10 shadow-sm text-tas-600 font-bold text-xs" :class="{'bg-tas-600 text-white border-tas-200': item.category === 'hotel'}">
-                                {{ item.time.split(':')[0] }}
-                            </div>
-                            <div class="bg-white rounded-2xl p-4 soft-shadow relative border border-gray-50 transition-all"
-                                 :class="{
-                                     'border-l-4 border-orange-400': item.category === 'flight', 
-                                     'border-l-4 border-purple-400': item.category === 'hotel',
-                                     'border-l-4 border-tas-500': item.category !== 'flight' && item.category !== 'hotel'
-                                 }">
-                                
-                                <div>
-                                    <div class="flex justify-between items-start mb-1">
-                                        <div class="text-xs font-bold text-tas-500 uppercase tracking-wider">{{ item.time }} • {{ itemCategoryName(item.category) }}</div>
-                                    </div>
-                                    
+                            <div class="absolute left-0 top-4 w-11 h-11 rounded-full bg-white border-4 border-tas-100 flex items-center justify-center z-10 shadow-sm text-tas-600 font-bold text-xs" :class="{'bg-tas-600 text-white border-tas-200': item.category === 'hotel'}">{{ item.time.split(':')[0] }}</div>
+                            <div class="bg-white rounded-2xl p-4 soft-shadow relative border border-gray-50 transition-all active:scale-[0.98]" :class="{'border-l-4 border-orange-400': item.category === 'flight', 'border-l-4 border-purple-400': item.category === 'hotel', 'border-l-4 border-tas-500': item.category !== 'flight' && item.category !== 'hotel'}">
+                                <div @click="openMap(item.location)">
+                                    <div class="flex justify-between items-start mb-1"><div class="text-xs font-bold text-tas-500 uppercase tracking-wider">{{ item.time }} • {{ itemCategoryName(item.category) }}</div></div>
                                     <h3 class="text-lg font-bold mb-1 text-slate-800" v-html="formatText(item.title)"></h3>
-                                    
-                                    <div class="text-sm text-gray-500 mb-2 flex items-start gap-1.5" v-if="item.desc">
-                                        <i class="fa-regular fa-note-sticky mt-1 text-[10px] flex-shrink-0 text-tas-400"></i>
-                                        <span class="whitespace-pre-line text-xs leading-relaxed" v-html="formatText(item.desc)"></span>
-                                    </div>
-                                    
-                                    <div v-if="item.info" class="mt-2 p-2 bg-red-50 rounded-lg text-xs text-red-600 border border-red-100 flex items-start gap-1.5">
-                                        <i class="fa-solid fa-circle-exclamation mt-0.5 flex-shrink-0"></i>
-                                        <span class="font-bold leading-relaxed whitespace-pre-line" v-html="formatText(item.info)"></span>
-                                    </div>
-                                    
+                                    <div class="text-sm text-gray-500 mb-2 flex items-start gap-1.5" v-if="item.desc"><i class="fa-regular fa-note-sticky mt-1 text-[10px] flex-shrink-0 text-tas-400"></i><span class="whitespace-pre-line text-xs leading-relaxed" v-html="formatText(item.desc)"></span></div>
+                                    <div v-if="item.info" class="mt-2 p-2 bg-red-50 rounded-lg text-xs text-red-600 border border-red-100 flex items-start gap-1.5"><i class="fa-solid fa-circle-exclamation mt-0.5 flex-shrink-0"></i><span class="font-bold leading-relaxed" v-html="formatText(item.info)"></span></div>
                                     <div class="flex flex-wrap gap-2 mt-3 items-center">
                                         <span v-if="item.transportType === 'car'" class="text-[10px] bg-blue-50 text-blue-600 px-2 py-1 rounded-md font-bold border border-blue-100"><i class="fa-solid fa-car mr-1"></i>自駕</span>
                                         <span v-if="item.transportType === 'walk'" class="text-[10px] bg-green-50 text-green-600 px-2 py-1 rounded-md font-bold border border-green-100"><i class="fa-solid fa-person-walking mr-1"></i>步行</span>
-                                        
-                                        <button v-if="item.location" @click="openMap(item.location, 'google')" class="text-[10px] nav-btn-google px-2.5 py-1.5 rounded-md font-bold flex items-center gap-1">
-                                            <i class="fa-brands fa-google"></i> Google Map
-                                        </button>
-                                        <button v-if="item.location" @click="openMap(item.location, 'apple')" class="text-[10px] nav-btn-apple px-2.5 py-1.5 rounded-md font-bold flex items-center gap-1">
-                                            <i class="fa-brands fa-apple"></i> Apple Map
-                                        </button>
+                                        <button v-if="item.location" @click.stop="openMap(item.location, 'google')" class="text-[10px] nav-btn-google px-2.5 py-1.5 rounded-md font-bold">Google Map</button>
+                                        <button v-if="item.location" @click.stop="openMap(item.location, 'apple')" class="text-[10px] nav-btn-apple px-2.5 py-1.5 rounded-md font-bold">Apple Map</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
                 <div v-if="currentTab === 'info'" class="space-y-6">
                     <div class="bg-white rounded-2xl p-0 soft-shadow overflow-hidden border-l-4 border-tas-600">
-                        <div class="bg-tas-100 p-3 text-tas-800 font-bold flex justify-between items-center">
-                            <span><i class="fa-solid fa-file-lines mr-2"></i>完整行程表</span>
-                        </div>
-                        <div class="p-4">
-                            <a href="https://docs.google.com/document/d/1NJE1hgVgpWntmnYgZMXkGSSeO-51cRj3/edit?usp=sharing" target="_blank" class="block w-full bg-tas-600 text-white font-bold py-3 rounded-xl shadow-md text-center">
-                                <i class="fa-brands fa-google-drive mr-2"></i> 點擊查看 Google Doc
-                            </a>
-                        </div>
+                        <div class="bg-tas-100 p-3 text-tas-800 font-bold flex justify-between items-center"><span><i class="fa-solid fa-file-lines mr-2"></i>完整行程表</span></div>
+                        <div class="p-4"><a href="https://docs.google.com/document/d/1NJE1hgVgpWntmnYgZMXkGSSeO-51cRj3/edit?usp=sharing" target="_blank" class="block w-full bg-tas-600 text-white font-bold py-3 rounded-xl shadow-md text-center">查看最新 Google Doc</a></div>
                     </div>
-
                     <div class="bg-white rounded-2xl p-0 soft-shadow overflow-hidden border-2 border-tas-200">
-                        <div class="bg-tas-50 p-3 text-tas-700 font-bold flex justify-between items-center">
-                            <span><i class="fa-regular fa-bell mr-2"></i>預約及費用清單</span>
-                        </div>
-                        <div class="p-4 space-y-4 text-sm">
-                            <div>
-                                <h4 class="font-bold text-tas-600 mb-2 border-b border-tas-100 pb-1">🎟️ 門票 & Tour</h4>
-                                <ul class="space-y-2 text-xs text-gray-600 ml-2 list-disc">
-                                    <li>MONA Ferry & Ticket: <span class="price-highlight">69 AUD</span> [cite: 18]</li>
-                                    <li>Seafood Cruise: <span class="price-highlight">約 HKD 2800</span> [cite: 19]</li>
-                                    <li>Bruny Ferry: <span class="price-highlight">55.8 AUD/車</span> [cite: 20]</li>
-                                    <li>Maria Ferry: <span class="price-highlight">56.5 AUD/人</span> [cite: 21]</li>
-                                    <li>Oyster Tour: <span class="price-highlight">170 AUD</span> [cite: 23]</li>
-                                    <li>Parks Pass: <span class="price-highlight">95.5 AUD/車</span> [cite: 24]</li>
-                                </ul>
-                            </div>
+                        <div class="bg-tas-50 p-3 text-tas-700 font-bold flex justify-between items-center"><span><i class="fa-regular fa-bell mr-2"></i>確認預約清單</span></div>
+                        <div class="p-4 space-y-4 text-xs">
+                           <div>• Da Angelo (Day 4): <span class="font-bold text-green-600">✅ 已BOOK 6:15pm</span></div>
+                           <div>• Frank Restaurant (Day 5): <span class="font-bold text-green-600">✅ 已BOOK 6pm</span></div>
+                           <div>• Black Cow Bistro (Day 8): <span class="font-bold text-green-600">✅ 已BOOK 7pm</span></div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <button @click="openAddModal" class="absolute bottom-6 right-6 w-14 h-14 bg-tas-600 text-white rounded-full shadow-lg flex items-center justify-center text-2xl z-50"><i class="fa-solid fa-plus"></i></button>
-
-        <div v-if="showModal" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm" @click.self="showModal = false">
-            <div class="bg-white w-full sm:w-96 rounded-t-3xl sm:rounded-3xl p-6 shadow-2xl">
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-xl font-bold text-tas-600">新增紀錄</h3>
-                    <button @click="showModal = false" class="text-gray-400"><i class="fa-solid fa-xmark text-xl"></i></button>
-                </div>
-                <div class="space-y-4">
-                    <input v-model="newItem.title" type="text" placeholder="名稱" class="w-full p-3 bg-gray-50 rounded-xl outline-none">
-                    <div class="flex gap-2">
-                        <input v-model="newItem.time" type="time" class="w-1/3 p-3 bg-gray-50 rounded-xl outline-none">
-                        <select v-model="newItem.category" class="w-2/3 p-3 bg-gray-50 rounded-xl outline-none"><option value="sightseeing">景點</option><option value="food">美食</option><option value="shopping">購物</option><option value="transport">交通</option><option value="hotel">住宿</option></select>
-                    </div>
-                    <textarea v-model="newItem.desc" placeholder="備註" class="w-full p-3 bg-gray-50 rounded-xl outline-none h-24"></textarea>
-                </div>
-                <button @click="confirmAdd" class="w-full bg-tas-600 text-white font-bold py-4 rounded-xl mt-6 shadow-lg">確認新增</button>
-            </div>
-        </div>
-
     </div>
 
     <script>
         const { createApp } = Vue;
-
         createApp({
             data() {
                 return {
-                    currentTab: `itinerary`,
-                    selectedDayIndex: 0,
-                    showModal: false,
-                    exchangeRate: 5.2,
-                    calcAud: ``, calcHkd: ``,
-                    weather: { city_name: `Hobart, AU`, temp: `--`, icon: `fa-cloud-sun` },
-                    apiKey: `cc2dab2806da14aec6dab2ed8260a1c4`, 
-
-                    days: [
-                        { weekday: `Thu`, date: `5/21`, dayNum: `0` }, 
-                        { weekday: `Fri`, date: `5/22`, dayNum: `1` }, { weekday: `Sat`, date: `5/23`, dayNum: `2` },
-                        { weekday: `Sun`, date: `5/24`, dayNum: `3` }, { weekday: `Mon`, date: `5/25`, dayNum: `4` },
-                        { weekday: `Tue`, date: `5/26`, dayNum: `5` }, { weekday: `Wed`, date: `5/27`, dayNum: `6` },
-                        { weekday: `Thu`, date: `5/28`, dayNum: `7` }, { weekday: `Fri`, date: `5/29`, dayNum: `8` },
-                        { weekday: `Sat`, date: `5/30`, dayNum: `9` }, { weekday: `Sun`, date: `5/31`, dayNum: `10` }
-                    ],
-
-                    dailyMainTitles: {
-                        0: `✈️ 香港 – 出發 → 悉尼（轉機）`,
-                        1: `🛬 Hobart – 抵達 → 海濱散步 → 晚餐`,
-                        2: `🖼️ Hobart – Salamanca Market → MONA → 🍽️ Frank Restaurant`,
-                        3: `🐚 海鮮 Cruise → 🚗 取車 → ⛰️ Mt Wellington`,
-                        4: `🏙️ Hobart – 市區漫遊 → Waterfront 晚餐`,
-                        5: `🏙️ Hobart → 🚗 Bruny Island 一日遊`,
-                        6: `🏙️ Hobart → 🚗 Triabunna → ⛴️ Maria Island → 🚗 Bicheno`,
-                        7: `🚗 Bicheno → Freycinet → Oyster Bay Tours → 🚗 Devonport`,
-                        8: `🏔️ Stanley → Cradle Mountain → Launceston`,
-                        9: `✈️ Launceston → Sydney（22 小時轉機）`,
-                        10: `✈️ Sydney → 香港`
-                    },
-
-                    dailyRemarks: {
-                        0: `🚀 香港出發：建議提早 2 小時到機場 [cite: 1]。\n🧭 轉機提醒：T1 到 T2 需轉乘接駁，預留充足時間 [cite: 1]。`,
-                        1: `🚗 交通概況：HBA 到 CBD 約 20-25 分鐘 。\n🌤️ 貼士：Hobart 傍晚風大，請備防風外套 。`,
-                        2: `🚶 步行概覽：全程平坦無辛苦路段 。\n🎪 提醒：市集人潮多，建議早到 。`,
-                        3: `⛰️ 路況提醒：山路多彎風大，請慢速行駛 [cite: 4]。\n🌬️ 拍照注意：山頂風大，請握實手機 [cite: 4]。`,
-                        4: `🚶 市區散步：全日以步行為主，少量上落斜 [cite: 4]。\n🍽️ 預約：Da Angelo 強烈建議預訂 [cite: 4]。`,
-                        5: `⛴️ 渡輪貼士：避開早上尖峰，08:50 前抵達較佳 [cite: 5]。\n🦘 安全：黃昏行車小心野生動物 [cite: 5]。`,
-                        6: `⛴️ Maria Island：必須於開船前 45 分鐘報到 [cite: 6]。\n🍱 飲食：島上無商店，請自備午餐 [cite: 6]。`,
-                        7: `🥾 登山提醒：Wineglass Bay 有石階，請小心腳步 [cite: 6]。\n⛽ 加油：建議於 Bicheno 或 Coles Bay 加滿油 [cite: 6]。`,
-                        8: `🏔️ 關鍵日：12:00 離開 Cradle 是今日行程關鍵 [cite: 7]。\n🥩 預約：Black Cow Bistro 必須預訂 [cite: 7]。`,
-                        9: `✈️ 返程：取行李再 Check-in。最後一晚可食頓靚 Dinner [cite: 8]。`,
-                        10: `✈️ 回港：Qantas 國際航班建議提早 1.5 小時到機場 [cite: 9]。`
-                    },
-
+                    currentTab: `itinerary`, selectedDayIndex: 0, exchangeRate: 5.2,
+                    weather: { city_name: `Hobart`, temp: `13`, icon: `fa-cloud-sun` },
+                    days: [{ weekday: `Thu`, date: `5/21`, dayNum: `0` }, { weekday: `Fri`, date: `5/22`, dayNum: `1` }, { weekday: `Sat`, date: `5/23`, dayNum: `2` }, { weekday: `Sun`, date: `5/24`, dayNum: `3` }, { weekday: `Mon`, date: `5/25`, dayNum: `4` }, { weekday: `Tue`, date: `5/26`, dayNum: `5` }, { weekday: `Wed`, date: `5/27`, dayNum: `6` }, { weekday: `Thu`, date: `5/28`, dayNum: `7` }, { weekday: `Fri`, date: `5/29`, dayNum: `8` }, { weekday: `Sat`, date: `5/30`, dayNum: `9` }, { weekday: `Sun`, date: `5/31`, dayNum: `10` }],
+                    dailyMainTitles: { 0: `✈️ 香港 – 出發 → 悉尼（轉機）`, 1: `🛬 Hobart – 抵達 → 海濱散步 → 晚餐`, 2: `🖼️ Hobart – Salamanca Market → MONA → Frank`, 3: `🐚 海鮮 Cruise → 🚗 取車 → ⛰️ Mt Wellington`, 4: `🏙️ Hobart – 市區漫遊 → Waterfront 晚餐`, 5: `🏙️ Hobart → 🚗 Bruny Island 一日遊`, 6: `🏝️ Triabunna → ⛴️ Maria Island → 🚗 Bicheno`, 7: `🚗 Wineglass Bay → Oyster Tour → Devonport`, 8: `🏔️ Stanley → Cradle Mountain → Launceston`, 9: `✈️ Launceston → Sydney（22 小時轉機）`, 10: `✈️ Sydney → 香港` },
+                    dailyRemarks: { 0: `🚀 21/5 香港出發：提早 2 小時到機場。\n🧭 轉機提醒：T1 到 T2 需轉乘接駁。`, 5: `⛴️ 渡輪：<span class="price-highlight">A$55.8/車</span>。\n🥩 餐廳：<span class="font-bold text-green-600">✅ 已BOOK 6pm Frank</span>。`, 8: `🏔️ 關鍵日：12:00 離開 Cradle 是今日行程關鍵。\n🥩 餐廳：<span class="font-bold text-green-600">✅ 已BOOK 7pm Black Cow</span>。`, 9: `🏨 住宿：<span class="font-black text-red-600 bg-yellow-300">⚠️ 30-31May 後補</span>。` },
                     itineraryData: [
                         // Day 0
-                        [
-                            { id: 1, time: `17:30`, title: `香港國際機場 (T1) 報到`, category: `flight`, desc: `建議 至少 2 小時 前到機 [cite: 1]`, location: `Hong Kong International Airport`, transportType: `walk` },
-                            { id: 2, time: `19:30`, title: `🛫 QF128 飛往悉尼`, category: `flight`, desc: `飛行時間約 9h15m [cite: 1]`, transportType: `flight`, travelTime: `9h 15m (7,390 km)` }
-                        ],
+                        [ { id: 1, time: `17:30`, title: `香港國際機場`, category: `transport`, desc: `QF128\n建議提早 2 小時前到機`, location: `HKIA`, transportType: `walk` }, { id: 2, time: `19:30`, title: `QF128 飛往悉尼`, category: `flight`, travelTime: `9h 15m (7,390 km)` } ],
                         // Day 1
-                        [
-                            { id: 101, time: `06:45`, title: `抵達悉尼機場 (T1)`, category: `transport`, desc: `過關後前往 T2 轉乘國內線 [cite: 1]`, location: `Sydney Airport Terminal 2` },
-                            { id: 102, time: `12:05`, title: `🛫 QF5721 飛往霍巴特`, category: `flight`, desc: `13:55 抵達 HBA (D 航站) `, transportType: `flight`, travelTime: `1h 50m (1,040 km)` },
-                            { id: 103, time: `14:30`, title: `44 Church St Airbnb`, category: `hotel`, desc: `Taxi/Uber 車資 A$45-65 `, location: `44 Church St, North Hobart`, transportType: `car`, travelTime: `20m (19 km)` },
-                            { id: 104, time: `15:00`, title: `🏠 【梳洗緩衝時間】`, category: `hotel`, desc: `1 小時洗臉、整理行李及小休 `, info: `💡 North Hobart 位處斜坡，建議搭 Uber 免卻上坡 。` },
-                            { id: 105, time: `16:30`, title: `🌊 海濱散步`, category: `sightseeing`, desc: `Constitution Dock 黃昏漁船相位 `, transportType: `walk`, travelTime: `25m (1.8 km)`, location: `Constitution Dock, Hobart` },
-                            { id: 106, time: `18:00`, title: `🍽️ 晚餐: 碼頭海鮮`, category: `food`, desc: `Mures Lower Deck 或 Pearl + Co `, location: `Victoria Dock, Hobart` }
-                        ],
+                        [ { id: 101, time: `06:45`, title: `抵達悉尼機場 (T1)`, category: `transport`, desc: `Terminal 1 to Terminal 2 轉機`, location: `Sydney Airport T2` }, { id: 102, time: `12:05`, title: `🛫 QF5721 飛往霍巴特`, category: `flight`, travelTime: `1h 50m (1,040 km)` }, { id: 103, time: `14:30`, title: `44 Church St Airbnb`, category: `hotel`, desc: `Airbnb, By Taxi around AUD 45-65`, location: `44 Church St, North Hobart`, travelTime: `20m (19 km)`, transportType: `car` }, { id: 104, time: `15:00`, title: `🏠 【梳洗時間】`, category: `hotel`, desc: `1 小時小休整理`, info: `💡 North Hobart 位處斜坡，建議搭 Uber。` }, { id: 105, time: `16:30`, title: `Brooke Street Pier`, category: `sightseeing`, desc: `先行熟位置，聽日搭 MONA Ferry`, location: `Brooke Street Pier`, travelTime: `25m 步行`, transportType: `walk` } ],
                         // Day 2
-                        [
-                            { id: 201, time: `07:00`, title: `🏠 【晨間梳洗】`, category: `hotel`, desc: `起床準備及化妝 ` },
-                            { id: 202, time: `08:00`, title: `🥐 早餐`, category: `food`, desc: `Machine Laundry Cafe 或 Daci & Daci `, location: `Salamanca Square, Hobart` },
-                            { id: 203, time: `08:30`, title: `🎪 Salamanca Market`, category: `shopping`, desc: `週六限定！一定要逛足 2 小時！ `, transportType: `walk`, travelTime: `2h`, location: `Salamanca Market, Hobart` },
-                            { id: 206, time: `10:30`, title: `🚤 前往 MONA`, category: `sightseeing`, desc: `11:15 渡輪班次 `, location: `Museum of Old and New Art, Hobart`, transportType: `ship`, travelTime: `30m` },
-                            { id: 209, time: `15:30`, title: `🌊 Waterfront 慢活散步`, category: `sightseeing`, desc: `回程船期 15:30/16:30 `, location: `Brooke Street Pier, Hobart` },
-                            { id: 210, time: `18:00`, title: `🍽️ 晚餐: Frank Restaurant`, category: `food`, desc: `Wood-fired flank steak (招牌) `, location: `Frank Restaurant Hobart` }
-                        ],
-                        // Day 3
-                        [
-                            { id: 301, time: `08:00`, title: `🏠 【退房梳洗】`, category: `hotel`, desc: `收拾行李並 Check-out [cite: 4]` },
-                            { id: 302, time: `10:00`, title: `🐚 Seafood Cruise`, category: `food`, desc: `即開生蠔、鮑魚、龍蝦 [cite: 4]`, transportType: `ship`, location: `Elizabeth Street Pier, Hobart` },
-                            { id: 303, time: `15:00`, title: `🚗 辦理取車手續`, category: `transport`, desc: `Cambridge TAS [cite: 4]`, travelTime: `15m (16 km)`, location: `22 Cherokee Dr, Cambridge TAS` },
-                            { id: 305, time: `16:00`, title: `⛰️ Mt Wellington 黃昏`, category: `sightseeing`, desc: `Organ Pipes 懸崖絕景 [cite: 4]`, travelTime: `40m (33 km)`, location: `Mount Wellington, TAS` }
-                        ],
+                        [ { id: 202, time: `08:00`, title: `🥐 早餐`, category: `food`, desc: `Machine Laundry Cafe`, location: `Salamanca Square`, transportType: `walk` }, { id: 203, time: `08:30`, title: `🎪 Salamanca Market`, category: `shopping`, desc: `Smith's pie: Scallops pie`, travelTime: `2h`, location: `Salamanca Market`, transportType: `walk` }, { id: 206, time: `10:30`, title: `Mona Ferry`, category: `transport`, desc: `11:15 班次`, travelTime: `8m 步行 (650 m)`, location: `Brooke Street Pier`, transportType: `walk` } ],
+                        // Day 5
+                        [ { id: 501, time: `08:15`, title: `Kettering Ferry Terminal`, category: `transport`, desc: `A$55.80 (來回)`, travelTime: `35m (34 km)`, location: `Kettering Ferry Terminal`, transportType: `car` }, { id: 502, time: `09:20`, title: `Truganini Lookout`, category: `sightseeing`, desc: `眺望 The Neck`, travelTime: `20m 船程 + 25m 車程`, location: `The Neck Lookout`, transportType: `car` }, { id: 503, time: `18:00`, title: `🍽️ Frank Restaurant`, category: `food`, desc: `<span class="font-bold text-green-600">✅ 已BOOK 6pm</span>`, location: `Frank Restaurant Hobart` } ],
+                        // Day 6
+                        [ { id: 601, time: `08:20`, title: `Maria Island Gateway`, category: `transport`, desc: `Triabunna 報到`, travelTime: `1h 15m (85 km)`, location: `Triabunna Wharf`, transportType: `car` }, { id: 602, time: `10:00`, title: `⛴️ Maria Island 搭船`, category: `sightseeing`, desc: `<span class="price-highlight">10:00去 / 14:30返</span>`, travelTime: `30m 船程`, location: `Maria Island` }, { id: 603, time: `18:30`, title: `🐧 Bicheno Penguin Tours`, category: `sightseeing`, desc: `小藍企鵝歸巢`, location: `Bicheno Penguin Tours` } ],
+                        // Day 7
+                        [ { id: 701, time: `08:45`, title: `Wineglass Bay Lookout`, category: `sightseeing`, travelTime: `35m (38 km)`, location: `Wineglass Bay Lookout`, transportType: `car` }, { id: 702, time: `11:00`, title: `🦪 Oyster Bay Tours`, category: `food`, desc: `A$170/人`, location: `Freycinet Marine Farm` }, { id: 703, time: `16:00`, title: `Devonport Airbnb`, category: `hotel`, desc: `📍 241 William St`, travelTime: `1h 35m (142 km)`, location: `241 William St, Devonport`, transportType: `car` } ],
                         // Day 8
-                        [
-                            { id: 801, time: `06:10`, title: `🏠 【搬運梳洗】`, category: `hotel`, desc: `準備並搬行李上車 [cite: 7]` },
-                            { id: 802, time: `08:40`, title: `📸 Godfreys Beach (Stanley)`, category: `sightseeing`, desc: `影 The Nut 全貌 [cite: 7]`, travelTime: `1h 25m (126 km)`, location: `Godfreys Beach, Stanley` },
-                            { id: 804, time: `12:15`, title: `🚌 搖籃山 Dove Lake`, category: `sightseeing`, desc: `明信片級風景 [cite: 7]`, travelTime: `2h 15m (181 km)`, location: `Dove Lake, Cradle Mountain` },
-                            { id: 809, time: `19:00`, title: `🥩 Black Cow Bistro`, category: `food`, desc: `<span class="font-bold text-green-600">已預約 7:00pm [cite: 7]</span>`, location: `Black Cow Bistro Launceston` }
-                        ]
-                    ],
-
-                    shoppingList: [],
-                    expenses: []
+                        [ { id: 801, time: `08:40`, title: `Godfreys Beach`, category: `sightseeing`, desc: `拍攝 The Nut`, travelTime: `1h 25m (126 km)`, location: `Godfreys Beach, Stanley`, transportType: `car` }, { id: 802, time: `11:50`, title: `Cradle Mt Visitor Centre`, category: `transport`, travelTime: `2h 15m (181 km)`, location: `Cradle Mountain Visitor Centre`, transportType: `car` }, { id: 803, time: `19:00`, title: `🍽️ Black Cow Bistro`, category: `food`, desc: `<span class="font-bold text-green-600">✅ 已BOOK 7pm</span>`, location: `Black Cow Bistro Launceston` } ],
+                        // Day 9-10
+                        [ { id: 901, time: `09:45`, title: `🛫 飛往悉尼`, category: `flight`, travelTime: `1h 40m`, location: `Sydney Airport` }, { id: 902, time: `20:45`, title: `Rydges Sydney Airport`, category: `hotel`, desc: `<span class="price-highlight">⚠️ 30-31May 後補</span>`, location: `Rydges Sydney Airport` }, { id: 1001, time: `10:10`, title: `🛫 Sydney → 香港`, category: `flight`, travelTime: `9h 45m` } ]
+                    ]
                 }
             },
-            computed: {
-                currentDayItinerary() { return this.itineraryData[this.selectedDayIndex] || []; },
-                totalExpenses() { return this.expenses.reduce((sum, item) => sum + parseInt(item.amount || 0), 0); }
-            },
+            watch: { selectedDayIndex() { this.updateWeather(); } },
             methods: {
-                openMap(loc, provider) { 
-                    if(!loc) return;
-                    if(provider === 'apple') { window.open(`http://maps.apple.com/?q=` + encodeURIComponent(loc), '_blank'); }
-                    else { window.open(`https://www.google.com/maps/search/?api=1&query=` + encodeURIComponent(loc), '_blank'); }
+                updateWeather() {
+                    const cityMap = { 0: "Sydney", 1: "Hobart", 2: "Hobart", 3: "Hobart", 4: "Hobart", 5: "Hobart", 6: "Bicheno", 7: "Devonport", 8: "Cradle Mountain", 9: "Sydney", 10: "Sydney" };
+                    this.weather.city_name = cityMap[this.selectedDayIndex];
+                    const temps = { "Sydney": "21", "Hobart": "13", "Bicheno": "14", "Devonport": "14", "Cradle Mountain": "7" };
+                    this.weather.temp = temps[this.weather.city_name] || "13";
+                },
+                openMap(loc, provider) {
+                    if (!loc) return;
+                    const url = provider === 'apple' ? `http://maps.apple.com/?q=${encodeURIComponent(loc)}` : `https://www.google.com/maps/search/?api=1&query=` + encodeURIComponent(loc);
+                    window.open(url, '_blank');
                 },
                 formatText(text) { return text ? String(text).replace(/\n/g, '<br>') : ''; },
                 tabClass(tab) { return this.currentTab === tab ? 'bg-tas-600 text-white w-12 h-12 rounded-full shadow-lg flex items-center justify-center transform scale-110' : 'bg-white/90 text-tas-600 w-10 h-10 rounded-full shadow flex items-center justify-center'; },
-                getTransportIcon(type) { const map = { walk: 'fa-person-walking', car: 'fa-car', flight: 'fa-plane', ship: 'fa-ship' }; return `fa-solid ${map[type] || 'fa-arrow-right'}`; },
+                getTransportIcon(type) { const map = { walk: 'fa-person-walking', car: 'fa-car', flight: 'fa-plane', ship: 'fa-ship', bus: 'fa-bus' }; return `fa-solid ${map[type] || 'fa-arrow-right'}`; },
                 itemCategoryName(cat) { const map = { sightseeing: '景點', food: '美食', shopping: '購物', transport: '交通', hotel: '住宿', flight: '航班' }; return map[cat] || '其他'; }
-            }
+            },
+            mounted() { this.updateWeather(); }
         }).mount('#app');
     </script>
 </body>
