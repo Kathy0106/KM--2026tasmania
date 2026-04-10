@@ -2,15 +2,12 @@
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>2026 塔斯曼尼亞 10天自駕 (V37)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>2026 塔斯曼尼亞 10天自駕 (V38 終極更新版)</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
-    
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
 
     <style>
@@ -18,6 +15,9 @@
             font-family: 'Zen Maru Gothic', sans-serif;
             background-color: #F8FAFC; /* 極淺藍灰 */
             overscroll-behavior-y: none;
+            margin: 0; padding: 0;
+            width: 100vw; height: 100vh; height: 100dvh;
+            overflow: hidden;
         }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
@@ -44,7 +44,9 @@
         }
     </script>
 </head>
-<body class="text-slate-700 h-screen w-screen overflow-hidden flex flex-col">
+<body class="text-slate-700 antialiased">
+
+    <div id="error-log" style="color: red; padding: 20px; font-weight: bold; background: #FFEBEE; display: none; position: absolute; z-index: 99999; top: 0; left: 0; width: 100%; height: 100%;"></div>
 
     <div id="app" class="h-full flex flex-col relative">
 
@@ -91,7 +93,7 @@
                         <div class="absolute left-[22px] top-4 bottom-4 w-0.5 bg-tas-200 opacity-50 z-0"></div>
 
                         <div v-for="(item, idx) in currentDayItinerary" :key="item.id" class="relative pl-12 pb-14 group">
-                            <div v-if="idx > 0" class="absolute -top-9 left-12 right-0 flex items-center text-xs text-tas-600 mb-2 z-50">
+                            <div v-if="idx > 0 && item.travelTime" class="absolute -top-9 left-12 right-0 flex items-center text-xs text-tas-600 mb-2 z-50">
                                 <span class="bg-white px-3 py-1 rounded-full border border-tas-200 flex items-center gap-1 shadow-sm font-bold whitespace-nowrap text-tas-600">
                                     <i :class="getTransportIcon(item.transportType)"></i>
                                     {{ item.travelTime || '移動' }}
@@ -179,8 +181,8 @@
                             <div>
                                 <h4 class="font-bold text-tas-600 mb-2 border-b border-tas-100 pb-1">🎟️ Tour / 門票</h4>
                                 <ul class="space-y-1 text-xs text-gray-600 ml-2 list-disc">
-                                    <li>MONA Ferry & Ticket (Day 3)</li>
-                                    <li><span class="text-red-600 font-bold">Deep-to-Dish Seafood Cruise (Day 4) (最急，班次少)</span></li>
+                                    <li>MONA Ferry & Ticket (Day 2)</li>
+                                    <li><span class="text-red-600 font-bold">Deep-to-Dish Seafood Cruise (Day 3)</span></li>
                                     <li><span class="text-red-600 font-bold">Maria Island Ferry (Day 6) (必須預約來回)</span></li>
                                     <li><span class="text-red-600 font-bold">Bicheno Penguin Tour (Day 6)</span></li>
                                     <li>Parks Pass (網上買 Holiday Pass)</li>
@@ -189,8 +191,8 @@
                             <div>
                                 <h4 class="font-bold text-tas-600 mb-2 border-b border-tas-100 pb-1">🍽️ 餐廳 (建議預約)</h4>
                                 <ul class="space-y-1 text-xs text-gray-600 ml-2 list-disc">
-                                    <li>Frank Restaurant (Day 2)</li>
-                                    <li>Da Angelo (Day 3)</li>
+                                    <li>Da Angelo (Day 4)</li>
+                                    <li>Frank Restaurant (Day 5)</li>
                                     <li><span class="text-red-600 font-bold">Black Cow Bistro (Day 8) (必訂)</span></li>
                                 </ul>
                             </div>
@@ -258,11 +260,11 @@
                     <input v-model="newItem.title" type="text" placeholder="行程名稱" class="w-full p-3 bg-gray-50 rounded-xl border-none outline-none focus:ring-2 focus:ring-tas-300">
                     <div class="flex gap-2">
                         <input v-model="newItem.time" type="time" class="w-1/3 p-3 bg-gray-50 rounded-xl outline-none">
-                        <select v-model="newItem.category" class="w-2/3 p-3 bg-gray-50 rounded-xl outline-none"><option value="sightseeing">景點</option><option value="food">美食</option><option value="shopping">購物</option><option value="transport">交通</option><option value="hotel">住宿</option></select>
+                        <select v-model="newItem.category" class="w-2/3 p-3 bg-gray-50 rounded-xl outline-none"><option value="sightseeing">景點</option><option value="food">美食</option><option value="shopping">購物</option><option value="transport">交通</option><option value="hotel">住宿</option><option value="flight">航班</option></select>
                     </div>
                     <div class="bg-gray-50 p-3 rounded-xl">
                          <div class="flex gap-2">
-                             <select v-model="newItem.transportType" class="flex-1 p-2 bg-white rounded-lg text-sm"><option value="car">自駕</option><option value="walk">步行</option><option value="flight">飛機</option><option value="ship">船/渡輪</option></select>
+                             <select v-model="newItem.transportType" class="flex-1 p-2 bg-white rounded-lg text-sm"><option value="car">自駕</option><option value="walk">步行</option><option value="flight">飛機</option><option value="ship">船/渡輪</option><option value="bus">巴士/火車</option></select>
                              <input v-model="newItem.travelTime" placeholder="時間 (e.g. 1.5 hr)" class="flex-1 p-2 bg-white rounded-lg text-sm">
                          </div>
                      </div>
@@ -300,6 +302,14 @@
     </div>
 
     <script>
+        window.onerror = function(msg, url, lineNo, columnNo, error) {
+            document.getElementById('error-log').style.display = 'block';
+            document.getElementById('error-log').innerHTML = '🚨 系統發生錯誤：<br><br>' + msg;
+            return false;
+        };
+    </script>
+
+    <script>
         const { createApp } = Vue;
 
         createApp({
@@ -318,114 +328,121 @@
                     apiKey: 'cc2dab2806da14aec6dab2ed8260a1c4', 
 
                     days: [
-                        { weekday: 'Wed', date: '5/21', dayNum: '0' }, 
-                        { weekday: 'Thu', date: '5/22', dayNum: '1' }, { weekday: 'Fri', date: '5/23', dayNum: '2' },
-                        { weekday: 'Sat', date: '5/24', dayNum: '3' }, { weekday: 'Sun', date: '5/25', dayNum: '4' },
-                        { weekday: 'Mon', date: '5/26', dayNum: '5' }, { weekday: 'Tue', date: '5/27', dayNum: '6' },
-                        { weekday: 'Wed', date: '5/28', dayNum: '7' }, { weekday: 'Thu', date: '5/29', dayNum: '8' },
-                        { weekday: 'Fri', date: '5/30', dayNum: '9' }, { weekday: 'Sat', date: '5/31', dayNum: '10' }
+                        { weekday: 'Thu', date: '5/21', dayNum: '0' }, 
+                        { weekday: 'Fri', date: '5/22', dayNum: '1' }, { weekday: 'Sat', date: '5/23', dayNum: '2' },
+                        { weekday: 'Sun', date: '5/24', dayNum: '3' }, { weekday: 'Mon', date: '5/25', dayNum: '4' },
+                        { weekday: 'Tue', date: '5/26', dayNum: '5' }, { weekday: 'Wed', date: '5/27', dayNum: '6' },
+                        { weekday: 'Thu', date: '5/28', dayNum: '7' }, { weekday: 'Fri', date: '5/29', dayNum: '8' },
+                        { weekday: 'Sat', date: '5/30', dayNum: '9' }, { weekday: 'Sun', date: '5/31', dayNum: '10' }
                     ],
 
                     itineraryData: [
                         // Day 0: 5/21
                         [
-                            { id: 0, time: '17:30', title: '抵達香港機場 T1', category: 'flight', desc: '辦理登機/安檢', transportType: 'walk', location: 'HKIA' },
-                            { id: 1, time: '19:30', title: '🛫 HKG → SYD (QF128)', category: 'flight', desc: '飛行時間 9h 15m\n<span class="text-red-600 font-bold">建議：長途夜機，機上盡量休息。</span>', transportType: 'flight' }
+                            { id: 1, time: '17:30', title: '抵達香港機場 (T1)', category: 'transport', desc: '報到 / 安檢\n建議：至少 2 小時前到機場\n檢查：護照、澳洲 eVisitor/ETA', location: 'Hong Kong International Airport' },
+                            { id: 2, time: '19:30', title: '🛫 HKG → SYD (QF128)', category: 'flight', desc: '飛行時間約 9h 15m\n(機上盡量睡眠)', transportType: 'flight' }
                         ],
                         // Day 1: 5/22
                         [
-                            { id: 11, time: '06:55', title: '抵達 Sydney (SYD) T1', category: 'transport', desc: '過關、取行李\n搭 T-Bus/T-Train 轉往 T2 國內航廈', transportType: 'bus', location: 'Sydney Airport' },
-                            { id: 12, time: '12:05', title: '🛫 SYD → HBA (QF1533)', category: 'flight', desc: '前往 Hobart', transportType: 'flight' },
-                            { id: 13, time: '13:55', title: '抵達 Hobart 機場', category: 'transport', desc: '搭的士/Uber 前往市區', transportType: 'car', location: 'Hobart Airport' },
-                            { id: 14, time: '16:00', title: '海濱散步', category: 'sightseeing', desc: 'Constitution Dock / Brooke St Pier\n熟路', transportType: 'walk', location: 'Constitution Dock' },
-                            { id: 15, time: '18:00', title: '晚餐: Mures / Drunken Admiral', category: 'food', desc: '海鮮晚餐', transportType: 'walk', location: 'Mures Lower Deck' },
-                            { id: 16, time: '20:00', title: 'Check-in Hobart CBD', category: 'hotel', desc: 'Hobart 市區酒店', transportType: 'walk', location: 'Hobart' }
+                            { id: 101, time: '06:45', title: '抵達 Sydney (SYD)', category: 'transport', desc: 'T1 → T2(國內) 需轉乘接駁，請預留充足時間提取/重託運行李。\n可於 T2 先食個早餐', location: 'Sydney Airport' },
+                            { id: 102, time: '12:05', title: '🛫 SYD → HBA', category: 'flight', desc: '前往 Hobart', transportType: 'flight' },
+                            { id: 103, time: '14:30', title: '機場 → North Hobart', category: 'transport', desc: '搭的士/Uber 前往 Airbnb', location: '44 Church St, North Hobart' },
+                            { id: 104, time: '15:00', title: '🏠 【梳洗時間】', category: 'hotel', desc: '1 小時洗臉、整理行李、小休叉電', info: 'North Hobart 區位於斜坡，未拎車前建議搭 Uber，免卻上坡辛苦。' },
+                            { id: 105, time: '16:30', title: '海濱散步', category: 'sightseeing', desc: '1. Woolworths: 買補給品\n2. Brooke St Pier: 睇定聽日搭船位\n3. Constitution Dock: 影黃昏漁船', transportType: 'walk' },
+                            { id: 106, time: '18:00', title: '晚餐: 碼頭區推介', category: 'food', desc: 'Mures Lower Deck (帶子咖喱批/深海魚柳)\n或 Pearl + Co (生蠔吧睇日落)', location: 'Victoria Dock, Hobart' }
                         ],
                         // Day 2: 5/23
                         [
-                            { id: 21, time: '09:00', title: '早餐: Villino / Daci', category: 'food', desc: '市區 Cafe', transportType: 'walk', location: 'Villino Coffee' },
-                            { id: 22, time: '10:00', title: '市區漫遊', category: 'sightseeing', desc: 'Salamanca Place 小店、Kelly’s Steps', transportType: 'walk', location: 'Salamanca Place' },
-                            { id: 23, time: '12:30', title: '午餐: Fish Frenzy', category: 'food', desc: '炸魚薯條', transportType: 'walk', location: 'Fish Frenzy' },
-                            { id: 24, time: '14:30', title: 'Mt Wellington (kunanyi)', category: 'sightseeing', desc: 'Uber/巴士上山\n<span class="text-red-600 font-bold">注意：山頂極大風，需穿厚外套。</span>', info: 'Pinnacle Observation Shelter', transportType: 'car', location: 'Mount Wellington' },
-                            { id: 25, time: '18:00', title: '晚餐: Frank Restaurant', category: 'food', desc: '南美烤肉 (<span class="text-red-600 font-bold">建議預約</span>)', transportType: 'car', location: 'Frank Restaurant' }
+                            { id: 201, time: '07:00', title: '🏠 【梳洗時間】', category: 'hotel', desc: '1 小時起床準備及化妝' },
+                            { id: 202, time: '08:00', title: '早餐', category: 'food', desc: 'Machine Laundry Café 或 Daci & Daci Bakers', transportType: 'walk' },
+                            { id: 203, time: '08:30', title: '🎪 Salamanca Market', category: 'shopping', desc: '週六限定！Hobart 最大周末市集\n必食：Smith’s pie (Scallops pie)', transportType: 'walk', location: 'Salamanca Market' },
+                            { id: 204, time: '10:30', title: '前往 Brooke Street Pier', category: 'transport', desc: '步行前往碼頭', transportType: 'walk' },
+                            { id: 205, time: '11:15', title: '🚤 搭 MONA Ferry', category: 'transport', desc: '前往博物館', transportType: 'ship' },
+                            { id: 206, time: '11:45', title: '🖼️ MONA 參觀', category: 'sightseeing', desc: '建議由底層開始行。\n必影：入口大樓梯、鏡面房、地面雕塑。', location: 'Museum of Old and New Art' },
+                            { id: 207, time: '15:30', title: '🚤 搭 Ferry 回市區', category: 'transport', desc: '可選 15:30 或 16:30 班次', transportType: 'ship' },
+                            { id: 208, time: '17:00', title: '🏠 【小休時間】', category: 'hotel', desc: '1 小時回 Airbnb 休息洗臉、換衫準備' },
+                            { id: 209, time: '18:00', title: 'Van Diemens Land Creamery', category: 'food', desc: '食手工雪糕', transportType: 'walk' },
+                            { id: 210, time: '18:30', title: '晚餐: 煮飯仔 @ Home', category: 'food', desc: '利用 Airbnb 廚房煎塔州三文魚', transportType: 'walk' }
                         ],
                         // Day 3: 5/24
                         [
-                            { id: 31, time: '08:30', title: '🛍️ Salamanca Market', category: 'shopping', desc: '<span class="text-red-600 font-bold">週六限定</span>\n必買：薰衣草熊、皮革蜜糖、木雕', transportType: 'walk', location: 'Salamanca Market' },
-                            { id: 32, time: '11:00', title: '前往 Brooke St Pier 碼頭', category: 'transport', desc: '11:15 搭船前往 MONA', transportType: 'ship', location: 'Brooke Street Pier' },
-                            { id: 33, time: '11:45', title: 'MONA 美術館', category: 'sightseeing', desc: '前衛藝術館 (約 3 小時)', info: '建議預訂 Posh Pit 或 Standard 位', transportType: 'walk', location: 'MONA' },
-                            { id: 34, time: '15:00', title: '搭船返回 Hobart', category: 'transport', desc: '返回市區', transportType: 'ship' },
-                            { id: 35, time: '16:00', title: 'Battery Point 散步', category: 'sightseeing', desc: 'Arthur Circus 小屋', transportType: 'walk', location: 'Battery Point' },
-                            { id: 36, time: '18:00', title: '晚餐: Da Angelo Ristorante', category: 'food', desc: '意大利菜 (<span class="text-red-600 font-bold">建議預約</span>)', transportType: 'walk', location: 'Da Angelo Ristorante' }
+                            { id: 301, time: '08:00', title: '🏠 【梳洗時間】', category: 'hotel', desc: '1 小時梳理、收拾並退房 Check-out' },
+                            { id: 302, time: '10:00', title: '🐚 Deep-to-Dish 海鮮 Cruise', category: 'food', desc: '半日遊。船上現食即開生蠔、海膽、青口、鮑魚、龍蝦。', location: 'Elizabeth Street Pier' },
+                            { id: 303, time: '14:30', title: '前往 Cambridge 取車', category: 'transport', desc: '搭 Uber/的士前往', transportType: 'car', location: '22 Cherokee Dr, Cambridge' },
+                            { id: 304, time: '15:00', title: '🚗 取車手續', category: 'transport', desc: '檢查：影相留底，確認保險\n問清楚是否可上 Bruny Island Ferry。' },
+                            { id: 305, time: '15:30', title: '⛰️ Mt Wellington (kunanyi)', category: 'sightseeing', desc: '由 Cambridge 直上山頂約 40 分鐘。俯瞰全景。', info: '山頂極冷大風，拍照要握實手機。下山天暗留意野生動物。', transportType: 'car', location: 'Mount Wellington' },
+                            { id: 306, time: '18:00', title: '🛍️ Woolworths 買物資', category: 'shopping', desc: '買聽日開始去 Bruny 同 Maria Island 嘅早餐同 Lunch 食材。', transportType: 'car' }
                         ],
-                        // Day 4: 5/25 (取車)
+                        // Day 4: 5/25
                         [
-                            { id: 41, time: '09:45', title: '集合 @ Franklin Wharf', category: 'transport', desc: '準備上船', transportType: 'walk', location: 'Franklin Wharf' },
-                            { id: 42, time: '10:00', title: 'Seafood Cruise', category: 'food', desc: '<span class="text-red-600 font-bold">Deep-to-Dish Tasmanian Seafood Cruise</span>\n4.5小時: 食即撈海膽、鮑魚、龍蝦', transportType: 'ship', location: 'Tasmanian Seafood Seduction' },
-                            { id: 43, time: '15:30', title: '🚗 取車 (Hobart City)', category: 'transport', desc: '檢查車身、輪胎、Parks Pass', info: '買全保 Zero Excess', transportType: 'car', location: 'Hobart' },
-                            { id: 44, time: '17:00', title: '超市補給', category: 'shopping', desc: 'Woolworths/Coles 買水及乾糧 (<span class="text-red-600 font-bold">為明日準備</span>)', transportType: 'car', location: 'Woolworths Hobart' },
-                            { id: 45, time: '18:30', title: '晚餐: 簡單輕食', category: 'food', desc: '超市烤雞', transportType: 'walk' }
+                            { id: 401, time: '08:30', title: '🏠 【梳洗時間】', category: 'hotel', desc: '1 小時起床、化妝及預備' },
+                            { id: 402, time: '10:00', title: '🏛️ Salamanca Place 小店', category: 'shopping', desc: '木藝/陶器、Art Mob、Hammer & Hand', transportType: 'walk', location: 'Salamanca Place' },
+                            { id: 403, time: '13:45', title: '🏡 Battery Point 散步', category: 'sightseeing', desc: 'Brooke St Pier → Kelly’s Steps → Arthur Circus (彩色小屋) → Hampden Rd', transportType: 'walk', location: 'Battery Point' },
+                            { id: 404, time: '15:30', title: '🍰 Czegs Café', category: 'food', desc: '必食 Vanilla Slice 或 巨型 Puff', transportType: 'walk' },
+                            { id: 405, time: '16:30', title: '🏠 【梳洗時間】', category: 'hotel', desc: '1 小時民宿小休、洗臉、準備晚餐' },
+                            { id: 406, time: '18:15', title: '晚餐: Da Angelo Ristorante', category: 'food', desc: '已預約 (4位)\n必食: Carbonara, Mushroom Pizza, Tiramisu', transportType: 'car', location: 'Da Angelo Ristorante' }
                         ],
-                         // Day 5: 5/26 (Bruny Island)
-                         [
-                            { id: 51, time: '08:00', title: 'Hobart → Kettering', category: 'transport', desc: '前往碼頭搭船', transportType: 'car', travelTime: '35 min' },
-                            { id: 52, time: '09:00', title: '渡輪往 Bruny Island', category: 'transport', desc: '人車上船', transportType: 'ship', location: 'Kettering Ferry Terminal' },
-                            { id: 53, time: '09:40', title: 'The Neck Lookout', category: 'sightseeing', desc: '地標觀景台', transportType: 'car', location: 'The Neck Lookout' },
-                            { id: 54, time: '10:30', title: 'Bruny Island Cheese Co.', category: 'food', desc: '食芝士', transportType: 'car', location: 'Bruny Island Cheese Company' },
-                            { id: 55, time: '11:30', title: 'Get Shucked (生蠔)', category: 'food', desc: '<span class="text-red-600 font-bold">必食新鮮生蠔</span>', transportType: 'car', location: 'Get Shucked' },
-                            { id: 56, time: '13:00', title: 'Cape Bruny Lighthouse', category: 'sightseeing', desc: '最南端燈塔', transportType: 'car', location: 'Cape Bruny Lighthouse' },
-                            { id: 57, time: '15:00', title: 'Adventure Bay', category: 'sightseeing', desc: '尋找白袋鼠', transportType: 'car', location: 'Adventure Bay' },
-                            { id: 58, time: '16:30', title: '回程 Hobart', category: 'transport', desc: '搭渡輪回 Kettering', transportType: 'ship' },
-                            { id: 59, time: '18:30', title: '晚餐: Aloft / Bar Wa', category: 'food', desc: 'Fine Dining (<span class="text-red-600 font-bold">需預約</span>) 或 Izakaya', transportType: 'car' }
-                        ],
-                        // Day 6: 5/27 (Maria Island)
-                         [
-                            { id: 61, time: '07:00', title: 'Hobart → Triabunna', category: 'transport', desc: '行李鎖車尾，車泊碼頭', transportType: 'car', travelTime: '1h 15m' },
-                            { id: 62, time: '10:00', title: '船入 Maria Island', category: 'transport', desc: '船程 30 分鐘 (<span class="text-red-600 font-bold">必須預約</span>)', transportType: 'ship', location: 'Triabunna Wharf' },
-                            { id: 63, time: '10:30', title: 'Maria Island 探索', category: 'sightseeing', desc: 'Darlington (睇袋熊)、Painted Cliffs\n<span class="text-red-600 font-bold">午餐自備三文治</span> (島上無餐廳)', transportType: 'walk', location: 'Maria Island' },
-                            { id: 64, time: '14:30', title: '回 Triabunna', category: 'transport', desc: '搭船離開', transportType: 'ship' },
-                            { id: 65, time: '15:15', title: '前往 Bicheno', category: 'transport', desc: '移動至東海岸', transportType: 'car', travelTime: '1h 40m' },
-                            { id: 66, time: '17:30', title: 'Check-in & 晚餐', category: 'food', desc: 'Lobster Shack', transportType: 'car', location: 'Lobster Shack Tasmania' },
-                            { id: 67, time: '18:30', title: 'Bicheno Penguin Tour', category: 'sightseeing', desc: '夜觀野生企鵝歸巢 (<span class="text-red-600 font-bold">必須預約</span>)', transportType: 'walk', location: 'Bicheno Penguin Tours' }
-                        ],
-                        // Day 7: 5/28 (Freycinet)
+                        // Day 5: 5/26
                         [
-                            { id: 71, time: '08:30', title: 'Bicheno → Coles Bay', category: 'transport', desc: '前往國家公園', transportType: 'car', travelTime: '35 min' },
-                            { id: 72, time: '09:15', title: 'Wineglass Bay Lookout', category: 'sightseeing', desc: '來回 1.5小時，中等難度', transportType: 'walk', location: 'Wineglass Bay Lookout' },
-                            { id: 73, time: '11:30', title: 'Cape Tourville Lighthouse', category: 'sightseeing', desc: '輕鬆步道，海景一流', transportType: 'walk', location: 'Cape Tourville Lighthouse' },
-                            { id: 74, time: '13:00', title: '午餐: Freycinet Marine Farm', category: 'food', desc: '食青口/生蠔', transportType: 'car', location: 'Freycinet Marine Farm' },
-                            { id: 75, time: '14:30', title: '前往 Sheffield', category: 'transport', desc: '長途車程 (3.5 hr)\n經 Campbell Town 休息', info: '注意：入夜前盡量抵達，小心袋鼠', transportType: 'car', location: 'Sheffield' },
-                            { id: 76, time: '18:00', title: '抵達 Sheffield', category: 'hotel', desc: '壁畫小鎮住宿\n<span class="text-red-600 font-bold">超市 19:00 關門，要快</span>', transportType: 'car', location: 'Sheffield' }
+                            { id: 501, time: '06:45', title: '🏠 【梳洗時間】', category: 'hotel', desc: '1 小時起床準備、檢查裝備' },
+                            { id: 502, time: '08:15', title: 'Hobart → Kettering', category: 'transport', desc: '前往渡輪碼頭', transportType: 'car', travelTime: '35m', location: 'Kettering Ferry Terminal' },
+                            { id: 503, time: '09:00', title: '⛴️ 渡輪往 Bruny Island', category: 'transport', desc: '人車上船', transportType: 'ship' },
+                            { id: 504, time: '09:20', title: '🏝️ Bruny Island 行程', category: 'sightseeing', desc: '• The Neck: 登200級樓梯睇全景\n• Bruny Island Cheese Co.\n• Bruny Baker: 買手工麵包(備現金)\n• Get Shucked: 鮮甜生蠔\n• Cape Bruny Lighthouse: 最南燈塔\n• Fluted Cape Track (有時間先去)', transportType: 'car', location: 'Bruny Island' },
+                            { id: 505, time: '16:30', title: '⛴️ 渡輪返 Kettering', category: 'transport', desc: 'Roberts Point 回程', transportType: 'ship' },
+                            { id: 506, time: '17:00', title: 'Kettering → Hobart CBD', category: 'transport', desc: '直踩去碼頭區', transportType: 'car', travelTime: '40m' },
+                            { id: 507, time: '17:40', title: '🅿️ 泊車 & 補妝', category: 'transport', desc: '泊 Dunn Place Car Park 或 Salamanca Square', transportType: 'walk' },
+                            { id: 508, time: '18:00', title: '晚餐: Frank Restaurant', category: 'food', desc: '已預約 (4位)\n必食: Wood-fired flank steak, Empanadas', location: 'Frank Restaurant' },
+                            { id: 509, time: '20:00', title: '返 North Hobart 休息', category: 'hotel', desc: '食飽揸車返大本營', transportType: 'car' }
                         ],
-                        // Day 8: 5/29 (Cradle Mt)
+                        // Day 6: 5/27
                         [
-                            { id: 81, time: '07:30', title: '前往 Cradle Mt Visitor Centre', category: 'transport', desc: '早起出發', transportType: 'car', travelTime: '50 min' },
-                            { id: 82, time: '08:30', title: '轉 Shuttle Bus 入園', category: 'transport', desc: '私家車不能入', transportType: 'bus', location: 'Cradle Mountain Visitor Centre' },
-                            { id: 83, time: '09:00', title: 'Dove Lake & Enchanted Walk', category: 'sightseeing', desc: '環湖步道短線 / Boat Shed', transportType: 'walk', location: 'Dove Lake' },
-                            { id: 84, time: '11:45', title: '午餐: Peppers Lodge', category: 'food', desc: 'Cradle Mountain Lodge', transportType: 'car' },
-                            { id: 85, time: '12:30', title: '前往 Stanley', category: 'transport', desc: '移動至西北海岸', transportType: 'car', travelTime: '2h 15m' },
-                            { id: 86, time: '15:00', title: 'The Nut (Stanley)', category: 'sightseeing', desc: '海上巨岩\n<span class="text-red-600 font-bold">5月 Chairlift 停運</span>，不建議強行上山頂', transportType: 'walk', location: 'The Nut State Reserve' },
-                            { id: 87, time: '17:00', title: '晚餐: Hursey Seafoods', category: 'food', desc: '食炸龍蝦', transportType: 'car', location: 'Hursey Seafoods' },
-                            { id: 88, time: '18:30', title: '前往 Launceston', category: 'transport', desc: '行 Bass Hwy 較易行', transportType: 'car', travelTime: '2h' },
-                            { id: 89, time: '20:30', title: 'Check-in Launceston', category: 'hotel', desc: 'CBD 住宿', transportType: 'car', location: 'Launceston' },
-                            { id: 891, time: '18:00', title: '晚餐: Black Cow Bistro', category: 'food', desc: 'Launceston 最強牛扒 (<span class="text-red-600 font-bold">必須預約</span>)', transportType: 'walk', location: 'Black Cow Bistro' }
+                            { id: 601, time: '05:30', title: '🏠 【梳洗時間】', category: 'hotel', desc: '1 小時快速梳洗、搬行李上車' },
+                            { id: 602, time: '07:00', title: 'Hobart → Triabunna', category: 'transport', desc: '出發去碼頭', transportType: 'car', travelTime: '1h 20m', location: 'Triabunna' },
+                            { id: 603, time: '10:00', title: '⛴️ Maria Island 探險', category: 'sightseeing', desc: '(10:00去 / 14:30返)\n路線: Darlington → Painted Cliffs (45m)\n尋找野生袋熊 (Wombat)', info: '中午食自備 Lunch，島上無補給', transportType: 'walk', location: 'Maria Island' },
+                            { id: 604, time: '15:00', title: 'Triabunna → Bicheno', category: 'transport', desc: '向東海岸出發', info: '黃昏行車慢速，避免碰撞野生動物', transportType: 'car', travelTime: '1h 40m', location: 'Bicheno' },
+                            { id: 605, time: '16:40', title: '🏘️ 【小休時間】', category: 'hotel', desc: '1 小時入住民宿 (4 Champ St)、簡單梳理', location: '4 Champ Street, Bicheno' }
                         ],
-                        // Day 9: 5/30 (To Sydney)
+                        // Day 7: 5/28
                         [
-                            { id: 91, time: '08:00', title: '早餐: Sweetbrew', category: 'food', desc: '或 Bread & Butter', transportType: 'walk' },
-                            { id: 92, time: '08:30', title: '前往機場還車', category: 'transport', desc: 'Launceston Airport (LST)', transportType: 'car', location: 'Launceston Airport' },
-                            { id: 93, time: '09:45', title: '🛫 LST → SYD (QF5746)', category: 'flight', desc: '前往悉尼', transportType: 'flight' },
-                            { id: 94, time: '12:30', title: '出市區 Check-in', category: 'transport', desc: '搭火車/Uber', transportType: 'train', location: 'Sydney CBD' },
-                            { id: 95, time: '13:30', title: '午餐: Fish Market', category: 'food', desc: '或 The Grounds', transportType: 'walk', location: 'Sydney Fish Market' },
-                            { id: 96, time: '15:00', title: '悉尼市區漫遊', category: 'sightseeing', desc: 'Opera House / Harbour Bridge / QVB', transportType: 'walk', location: 'Sydney Opera House' },
-                            { id: 97, time: '19:00', title: '晚餐: Mr. Wong', category: 'food', desc: '或 Hurricane’s Grill (<span class="text-red-600 font-bold">建議預約</span>)', transportType: 'walk', location: 'Mr. Wong' },
-                            { id: 98, time: '21:00', title: '住宿', category: 'hotel', desc: 'Sydney Airport 附近 (<span class="text-red-600 font-bold">方便翌日早機</span>) 或 CBD', transportType: 'walk' }
+                            { id: 701, time: '07:15', title: '🏠 【梳洗時間】', category: 'hotel', desc: '1 小時梳洗、行李上車及 Check-out' },
+                            { id: 702, time: '08:45', title: '⛰️ Wineglass Bay Lookout', category: 'sightseeing', desc: '行山 (30-40mins) 影葡萄杯海灣', transportType: 'walk', location: 'Wineglass Bay Lookout' },
+                            { id: 703, time: '10:20', title: '🚗 Cape Tourville Lighthouse', category: 'sightseeing', desc: '全程木棧道輕鬆行', transportType: 'car', location: 'Cape Tourville Lighthouse' },
+                            { id: 704, time: '11:00', title: '開往 Devonport', category: 'transport', desc: '中途停 Campbell Town 休息', transportType: 'car', travelTime: '3h' },
+                            { id: 705, time: '14:00', title: '🛍️ Woolworths Devonport', category: 'shopping', desc: '買聽日搖籃山 Lunch 食材', info: '入山後野食極少，此處必須補給', transportType: 'car', location: 'Woolworths Devonport' },
+                            { id: 706, time: '16:00', title: '🏠 【梳洗時間】', category: 'hotel', desc: '1 小時民宿梳理、放行李休息', location: '241 William Street, Devonport' }
                         ],
-                        // Day 10: 5/31 (Home)
+                        // Day 8: 5/29
                         [
-                            { id: 101, time: '08:00', title: '前往悉尼機場 (T1)', category: 'transport', desc: '國際線出發', transportType: 'car', location: 'Sydney International Airport' },
-                            { id: 102, time: '10:10', title: '🛫 SYD → HKG (QF127)', category: 'flight', desc: '回家', transportType: 'flight' },
-                            { id: 103, time: '17:55', title: '抵達香港', category: 'flight', desc: 'Sweet Home!', transportType: 'flight' }
+                            { id: 801, time: '06:10', title: '🏠 【梳洗時間】', category: 'hotel', desc: '1 小時準備、搬行李上車' },
+                            { id: 802, time: '07:10', title: 'Devonport → Stanley', category: 'transport', desc: '出發西北', transportType: 'car', travelTime: '1.5h' },
+                            { id: 803, time: '08:40', title: '📸 Stanley (Godfreys Beach)', category: 'sightseeing', desc: '影 The Nut 全貌與海岸線', location: 'Godfreys Beach' },
+                            { id: 804, time: '09:40', title: 'Stanley → Cradle Mt', category: 'transport', desc: '前往搖籃山', transportType: 'car', travelTime: '2h' },
+                            { id: 805, time: '11:40', title: '遊客中心手續', category: 'transport', desc: '泊低私家車，換領 Shuttle Bus 票', location: 'Cradle Mountain Visitor Centre' },
+                            { id: 806, time: '12:10', title: '🚌 搖籃山行山精華', category: 'sightseeing', desc: '• Dove Lake: 行 20 分鐘到 Boat Shed\n• Glacier Rock: 登石睇湖景\n• Enchanted Walk: 睇 Moss Forest', transportType: 'walk', location: 'Dove Lake' },
+                            { id: 807, time: '14:30', title: 'Cradle → Launceston', category: 'transport', desc: '出發去 Launceston', info: '趕天黑前出山！野生動物極多，切勿開快車！', transportType: 'car', travelTime: '2h 15m' },
+                            { id: 808, time: '16:45', title: '🏘️ 【深度梳洗】', category: 'hotel', desc: '1.5 小時詳細洗漱、化妝及換衫\n為夜晚食好西準備！', location: '150 Brisbane Street, Launceston' },
+                            { id: 809, time: '19:00', title: '晚餐: Black Cow Bistro', category: 'food', desc: '已預約 (4位)\n必食: Robbins Island Wagyu, Duck Fat Potatoes', transportType: 'walk', location: 'Black Cow Bistro' }
+                        ],
+                        // Day 9: 5/30
+                        [
+                            { id: 901, time: '06:30', title: '🏠 【梳洗時間】', category: 'hotel', desc: '1 小時起床、收拾行李、Check-out' },
+                            { id: 902, time: '08:00', title: '🚗 LST 機場還車', category: 'transport', desc: '辦理還車手續', location: 'Launceston Airport' },
+                            { id: 903, time: '09:45', title: '🛫 LST → SYD (QF5746)', category: 'flight', desc: '飛往悉尼', transportType: 'flight' },
+                            { id: 904, time: '11:25', title: '🚕 機場 → 悉尼住宿', category: 'transport', desc: '安頓行李 (CBD 或 Circular Quay)', transportType: 'car' },
+                            { id: 905, time: '12:30', title: '🏠 【梳理時間】', category: 'hotel', desc: '1 小時入住、洗臉、整理衣物及小休' },
+                            { id: 906, time: '13:30', title: '悉尼經典地標散步', category: 'sightseeing', desc: 'Circular Quay → Sydney Opera House\nRoyal Botanic Garden → Mrs Macquarie’s Chair', transportType: 'walk', location: 'Sydney Opera House' },
+                            { id: 907, time: '15:30', title: '🛍️ The Rocks 週六市集', category: 'shopping', desc: '週六限定手工藝市集\n順路行 Pylon Lookout 俯瞰海港', transportType: 'walk', location: 'The Rocks' },
+                            { id: 908, time: '17:30', title: '🏠 【梳洗時間】', category: 'hotel', desc: '1 小時換衫、補妝，準備最後晚餐' },
+                            { id: 909, time: '18:30', title: '晚餐: 悉尼必食', category: 'food', desc: '選項A: Quay / Aria (海港景觀)\n選項B: The Gidley / Rockpool (牛扒)\n選項C: Darling Harbour 碼頭邊' }
+                        ],
+                        // Day 10: 5/31
+                        [
+                            { id: 1001, time: '07:45', title: '☀️ 起床 & 整理行李', category: 'hotel', desc: '如住 CBD，預留 25-35 分鐘交通' },
+                            { id: 1002, time: '08:00', title: '前往 Sydney T1', category: 'transport', desc: 'Uber/Taxi (約 20-30m) 或 Airport Link (約 17m)', transportType: 'car', location: 'Sydney International Airport' },
+                            { id: 1003, time: '08:30', title: '🛄 Check-in / 安檢', category: 'flight', desc: '國際航班建議提早到', info: '安檢排隊有時較慢，勿太遲' },
+                            { id: 1004, time: '09:15', title: '☕ 機場早餐', category: 'food', desc: '登機等候' },
+                            { id: 1005, time: '10:10', title: '🛫 SYD → HKG (QF127)', category: 'flight', desc: '飛行時間：約 9h 45m', transportType: 'flight' },
+                            { id: 1006, time: '17:55', title: '抵達香港', category: 'transport', desc: 'Sweet Home!' }
                         ]
                     ],
 
@@ -476,11 +493,11 @@
                     if (type === 'aud') this.calcHkd = (this.calcAud * this.exchangeRate).toFixed(1);
                     else this.calcAud = (this.calcHkd / this.exchangeRate).toFixed(2);
                 },
-                openMap(loc) { if(loc) window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(loc)}`, '_blank'); },
+                openMap(loc) { if(loc) window.open(`https://www.google.com/maps/search/?api=1&query=$` + encodeURIComponent(loc), '_blank'); },
                 openImage(src) { this.currentImageSrc = src; this.showImageModal = true; },
-                formatText(text) { return text.replace(/\n/g, '<br>'); },
-                tabClass(tab) { return this.currentTab === tab ? 'bg-tas-600 text-white w-12 h-12 rounded-full shadow-lg flex items-center justify-center transform scale-110' : 'bg-white/90 text-tas-600 w-10 h-10 rounded-full shadow flex items-center justify-center'; },
-                getCategoryIcon(cat) { const map = { food: 'fa-utensils', transport: 'fa-car', shopping: 'fa-bag-shopping', ticket: 'fa-ticket', hotel: 'fa-bed' }; return `fa-solid ${map[cat] || 'fa-circle'}`; },
+                formatText(text) { return text ? String(text).replace(/\n/g, '<br>') : ''; },
+                tabClass(tab) { return this.currentTab === tab ? 'bg-tas-600 text-white w-12 h-12 rounded-full shadow-lg flex items-center justify-center transform scale-110 transition-all' : 'bg-white/90 text-tas-600 w-10 h-10 rounded-full shadow flex items-center justify-center transition-all'; },
+                getCategoryIcon(cat) { const map = { food: 'fa-utensils', transport: 'fa-car', shopping: 'fa-bag-shopping', ticket: 'fa-ticket', hotel: 'fa-bed', flight: 'fa-plane' }; return `fa-solid ${map[cat] || 'fa-circle'}`; },
                 getTransportIcon(type) { const map = { walk: 'fa-person-walking', train: 'fa-train', car: 'fa-car', bus: 'fa-bus', flight: 'fa-plane', ship: 'fa-ship' }; return `fa-solid ${map[type] || 'fa-arrow-right'}`; },
                 itemCategoryName(cat) { const map = { sightseeing: '景點', food: '美食', shopping: '購物', transport: '交通', hotel: '住宿', flight: '航班' }; return map[cat] || '其他'; },
                 openAddModal() { this.showModal = true; },
@@ -498,9 +515,9 @@
                     }
                     this.showModal = false; 
                 },
-                deleteItem(id) { if(confirm('刪除?')) this.itineraryData[this.selectedDayIndex] = this.itineraryData[this.selectedDayIndex].filter(i => i.id !== id); },
+                deleteItem(id) { if(confirm('確定要刪除嗎?')) this.itineraryData[this.selectedDayIndex] = this.itineraryData[this.selectedDayIndex].filter(i => i.id !== id); },
                 removeShoppingItem(id) { this.shoppingList = this.shoppingList.filter(i => i.id !== id); localStorage.setItem('shoppingList_tas', JSON.stringify(this.shoppingList)); },
-                deleteExpense(id) { if(confirm('刪除?')) { this.expenses = this.expenses.filter(i => i.id !== id); localStorage.setItem('expenses_tas', JSON.stringify(this.expenses)); } },
+                deleteExpense(id) { if(confirm('確定要刪除嗎?')) { this.expenses = this.expenses.filter(i => i.id !== id); localStorage.setItem('expenses_tas', JSON.stringify(this.expenses)); } },
                 moveItem(idx, dir) { 
                     const list = this.itineraryData[this.selectedDayIndex];
                     const target = idx + dir;
