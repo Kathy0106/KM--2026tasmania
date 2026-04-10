@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>2026 塔斯曼尼亞 10天自駕 (V51 終極版)</title>
+    <title>2026 塔斯曼尼亞 10天自駕 (V52 每日標題版)</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.3.4/vue.global.min.js"></script>
@@ -40,6 +40,15 @@
             background: linear-gradient(to right, #3B82F6, #2563EB);
             color: white;
             box-shadow: 0 2px 10px rgba(37, 99, 235, 0.3);
+        }
+        /* ✅ V52 新增：每日大標題樣式 */
+        .daily-title-box {
+            background-color: #1E3A8A; /* 深藍色背景 */
+            color: white;
+            border-radius: 16px;
+            padding: 12px 16px;
+            box-shadow: 0 4px 15px rgba(30, 58, 138, 0.2);
+            margin-bottom: 16px;
         }
     </style>
     
@@ -92,12 +101,25 @@
                         </div>
                     </div>
 
-                    <div class="bg-gradient-to-r from-blue-50 to-tas-100 rounded-2xl p-4 mb-6 flex items-center justify-between shadow-sm text-slate-700 border border-blue-100">
+                    <div class="bg-gradient-to-r from-blue-50 to-tas-100 rounded-2xl p-4 mb-4 flex items-center justify-between shadow-sm text-slate-700 border border-blue-100">
                         <div>
                             <div class="text-xs opacity-70 flex items-center gap-1"><i class="fa-solid fa-location-dot text-tas-500"></i> {{ weather.city_name }}</div>
                             <div class="text-2xl font-bold text-tas-700">{{ weather.temp }}°C <span class="text-sm font-normal text-gray-500">體感 {{ weather.feels_like }}°C</span></div>
                         </div>
                         <i :class="['fa-solid', weather.icon, 'text-4xl text-yellow-400']"></i>
+                    </div>
+
+                    <div v-if="dailyMainTitles[selectedDayIndex]" class="daily-title-box flex items-center gap-3">
+                        <div class="flex-1">
+                            <h2 class="text-[15px] font-bold leading-tight tracking-wide" v-html="dailyMainTitles[selectedDayIndex]"></h2>
+                        </div>
+                    </div>
+
+                    <div v-if="dailyRemarks[selectedDayIndex]" class="remarks-box p-4 mb-8 soft-shadow">
+                        <div class="text-sm font-black text-tas-700 mb-2 border-b-2 border-tas-200 pb-1">
+                            <i class="fa-solid fa-lightbulb mr-2"></i>今日重點提醒
+                        </div>
+                        <div class="text-xs space-y-3 leading-relaxed" v-html="formatText(dailyRemarks[selectedDayIndex])"></div>
                     </div>
 
                     <div class="space-y-0 relative">
@@ -183,6 +205,26 @@
                                     <li><span class="font-bold text-slate-800">Parks Pass:</span> <br><span class="price-highlight">95.5 AUD/車 (約 HKD 573)</span></li>
                                 </ul>
                             </div>
+                            <div>
+                                <h4 class="font-bold text-tas-600 mb-2 border-b border-tas-100 pb-1">✈️ 機票 & 🚗 租車</h4>
+                                <ul class="space-y-1 text-xs text-gray-600 ml-2 list-disc">
+                                    <li>香港 ↔ 悉尼 (Qantas)</li>
+                                    <li>悉尼 → Hobart / Launceston → 悉尼</li>
+                                    <li><span class="text-red-600 font-bold">租車: 異地還車。必須加購全保 (Zero Excess)</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-2xl p-4 soft-shadow">
+                        <h3 class="font-bold text-slate-700 mb-3"><i class="fa-solid fa-clipboard-check mr-2 text-tas-500"></i>出發前 Checklist</h3>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex items-center gap-2"><input type="checkbox" class="accent-tas-600"> 簽證: ETA / eVisitor</div>
+                            <div class="flex items-center gap-2"><input type="checkbox" class="accent-tas-600"> <span class="text-red-600 font-bold">租車: 必買全保 (Zero Excess) 防袋鼠/碎石</span></div>
+                            <div class="flex items-center gap-2"><input type="checkbox" class="accent-tas-600"> 證件: 國際車牌 + 香港車牌</div>
+                            <div class="flex items-center gap-2"><input type="checkbox" class="accent-tas-600"> 購買 Parks Pass ($95.5/車) 🌲</div>
+                            <div class="flex items-center gap-2"><input type="checkbox" class="accent-tas-600"> <span class="text-red-600 font-bold">必訂: Cruise / 企鵝 / 住宿</span></div>
+                            <div class="flex items-center gap-2"><input type="checkbox" class="accent-tas-600"> <span class="text-red-600 font-bold">行李: 5月山區寒冷(0-5度)，備厚褸/冷帽</span></div>
                         </div>
                     </div>
                     
@@ -286,6 +328,21 @@
                         { weekday: `Sat`, date: `5/30`, dayNum: `9` }, { weekday: `Sun`, date: `5/31`, dayNum: `10` }
                     ],
 
+                    // ✅ V52: 100% 同步 PDF 的每日大標題
+                    dailyMainTitles: {
+                        0: `✈️ 香港 – 出發 → 悉尼（轉機）`,
+                        1: `🛬 Hobart – 抵達 → 海濱散步 → 晚餐`,
+                        2: `🖼️ Hobart – Salamanca Market → MONA → 🍽️ Frank Restaurant（碼頭黃昏）`,
+                        3: `🐚 海鮮 Cruise → 🚗 取車 → ⛰️ Mt Wellington（黃昏） → 🍽️ Waterfront 晚餐`,
+                        4: `🏙️ Hobart – 市區漫遊 → Waterfront 晚餐`,
+                        5: `🏙️ Hobart → 🚗 Bruny Island 一日遊（Kettering 渡輪）`,
+                        6: `🏙️ Hobart → 🚗 Triabunna → ⛴️ Maria Island → 🚗 Bicheno（夜觀企鵝）`,
+                        7: `🚗 Bicheno → Freycinet（Wineglass Bay）→ Oyster Bay Tours → 🚗 北上 → Devonport / Latrobe`,
+                        8: `🏔️ Stanley（The Nut）→ Cradle Mountain（短線步道）→ Launceston（入住＋Black Cow）`,
+                        9: `✈️ Launceston → LST → Sydney（22 小時轉機）`,
+                        10: `✈️ Sydney → 香港（HKG）`
+                    },
+
                     dailyRemarks: {
                         0: `🚀 <b>香港出發往悉尼</b>\n落機後提醒：\n• 🛬 到達：SYD T1（國際）去T2轉機\n• 🧭 T1 → T2 (國內)：需轉乘接駁，預留充足時間提取/重託行李\n• ☕ T2 早餐：等機去 Hobart 前先食個早餐休息\n⭐ 今日貼士：\n• 🥤 多飲水：長途機易脫水\n• 🧥 備羽絨：夜機冷氣強\n• 📲 開漫遊：抵達即用`,
                         1: `🚗 <b>今日交通概況</b>\n• 🧳 13:55 抵達 HBA（D 航站） → 拎行李\n• 🚕 HBA → CBD：約 20 分鐘 (車資 A$45–65)\n• 🅿️ 泊車：市中心以咪錶/停車場為主\n⭐ 今日貼士：\n• 🌤️ 防風外套：Hobart 傍晚風大\n• 📸 日落打卡：16:30–18:00 光線最靚\n• 🎫 預約：MONA Ferry 及海鮮 Cruise 儘早預訂`,
@@ -300,7 +357,6 @@
                         10: `✈️ <b>最後撤退香港</b>\n🚗 交通：CBD 出發預留 20-25 分鐘交通\n⭐ 提示：\n• 🛄 Qantas 國際航班建議 至少1.5小時前 到達\n• 📝 預留 45m Check-in + 20m 安檢排隊`
                     },
 
-                    // ✅ V51: Title/Desc 100% 根據 PDF，TravelTime/Distance 100% 根據 Google 準確數據！
                     itineraryData: [
                         // Day 0
                         [
