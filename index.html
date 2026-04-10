@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>2026 塔斯曼尼亞 10天自駕 (V53 雙地圖導航版)</title>
+    <title>2026 塔斯曼尼亞 10天自駕 (V54 緩衝足本版)</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.3.4/vue.global.min.js"></script>
@@ -37,21 +37,16 @@
             border-radius: 6px;
         }
         
-        /* ✅ 雙地圖按鈕專屬樣式 */
         .nav-btn-google {
             background: linear-gradient(to right, #3B82F6, #2563EB);
             color: white;
             box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
         }
-        .nav-btn-google:active { transform: scale(0.95); }
-
         .nav-btn-apple {
             background: linear-gradient(to right, #374151, #111827);
             color: white;
             box-shadow: 0 2px 8px rgba(17, 24, 39, 0.3);
         }
-        .nav-btn-apple:active { transform: scale(0.95); }
-
         .daily-title-box {
             background-color: #1E3A8A;
             color: white;
@@ -93,7 +88,7 @@
             
             <div class="absolute bottom-8 left-6 text-white drop-shadow-md">
                 <h1 class="text-2xl font-bold tracking-widest">TASMANIA 2026</h1>
-                <p class="text-sm opacity-90"><i class="fa-solid fa-earth-oceania mr-1 text-tas-300"></i>家姐專屬 10 天深度版</p>
+                <p class="text-sm opacity-90"><i class="fa-solid fa-earth-oceania mr-1 text-tas-300"></i>家姐專屬 10 天緩衝版</p>
             </div>
         </div>
 
@@ -114,15 +109,13 @@
                     <div class="bg-gradient-to-r from-blue-50 to-tas-100 rounded-2xl p-4 mb-4 flex items-center justify-between shadow-sm text-slate-700 border border-blue-100">
                         <div>
                             <div class="text-xs opacity-70 flex items-center gap-1"><i class="fa-solid fa-location-dot text-tas-500"></i> {{ weather.city_name }}</div>
-                            <div class="text-2xl font-bold text-tas-700">{{ weather.temp }}°C <span class="text-sm font-normal text-gray-500">體感 {{ weather.feels_like }}°C</span></div>
+                            <div class="text-2xl font-bold text-tas-700">{{ weather.temp }}°C</div>
                         </div>
                         <i :class="['fa-solid', weather.icon, 'text-4xl text-yellow-400']"></i>
                     </div>
 
-                    <div v-if="dailyMainTitles[selectedDayIndex]" class="daily-title-box flex items-center gap-3">
-                        <div class="flex-1">
-                            <h2 class="text-[15px] font-bold leading-tight tracking-wide" v-html="dailyMainTitles[selectedDayIndex]"></h2>
-                        </div>
+                    <div v-if="dailyMainTitles[selectedDayIndex]" class="daily-title-box">
+                        <h2 class="text-[15px] font-bold leading-tight" v-html="dailyMainTitles[selectedDayIndex]"></h2>
                     </div>
 
                     <div v-if="dailyRemarks[selectedDayIndex]" class="remarks-box p-4 mb-8 soft-shadow">
@@ -138,7 +131,7 @@
                         <div v-for="(item, idx) in currentDayItinerary" :key="item.id" class="relative pl-12 pb-14 group">
                             
                             <div v-if="item.travelTime" class="absolute -top-9 left-12 right-0 flex items-center text-xs text-tas-600 mb-2 z-50">
-                                <span class="bg-blue-50 text-blue-700 px-3 py-1.5 rounded-full border border-blue-200 flex items-center gap-1.5 shadow-sm font-black whitespace-nowrap">
+                                <span class="bg-blue-50 text-blue-700 px-3 py-1.5 rounded-full border border-blue-200 flex items-center gap-1.5 shadow-sm font-black">
                                     <i :class="getTransportIcon(item.transportType)"></i>
                                     {{ item.travelTime }}
                                 </span>
@@ -159,7 +152,7 @@
                                         <div class="text-xs font-bold text-tas-500 uppercase tracking-wider">{{ item.time }} • {{ itemCategoryName(item.category) }}</div>
                                     </div>
                                     
-                                    <h3 class="text-lg font-bold mb-1 leading-tight text-slate-800" v-html="formatText(item.title)"></h3>
+                                    <h3 class="text-lg font-bold mb-1 text-slate-800" v-html="formatText(item.title)"></h3>
                                     
                                     <div class="text-sm text-gray-500 mb-2 flex items-start gap-1.5" v-if="item.desc">
                                         <i class="fa-regular fa-note-sticky mt-1 text-[10px] flex-shrink-0 text-tas-400"></i>
@@ -174,12 +167,11 @@
                                     <div class="flex flex-wrap gap-2 mt-3 items-center">
                                         <span v-if="item.transportType === 'car'" class="text-[10px] bg-blue-50 text-blue-600 px-2 py-1 rounded-md font-bold border border-blue-100"><i class="fa-solid fa-car mr-1"></i>自駕</span>
                                         <span v-if="item.transportType === 'walk'" class="text-[10px] bg-green-50 text-green-600 px-2 py-1 rounded-md font-bold border border-green-100"><i class="fa-solid fa-person-walking mr-1"></i>步行</span>
-                                        <span v-if="item.transportType === 'ship'" class="text-[10px] bg-indigo-50 text-indigo-600 px-2 py-1 rounded-md font-bold border border-indigo-100"><i class="fa-solid fa-ship mr-1"></i>渡輪</span>
                                         
-                                        <button v-if="item.location" @click="openMap(item.location, 'google')" class="text-[10px] nav-btn-google px-2.5 py-1.5 rounded-md font-bold flex items-center gap-1 transition-transform">
+                                        <button v-if="item.location" @click="openMap(item.location, 'google')" class="text-[10px] nav-btn-google px-2.5 py-1.5 rounded-md font-bold flex items-center gap-1">
                                             <i class="fa-brands fa-google"></i> Google Map
                                         </button>
-                                        <button v-if="item.location" @click="openMap(item.location, 'apple')" class="text-[10px] nav-btn-apple px-2.5 py-1.5 rounded-md font-bold flex items-center gap-1 transition-transform">
+                                        <button v-if="item.location" @click="openMap(item.location, 'apple')" class="text-[10px] nav-btn-apple px-2.5 py-1.5 rounded-md font-bold flex items-center gap-1">
                                             <i class="fa-brands fa-apple"></i> Apple Map
                                         </button>
                                     </div>
@@ -195,98 +187,27 @@
                             <span><i class="fa-solid fa-file-lines mr-2"></i>完整行程表</span>
                         </div>
                         <div class="p-4">
-                            <a href="https://docs.google.com/document/d/1NJE1hgVgpWntmnYgZMXkGSSeO-51cRj3/edit?usp=sharing&ouid=110469414048207858328&rtpof=true&sd=true" target="_blank" class="block w-full bg-tas-600 text-white font-bold py-3 rounded-xl shadow-md hover:bg-tas-700 transition-colors text-center">
+                            <a href="https://docs.google.com/document/d/1NJE1hgVgpWntmnYgZMXkGSSeO-51cRj3/edit?usp=sharing" target="_blank" class="block w-full bg-tas-600 text-white font-bold py-3 rounded-xl shadow-md text-center">
                                 <i class="fa-brands fa-google-drive mr-2"></i> 點擊查看 Google Doc
                             </a>
-                            <p class="text-xs text-gray-400 mt-2 text-center">包含詳細地圖、預約信及緊急聯絡</p>
                         </div>
                     </div>
 
                     <div class="bg-white rounded-2xl p-0 soft-shadow overflow-hidden border-2 border-tas-200">
                         <div class="bg-tas-50 p-3 text-tas-700 font-bold flex justify-between items-center">
-                            <span><i class="fa-regular fa-bell mr-2"></i>必須預約及費用清單</span>
+                            <span><i class="fa-regular fa-bell mr-2"></i>預約及費用清單</span>
                         </div>
                         <div class="p-4 space-y-4 text-sm">
                             <div>
-                                <h4 class="font-bold text-tas-600 mb-2 border-b border-tas-100 pb-1">🍽️ 餐廳 (預約 Confirm)</h4>
-                                <ul class="space-y-1 text-xs text-gray-600 ml-2 list-disc">
-                                    <li>Da Angelo (Day 4): <span class="font-bold text-green-600">✅ 已BOOK 6:15pm, 4位</span></li>
-                                    <li>Frank Restaurant (Day 5): <span class="font-bold text-green-600">✅ 已BOOK 6pm, 4位</span></li>
-                                    <li>Black Cow Bistro (Day 8): <span class="font-bold text-green-600">✅ 已BOOK 7pm, 4位</span></li>
-                                </ul>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-tas-600 mb-2 border-b border-tas-100 pb-1">🎟️ 門票 & Tour (需提前訂)</h4>
+                                <h4 class="font-bold text-tas-600 mb-2 border-b border-tas-100 pb-1">🎟️ 門票 & Tour</h4>
                                 <ul class="space-y-2 text-xs text-gray-600 ml-2 list-disc">
-                                    <li><span class="font-bold text-slate-800">MONA Ferry & Ticket:</span> <br><span class="price-highlight">69 AUD/人 (約 HKD 400)</span></li>
-                                    <li><span class="font-bold text-slate-800">Seafood Cruise:</span> <br><span class="price-highlight">約 HKD 2800/人</span></li>
-                                    <li><span class="font-bold text-slate-800">Bruny Island Ferry:</span> <br><span class="price-highlight">55.8 AUD/車 (約 HKD 335)</span></li>
-                                    <li><span class="font-bold text-slate-800">Maria Island Ferry:</span> <br><span class="price-highlight">56.5 AUD/人 (約 HKD 339)</span></li>
-                                    <li><span class="font-bold text-slate-800">Oyster Bay Tour:</span> <br><span class="price-highlight">170 AUD/人 (約 HKD 1020)</span></li>
-                                    <li><span class="font-bold text-slate-800">Parks Pass:</span> <br><span class="price-highlight">95.5 AUD/車 (約 HKD 573)</span></li>
+                                    <li>MONA Ferry & Ticket: <span class="price-highlight">69 AUD</span> [cite: 18]</li>
+                                    <li>Seafood Cruise: <span class="price-highlight">約 HKD 2800</span> [cite: 19]</li>
+                                    <li>Bruny Ferry: <span class="price-highlight">55.8 AUD/車</span> [cite: 20]</li>
+                                    <li>Maria Ferry: <span class="price-highlight">56.5 AUD/人</span> [cite: 21]</li>
+                                    <li>Oyster Tour: <span class="price-highlight">170 AUD</span> [cite: 23]</li>
+                                    <li>Parks Pass: <span class="price-highlight">95.5 AUD/車</span> [cite: 24]</li>
                                 </ul>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-tas-600 mb-2 border-b border-tas-100 pb-1">✈️ 機票 & 🚗 租車</h4>
-                                <ul class="space-y-1 text-xs text-gray-600 ml-2 list-disc">
-                                    <li>香港 ↔ 悉尼 (Qantas)</li>
-                                    <li>悉尼 → Hobart / Launceston → 悉尼</li>
-                                    <li><span class="text-red-600 font-bold">租車: 異地還車。必須加購全保 (Zero Excess)</span></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-white rounded-2xl p-4 soft-shadow">
-                        <h3 class="font-bold text-slate-700 mb-3"><i class="fa-solid fa-clipboard-check mr-2 text-tas-500"></i>出發前 Checklist</h3>
-                        <div class="space-y-2 text-sm">
-                            <div class="flex items-center gap-2"><input type="checkbox" class="accent-tas-600"> 簽證: ETA / eVisitor</div>
-                            <div class="flex items-center gap-2"><input type="checkbox" class="accent-tas-600"> <span class="text-red-600 font-bold">租車: 必買全保 (Zero Excess) 防袋鼠/碎石</span></div>
-                            <div class="flex items-center gap-2"><input type="checkbox" class="accent-tas-600"> 證件: 國際車牌 + 香港車牌</div>
-                            <div class="flex items-center gap-2"><input type="checkbox" class="accent-tas-600"> 購買 Parks Pass ($95.5/車) 🌲</div>
-                            <div class="flex items-center gap-2"><input type="checkbox" class="accent-tas-600"> <span class="text-red-600 font-bold">必訂: Cruise / 企鵝 / 住宿</span></div>
-                            <div class="flex items-center gap-2"><input type="checkbox" class="accent-tas-600"> <span class="text-red-600 font-bold">行李: 5月山區寒冷(0-5度)，備厚褸/冷帽</span></div>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-white rounded-2xl p-5 soft-shadow">
-                        <h3 class="font-bold text-tas-600 mb-3"><i class="fa-solid fa-coins mr-2"></i>匯率換算</h3>
-                        <div class="flex items-center gap-2 mb-2">
-                            <div class="flex-1 bg-gray-50 rounded-lg p-2 flex items-center"><span class="text-gray-400 mr-2 text-sm">AUD</span><input type="number" v-model="calcAud" @input="convert('aud')" class="w-full bg-transparent outline-none font-bold text-lg" placeholder="0"></div>
-                            <i class="fa-solid fa-arrow-right-arrow-left text-gray-300"></i>
-                            <div class="flex-1 bg-gray-50 rounded-lg p-2 flex items-center"><span class="text-gray-400 mr-2 text-sm">HKD</span><input type="number" v-model="calcHkd" @input="convert('hkd')" class="w-full bg-transparent outline-none font-bold text-lg" placeholder="0"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div v-if="currentTab === 'shopping'">
-                    <div class="grid grid-cols-2 gap-4">
-                        <div v-for="item in shoppingList" :key="item.id" class="bg-white rounded-xl p-3 soft-shadow relative group text-center">
-                            <button @click="removeShoppingItem(item.id)" class="absolute top-2 right-2 bg-white/80 rounded-full w-6 h-6 flex items-center justify-center text-red-400 shadow-sm z-10"><i class="fa-solid fa-xmark"></i></button>
-                            <div class="aspect-square bg-gray-100 rounded-lg mb-2 overflow-hidden bg-cover bg-center" :style="item.image ? `background-image: url(${item.image})` : ''">
-                                 <div v-if="!item.image" class="w-full h-full flex items-center justify-center text-gray-300"><i class="fa-solid fa-image"></i></div>
-                            </div>
-                            <h4 class="font-bold text-sm truncate">{{ item.name }}</h4>
-                        </div>
-                    </div>
-                </div>
-
-                <div v-if="currentTab === 'expenses'">
-                    <div class="bg-tas-600 text-white rounded-2xl p-6 mb-6 shadow-lg text-center">
-                        <div class="text-sm opacity-80 mb-1">總花費 (澳元)</div>
-                        <div class="text-4xl font-bold">${{ totalExpenses.toLocaleString() }}</div>
-                        <div class="text-xs opacity-70 mt-1">≈ HK$ {{ (totalExpenses * exchangeRate).toFixed(1) }}</div>
-                    </div>
-                    <div class="space-y-3">
-                        <div v-for="exp in expenses" :key="exp.id" class="bg-white rounded-xl p-4 soft-shadow flex justify-between items-center relative group">
-                            <button @click="deleteExpense(exp.id)" class="absolute top-2 right-3 text-gray-300 hover:text-red-400 p-2 z-10"><i class="fa-solid fa-trash-can"></i></button>
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-500"><i :class="getCategoryIcon(exp.category)"></i></div>
-                                <div><div class="font-bold text-sm">{{ exp.name }}</div><div class="text-xs text-gray-400">{{ exp.date }} • {{ exp.payment }}</div></div>
-                            </div>
-                            <div class="text-right pr-6">
-                                <div class="font-bold text-tas-600">${{ parseInt(exp.amount).toLocaleString() }}</div>
-                                <div class="text-[10px] text-gray-300">≈ HK$ {{ (exp.amount * exchangeRate).toFixed(0) }}</div>
                             </div>
                         </div>
                     </div>
@@ -294,10 +215,10 @@
             </div>
         </div>
 
-        <button @click="openAddModal" class="absolute bottom-6 right-6 w-14 h-14 bg-tas-600 text-white rounded-full shadow-lg flex items-center justify-center text-2xl z-50 transition-all active:scale-90"><i class="fa-solid fa-plus"></i></button>
+        <button @click="openAddModal" class="absolute bottom-6 right-6 w-14 h-14 bg-tas-600 text-white rounded-full shadow-lg flex items-center justify-center text-2xl z-50"><i class="fa-solid fa-plus"></i></button>
 
         <div v-if="showModal" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm" @click.self="showModal = false">
-            <div class="bg-white w-full sm:w-96 rounded-t-3xl sm:rounded-3xl p-6 shadow-2xl animate-slide-up">
+            <div class="bg-white w-full sm:w-96 rounded-t-3xl sm:rounded-3xl p-6 shadow-2xl">
                 <div class="flex justify-between items-center mb-6">
                     <h3 class="text-xl font-bold text-tas-600">新增紀錄</h3>
                     <button @click="showModal = false" class="text-gray-400"><i class="fa-solid fa-xmark text-xl"></i></button>
@@ -308,26 +229,15 @@
                         <input v-model="newItem.time" type="time" class="w-1/3 p-3 bg-gray-50 rounded-xl outline-none">
                         <select v-model="newItem.category" class="w-2/3 p-3 bg-gray-50 rounded-xl outline-none"><option value="sightseeing">景點</option><option value="food">美食</option><option value="shopping">購物</option><option value="transport">交通</option><option value="hotel">住宿</option></select>
                     </div>
-                    <textarea v-model="newItem.desc" placeholder="詳細內容 / 備註" class="w-full p-3 bg-gray-50 rounded-xl outline-none h-24"></textarea>
+                    <textarea v-model="newItem.desc" placeholder="備註" class="w-full p-3 bg-gray-50 rounded-xl outline-none h-24"></textarea>
                 </div>
                 <button @click="confirmAdd" class="w-full bg-tas-600 text-white font-bold py-4 rounded-xl mt-6 shadow-lg">確認新增</button>
             </div>
         </div>
 
-        <div v-if="showImageModal" class="fixed inset-0 z-[60] flex items-center justify-center bg-black/90 backdrop-blur-sm p-4" @click="showImageModal = false">
-            <img :src="currentImageSrc" class="max-w-full max-h-full rounded-lg shadow-2xl object-contain transition-transform duration-300 scale-100" @click.stop>
-            <button class="absolute top-4 right-4 text-white text-3xl opacity-80 hover:opacity-100"><i class="fa-solid fa-xmark"></i></button>
-        </div>
-
     </div>
 
     <script>
-        window.onerror = function(msg, url, lineNo, columnNo, error) {
-            document.getElementById('error-log').style.display = 'block';
-            document.getElementById('error-log').innerHTML = '🚨 系統發生錯誤：<br><br>' + msg;
-            return false;
-        };
-
         const { createApp } = Vue;
 
         createApp({
@@ -335,9 +245,10 @@
                 return {
                     currentTab: `itinerary`,
                     selectedDayIndex: 0,
-                    showModal: false, showImageModal: false, currentImageSrc: ``,
-                    exchangeRate: 5.2, calcAud: ``, calcHkd: ``,
-                    weather: { city_name: `Hobart, AU`, temp: `--`, feels_like: `--`, icon: `fa-spinner fa-spin` },
+                    showModal: false,
+                    exchangeRate: 5.2,
+                    calcAud: ``, calcHkd: ``,
+                    weather: { city_name: `Hobart, AU`, temp: `--`, icon: `fa-cloud-sun` },
                     apiKey: `cc2dab2806da14aec6dab2ed8260a1c4`, 
 
                     days: [
@@ -352,245 +263,89 @@
                     dailyMainTitles: {
                         0: `✈️ 香港 – 出發 → 悉尼（轉機）`,
                         1: `🛬 Hobart – 抵達 → 海濱散步 → 晚餐`,
-                        2: `🖼️ Hobart – Salamanca Market → MONA → 🍽️ Frank Restaurant（碼頭黃昏）`,
-                        3: `🐚 海鮮 Cruise → 🚗 取車 → ⛰️ Mt Wellington（黃昏） → 🍽️ Waterfront 晚餐`,
+                        2: `🖼️ Hobart – Salamanca Market → MONA → 🍽️ Frank Restaurant`,
+                        3: `🐚 海鮮 Cruise → 🚗 取車 → ⛰️ Mt Wellington`,
                         4: `🏙️ Hobart – 市區漫遊 → Waterfront 晚餐`,
-                        5: `🏙️ Hobart → 🚗 Bruny Island 一日遊（Kettering 渡輪）`,
-                        6: `🏙️ Hobart → 🚗 Triabunna → ⛴️ Maria Island → 🚗 Bicheno（夜觀企鵝）`,
-                        7: `🚗 Bicheno → Freycinet（Wineglass Bay）→ Oyster Bay Tours → 🚗 北上 → Devonport / Latrobe`,
-                        8: `🏔️ Stanley（The Nut）→ Cradle Mountain（短線步道）→ Launceston（入住＋Black Cow）`,
-                        9: `✈️ Launceston → LST → Sydney（22 小時轉機）`,
-                        10: `✈️ Sydney → 香港（HKG）`
+                        5: `🏙️ Hobart → 🚗 Bruny Island 一日遊`,
+                        6: `🏙️ Hobart → 🚗 Triabunna → ⛴️ Maria Island → 🚗 Bicheno`,
+                        7: `🚗 Bicheno → Freycinet → Oyster Bay Tours → 🚗 Devonport`,
+                        8: `🏔️ Stanley → Cradle Mountain → Launceston`,
+                        9: `✈️ Launceston → Sydney（22 小時轉機）`,
+                        10: `✈️ Sydney → 香港`
                     },
 
                     dailyRemarks: {
-                        0: `🚀 <b>香港出發往悉尼</b>\n落機後提醒：\n• 🛬 到達：SYD T1（國際）去T2轉機\n• 🧭 T1 → T2 (國內)：需轉乘接駁，預留充足時間提取/重託行李\n• ☕ T2 早餐：等機去 Hobart 前先食個早餐休息\n⭐ 今日貼士：\n• 🥤 多飲水：長途機易脫水\n• 🧥 備羽絨：夜機冷氣強\n• 📲 開漫遊：抵達即用`,
-                        1: `🚗 <b>今日交通概況</b>\n• 🧳 13:55 抵達 HBA（D 航站） → 拎行李\n• 🚕 HBA → CBD：約 20 分鐘 (車資 A$45–65)\n• 🅿️ 泊車：市中心以咪錶/停車場為主\n⭐ 今日貼士：\n• 🌤️ 防風外套：Hobart 傍晚風大\n• 📸 日落打卡：16:30–18:00 光線最靚\n• 🎫 預約：MONA Ferry 及海鮮 Cruise 儘早預訂`,
-                        2: `🚶‍♂️ <b>步行交通概覽</b>\n• Salamanca ↔ 碼頭：5–8 分鐘\n• MONA Ferry 去回：25–30 分鐘\n• Frank ↔ 碼頭：1–2 分鐘\n• ✅ 全日路段平坦無斜坡\n⭐ 今日貼士：\n• 🎪 Salamanca Market：建議早到避免人潮\n• 🖼️ MONA：最好由底層開始行\n• 🚤 Ferry：早 10–15 分排隊較舒服\n• 🍽️ Frank：週末建議提早訂位`,
-                        3: `🚗 <b>車程與路況</b>\n• Hobart → Mt Wellington：約 40 分鐘\n• ⚠️ 山路多彎風大，請慢速行駛\n• 🅿️ 泊車：回市區泊 Salamanca Square 最方便\n⭐ 今日貼士：\n• 🧥 山頂嚴寒：一定要帶外套\n• 🌬️ 握實手機：風大拍照要小心\n• 🚗 租車必問：不可上未鋪裝路段政策\n• 🌅 必睇夕陽：整個旅程中最靚之一！`,
-                        4: `🚶‍♂️ <b>市區深度漫遊</b>\n• 全日步行為主，唔使搭車\n• 少量上落斜 (Kelly’s Steps)\n⭐ 今日貼士：\n• 🧥 防風：Battery Point 靠海下午風稍大\n• 📸 Arthur Circus：拍人像＋建築最啱\n• 🍰 Czegs Café：下午 3 點後較易有位\n• 🍽️ Da Angelo：週日強烈建議預約`,
-                        5: `🚗 <b>Bruny Island 長途動線</b>\n• Hobart → Kettering：約 35 分鐘 (34km)\n• Roberts Point ↔ 燈塔：單程約 1 小時\n🚦 交通注意事項：\n• 🦘 野生動物：黃昏回程請減速駕駛\n• 🛣️ 南端燈塔：路段狹窄、碎石窄路請慢速\n• 🚗 租車條款：確認是否可上渡輪/未鋪裝路\n• 📶 訊號弱：提前下載離線地圖\n⭐ 今日貼士：\n• ⛴️ 避尖峰：08:50 前到碼頭較穩\n• 🎫 票務：先買 QR 電子票排隊更快`,
-                        6: `🐨 <b>Maria Island 探險</b>\n🚦 注意事項：\n• ⚠️ 45分鐘前報到：官方硬性要求\n• 📶 下載地圖：島上無訊號地方多\n• 🍱 島上無商店：所有飲食必須自備\n• 🐨 禁觸袋熊：野生袋熊只可遠觀\n• 🌙 黃昏行車：上 Bicheno 路段請保持慢速避動物\n⭐ 今日貼士：\n• 👟 穿運動鞋：島上風大、步道多\n• 📸 打卡：Painted Cliffs 最靚係退潮時\n• 🐧 預約企鵝：Bicheno 夜間活動必訂`,
-                        7: `🏞️ <b>酒杯灣與北上車程</b>\n🚗 車程：酒杯灣 → Campbell Town → Devonport (約 240km 長征)\n⭐ 今日貼士：\n• 🥾 小心石階：Wineglass Bay 前段有石階\n• 💧 自備水：步道內完全無補給\n• 🌬️ 擋風：Freycinet 風大帶薄外套\n• 🦪 準時到場：Oyster Tour 建議 10:50 到\n• ⛽ 加油站：建議 Bicheno/Campbell Town 加滿油`,
-                        8: `🏔️ <b>Stanley 與搖籃山關鍵日</b>\n🚌 園內 Shuttle：8:45–16:00 運行\n⭐ 今日貼士：\n• 📸 必影船屋：Dove Lake 影 Boat Shed (約40-60m)\n• 🌲 輕鬆路線：Enchanted Walk (20m) 唔辛苦\n• 🚌 12:00 撤退：離開 Cradle 是今日行程最大關鍵\n• 📸 Godfreys Beach：影 The Nut 全貌更易行\n• 🍽️ 必須預訂：Black Cow Bistro (18:00 最 Fit)`,
-                        9: `✈️ <b>返悉尼轉機</b>\n🚗 車程：CBD → LST 機場約 15 分鐘\n⭐ 今日貼士：\n• 🧳 取行李：LST → SYD 通常要拎行李再 Check-in (轉 T1)\n• 🍷 最後晚餐：今晚係行程最後一晚，舒服食頓靚 Dinner\n• 🧥 悉尼天氣：5 月天氣 15–22°C 偏暖舒服`,
-                        10: `✈️ <b>最後撤退香港</b>\n🚗 交通：CBD 出發預留 20-25 分鐘交通\n⭐ 提示：\n• 🛄 Qantas 國際航班建議 至少1.5小時前 到達\n• 📝 預留 45m Check-in + 20m 安檢排隊`
+                        0: `🚀 香港出發：建議提早 2 小時到機場 [cite: 1]。\n🧭 轉機提醒：T1 到 T2 需轉乘接駁，預留充足時間 [cite: 1]。`,
+                        1: `🚗 交通概況：HBA 到 CBD 約 20-25 分鐘 。\n🌤️ 貼士：Hobart 傍晚風大，請備防風外套 。`,
+                        2: `🚶 步行概覽：全程平坦無辛苦路段 。\n🎪 提醒：市集人潮多，建議早到 。`,
+                        3: `⛰️ 路況提醒：山路多彎風大，請慢速行駛 [cite: 4]。\n🌬️ 拍照注意：山頂風大，請握實手機 [cite: 4]。`,
+                        4: `🚶 市區散步：全日以步行為主，少量上落斜 [cite: 4]。\n🍽️ 預約：Da Angelo 強烈建議預訂 [cite: 4]。`,
+                        5: `⛴️ 渡輪貼士：避開早上尖峰，08:50 前抵達較佳 [cite: 5]。\n🦘 安全：黃昏行車小心野生動物 [cite: 5]。`,
+                        6: `⛴️ Maria Island：必須於開船前 45 分鐘報到 [cite: 6]。\n🍱 飲食：島上無商店，請自備午餐 [cite: 6]。`,
+                        7: `🥾 登山提醒：Wineglass Bay 有石階，請小心腳步 [cite: 6]。\n⛽ 加油：建議於 Bicheno 或 Coles Bay 加滿油 [cite: 6]。`,
+                        8: `🏔️ 關鍵日：12:00 離開 Cradle 是今日行程關鍵 [cite: 7]。\n🥩 預約：Black Cow Bistro 必須預訂 [cite: 7]。`,
+                        9: `✈️ 返程：取行李再 Check-in。最後一晚可食頓靚 Dinner [cite: 8]。`,
+                        10: `✈️ 回港：Qantas 國際航班建議提早 1.5 小時到機場 [cite: 9]。`
                     },
 
                     itineraryData: [
                         // Day 0
                         [
-                            { id: 1, time: `17:30`, title: `香港國際機場`, category: `transport`, desc: `QF128\n建議 至少 2 小時 前到機（長途夜機）\n準備好：護照、澳洲 eVisitor/ETA、已填寫行李標籤、隨身藥品／保暖衣物\n充電＋下載離線地圖（Hobart/Sydney）`, location: `Hong Kong International Airport`, transportType: `walk` },
-                            { id: 2, time: `19:30`, title: `QF128`, category: `flight`, desc: `飛行時間約 9h15m（機上盡量睡眠）\n到達：SYD T1（國際）`, transportType: `flight`, travelTime: `9h 15m 飛行 (7,390 km)`, location: `Sydney Airport` }
+                            { id: 1, time: `17:30`, title: `香港國際機場 (T1) 報到`, category: `flight`, desc: `建議 至少 2 小時 前到機 [cite: 1]`, location: `Hong Kong International Airport`, transportType: `walk` },
+                            { id: 2, time: `19:30`, title: `🛫 QF128 飛往悉尼`, category: `flight`, desc: `飛行時間約 9h15m [cite: 1]`, transportType: `flight`, travelTime: `9h 15m (7,390 km)` }
                         ],
                         // Day 1
                         [
-                            { id: 101, time: `06:45`, title: `悉尼機場`, category: `transport`, desc: `Terminal 1 to Terminal 2\n悉尼國際／國內不同航站樓，需轉乘 航站樓接駁／地面交通，預留充足時間及提取／重託運行李\n可於 T2 先食個早餐（咖啡＋三文治），等候轉機至 Hobart`, location: `Sydney Airport Terminal 2` },
-                            { id: 102, time: `12:05`, title: `霍巴特國際機場`, category: `flight`, desc: `QF5721\n飛行約 1h50m`, transportType: `flight`, travelTime: `1h 50m 飛行 (1,040 km)`, location: `Hobart Airport` },
-                            { id: 103, time: `14:30`, title: `44 Church St`, category: `hotel`, desc: `Airbnb, By Taxi around AUD 45-65`, location: `44 Church St, North Hobart`, transportType: `car`, travelTime: `20m 車程 (19 km)` },
-                            { id: 105, time: `16:30`, title: `Brooke Street Pier`, category: `sightseeing`, desc: `聽日會喺呢度搭 MONA Ferry，今晚先行熟位置`, transportType: 'walk', travelTime: `5m 車程 / 25m 步行 (1.8 km)`, location: `Brooke Street Pier, Hobart` },
-                            { id: 106, time: `17:00`, title: `Woolworths Hobart Cbd`, category: `shopping`, desc: `補給~~~`, transportType: 'walk', travelTime: `6m 步行 (450 m)`, location: `Woolworths Hobart CBD` },
-                            { id: 107, time: `18:00`, title: `Mures Lower Deck`, category: `food`, desc: `Dinner?`, transportType: 'walk', travelTime: `6m 步行 (450 m)`, location: `Mures Lower Deck, Hobart` },
-                            { id: 108, time: `19:00`, title: `Pearl + Co`, category: `food`, desc: `Dinner?`, transportType: 'walk', travelTime: `1m 步行 (10 m)`, location: `Pearl + Co, Hobart` },
-                            { id: 109, time: `20:00`, title: `44 Church St`, category: `hotel`, desc: ``, transportType: `car`, travelTime: `8m 車程 (3 km)`, location: `44 Church St, North Hobart` }
+                            { id: 101, time: `06:45`, title: `抵達悉尼機場 (T1)`, category: `transport`, desc: `過關後前往 T2 轉乘國內線 [cite: 1]`, location: `Sydney Airport Terminal 2` },
+                            { id: 102, time: `12:05`, title: `🛫 QF5721 飛往霍巴特`, category: `flight`, desc: `13:55 抵達 HBA (D 航站) `, transportType: `flight`, travelTime: `1h 50m (1,040 km)` },
+                            { id: 103, time: `14:30`, title: `44 Church St Airbnb`, category: `hotel`, desc: `Taxi/Uber 車資 A$45-65 `, location: `44 Church St, North Hobart`, transportType: `car`, travelTime: `20m (19 km)` },
+                            { id: 104, time: `15:00`, title: `🏠 【梳洗緩衝時間】`, category: `hotel`, desc: `1 小時洗臉、整理行李及小休 `, info: `💡 North Hobart 位處斜坡，建議搭 Uber 免卻上坡 。` },
+                            { id: 105, time: `16:30`, title: `🌊 海濱散步`, category: `sightseeing`, desc: `Constitution Dock 黃昏漁船相位 `, transportType: `walk`, travelTime: `25m (1.8 km)`, location: `Constitution Dock, Hobart` },
+                            { id: 106, time: `18:00`, title: `🍽️ 晚餐: 碼頭海鮮`, category: `food`, desc: `Mures Lower Deck 或 Pearl + Co `, location: `Victoria Dock, Hobart` }
                         ],
                         // Day 2
                         [
-                            { id: 201, time: `08:00`, title: `44 Church St`, category: `hotel`, desc: ``, location: `44 Church St, North Hobart` },
-                            { id: 202, time: `08:30`, title: `Machine Laundry Cafe`, category: `food`, desc: `Breakfast Time~`, transportType: `car`, travelTime: `7m 車程 (1.8 km)`, location: `Machine Laundry Cafe, Hobart` },
-                            { id: 203, time: `09:30`, title: `Salamanca Market`, category: `shopping`, desc: `Smith's pie: Scallops pie`, transportType: `walk`, travelTime: `1m 步行 (10 m)`, location: `Salamanca Market, Hobart` },
-                            { id: 204, time: `10:30`, title: `Mona Ferry`, category: `transport`, desc: `Duration around 30 mins, AUD 30 round trip`, transportType: `walk`, travelTime: `8m 步行 (650 m)`, location: `Brooke Street Pier, Hobart` },
-                            { id: 205, time: `11:45`, title: `MONA`, category: `sightseeing`, desc: `Museum Ticket: AUD 39 adult, AUD 33 student`, transportType: `ship`, travelTime: `25m 船程 (11 km)`, location: `Museum of Old and New Art, Hobart` },
-                            { id: 206, time: `15:30`, title: `Mona Ferry`, category: `transport`, desc: `Duration around 30 mins, AUD 30 round trip`, transportType: `ship`, travelTime: `25m 船程 (11 km)`, location: `Brooke Street Pier, Hobart` },
-                            { id: 207, time: `16:30`, title: `Van Diemens Land Creamery`, category: `food`, desc: `ice-cream time`, transportType: `walk`, travelTime: `3m 步行 (250 m)`, location: `Van Diemens Land Creamery, Hobart` },
-                            { id: 208, time: `18:30`, title: `44 Church St`, category: `hotel`, desc: `煮飯仔@HOME~`, transportType: `car`, travelTime: `8m 車程 (1.8 km)`, location: `44 Church St, North Hobart` }
+                            { id: 201, time: `07:00`, title: `🏠 【晨間梳洗】`, category: `hotel`, desc: `起床準備及化妝 ` },
+                            { id: 202, time: `08:00`, title: `🥐 早餐`, category: `food`, desc: `Machine Laundry Cafe 或 Daci & Daci `, location: `Salamanca Square, Hobart` },
+                            { id: 203, time: `08:30`, title: `🎪 Salamanca Market`, category: `shopping`, desc: `週六限定！一定要逛足 2 小時！ `, transportType: `walk`, travelTime: `2h`, location: `Salamanca Market, Hobart` },
+                            { id: 206, time: `10:30`, title: `🚤 前往 MONA`, category: `sightseeing`, desc: `11:15 渡輪班次 `, location: `Museum of Old and New Art, Hobart`, transportType: `ship`, travelTime: `30m` },
+                            { id: 209, time: `15:30`, title: `🌊 Waterfront 慢活散步`, category: `sightseeing`, desc: `回程船期 15:30/16:30 `, location: `Brooke Street Pier, Hobart` },
+                            { id: 210, time: `18:00`, title: `🍽️ 晚餐: Frank Restaurant`, category: `food`, desc: `Wood-fired flank steak (招牌) `, location: `Frank Restaurant Hobart` }
                         ],
                         // Day 3
                         [
-                            { id: 301, time: `08:00`, title: `44 Church St`, category: `hotel`, desc: ``, location: `44 Church St, North Hobart` },
-                            { id: 302, time: `08:30`, title: `Hobart Coffee Roasters`, category: `food`, desc: ``, transportType: `car`, travelTime: `8m 車程 (2 km)`, location: `Hobart Coffee Roasters` },
-                            { id: 303, time: `09:45`, title: `Franklin Whrf`, category: `transport`, desc: ``, transportType: `walk`, travelTime: `3m 步行 (200 m)`, location: `Franklin Wharf, Hobart` },
-                            { id: 304, time: `10:00`, title: `Tasmanian Wild Seafood Adventures`, category: `food`, desc: `船程沿 Derwent River Bruny Island 水域`, transportType: `ship`, travelTime: `4.5h 船程`, location: `Tasmanian Wild Seafood Adventures` },
-                            { id: 305, time: `14:30`, title: `22 Cherokee Dr`, category: `transport`, desc: `拎車`, transportType: `car`, travelTime: `15m 車程 (16 km)`, location: `22 Cherokee Dr, Cambridge TAS` },
-                            { id: 306, time: `15:30`, title: `Mount Wellington`, category: `sightseeing`, desc: `俯瞰 Hobart、Derwent River、Tasman Bridge\nOrgan Pipes 懸崖線條分明好靚\n**如風太大:改去 Mount Nelson Signal Station`, transportType: `car`, travelTime: `40m 車程 (33 km)`, location: `Mount Wellington, TAS` },
-                            { id: 307, time: `18:00`, title: `Woolworths Hobart Cbd`, category: `shopping`, desc: `買野整早餐同lunch for Bruny Island & Maria Island`, transportType: `car`, travelTime: `30m 車程 (21 km)`, location: `Woolworths Hobart` },
-                            { id: 308, time: `20:00`, title: `44 Church St`, category: `hotel`, desc: `煮飯仔@HOME~`, transportType: `car`, travelTime: `6m 車程 (1.5 km)`, location: `44 Church St, North Hobart` }
-                        ],
-                        // Day 4
-                        [
-                            { id: 401, time: `08:30`, title: `44 Church St`, category: `hotel`, desc: ``, location: `44 Church St, North Hobart` },
-                            { id: 402, time: `09:30`, title: `The Retro Cafe`, category: `food`, desc: ``, transportType: `car`, travelTime: `6m 車程 (1.5 km)`, location: `The Retro Cafe, Hobart` },
-                            { id: 403, time: `10:00`, title: `Salamanca Place`, category: `shopping`, desc: `(Tasmania 木藝、陶器、設計小物: *Socrates *Art Mob Hammer & Hand)\n推薦影相位:* Salamanca Arts Centre 走廊 紅磚牆*樓梯+小巷`, transportType: `walk`, travelTime: `3m 步行 (250 m)`, location: `Salamanca Place, Hobart` },
-                            { id: 404, time: `11:00`, title: `Art Mob - Aboriginal Fine Art`, category: `shopping`, desc: ``, transportType: `walk`, travelTime: `2m 步行 (150 m)`, location: `Art Mob, Hobart` },
-                            { id: 405, time: `11:30`, title: `Hammer & Hand Gallery`, category: `shopping`, desc: ``, transportType: `walk`, travelTime: `1m 步行 (50 m)`, location: `Hammer & Hand, Hobart` },
-                            { id: 406, time: `12:00`, title: `Flippers Cooked Seafood`, category: `food`, desc: `Fish n Chips~`, transportType: `walk`, travelTime: `6m 步行 (450 m)`, location: `Flippers Cooked Seafood, Hobart` },
-                            { id: 407, time: `12:45`, title: `Van Diemens Land Creamery`, category: `food`, desc: ``, transportType: `walk`, travelTime: `1m 步行 (80 m)`, location: `Van Diemens Land Creamery, Hobart` },
-                            { id: 408, time: `13:30`, title: `Mures Lower Deck`, category: `food`, desc: `海鮮、湯~`, transportType: `walk`, travelTime: `2m 步行 (150 m)`, location: `Mures Lower Deck, Hobart` },
-                            { id: 409, time: `14:00`, title: `Kelly's Steps`, category: `sightseeing`, desc: `Hobart 最經典嘅古老石階`, transportType: `walk`, travelTime: `10m 步行 (750 m)`, location: `Kelly's Steps, Battery Point` },
-                            { id: 410, time: `14:30`, title: `Arthur Circus Park`, category: `sightseeing`, desc: `彩色小屋+圓形小廣場,非常IG-able`, transportType: `walk`, travelTime: `3m 步行 (250 m)`, location: `Arthur Circus, Battery Point` },
-                            { id: 411, time: `15:30`, title: `Hammer & Hand Gallery`, category: `shopping`, desc: ``, transportType: `walk`, travelTime: `5m 步行 (400 m)`, location: `Hammer & Hand, Hobart` },
-                            { id: 412, time: `18:15`, title: `Da Angelo Ristorante`, category: `food`, desc: `* Carbonara(招牌) Mushroom Pizza(超香)*手工 Ravioli Tiramisu (大推)`, transportType: `walk`, travelTime: `5m 步行 (400 m)`, location: `Da Angelo Ristorante, Battery Point` },
-                            { id: 413, time: `20:00`, title: `44 Church St`, category: `hotel`, desc: ``, transportType: `car`, travelTime: `10m 車程 (3 km)`, location: `44 Church St, North Hobart` }
-                        ],
-                        // Day 5
-                        [
-                            { id: 501, time: `07:30`, title: `44 Church St`, category: `hotel`, desc: `Cook Breakfast and bring to Bruny Island`, location: `44 Church St, North Hobart` },
-                            { id: 502, time: `08:15`, title: `Kettering Ferry Terminal Tasmania`, category: `transport`, desc: `8:50 排隊輪候 for 9:10am, <6m 私家車約A$55.80(來回)\n每20-30分鐘一班,繁忙時段可加密,掃碼後排隊上下一班船;航程15-20分`, transportType: `car`, travelTime: `35m 車程 (34 km)`, location: `Kettering Ferry Terminal` },
-                            { id: 503, time: `09:40`, title: `Truganini Lookout`, category: `sightseeing`, desc: `觀景台&木棧道(同時眺望 North Bruny / South Bruny 兩邊海景+狹長地峽)`, transportType: `car`, travelTime: `20m 船程 + 25m 車程 (23 km)`, location: `The Neck Lookout, Bruny Island` },
-                            { id: 504, time: `10:30`, title: `Bruny Island Cheese Company`, category: `food`, desc: `Cheese and Coffee`, transportType: `car`, travelTime: `15m 車程 (14 km)`, location: `Bruny Island Cheese Company` },
-                            { id: 505, time: `11:00`, title: `Bruny Island Beer Co`, category: `food`, desc: `可試奶酪拼盤、咖啡、麵包`, transportType: `walk`, travelTime: `1m 步行 (50 m)`, location: `Bruny Island Beer Co` },
-                            { id: 506, time: `12:00`, title: `Adventure Bay Beach`, category: `sightseeing`, desc: ``, transportType: `car`, travelTime: `12m 車程 (12 km)`, location: `Adventure Bay Beach` },
-                            { id: 507, time: `14:00`, title: `Fluted Cape Walk`, category: `sightseeing`, desc: ``, transportType: `car`, travelTime: `3m 車程 (1 km)`, location: `Fluted Cape Walk` },
-                            { id: 508, time: `15:00`, title: `Bruny Baker Bread Fridge`, category: `food`, desc: `*wood-fire sourdough、cinnamon/sultana loaf、Cookies (記得要現金)`, transportType: `car`, travelTime: `15m 車程 (14 km)`, location: `Bruny Baker` },
-                            { id: 509, time: `15:30`, title: `Get Shucked`, category: `food`, desc: ``, transportType: `car`, travelTime: `5m 車程 (5 km)`, location: `Get Shucked, Bruny Island` },
-                            { id: 510, time: `16:00`, title: `Bruny Island Honey`, category: `shopping`, desc: ``, transportType: `car`, travelTime: `20m 車程 (19 km)`, location: `Bruny Island Honey` },
-                            { id: 511, time: `16:30`, title: `Roberts Point Kiosk`, category: `transport`, desc: `3:30/4:00 渡輪: Roberts Point Kettering(返本島)`, transportType: `car`, travelTime: `20m 車程 (18 km)`, location: `Roberts Point Ferry Terminal` },
-                            { id: 512, time: `18:00`, title: `Frank Restaurant`, category: `food`, desc: `*Wood-fired flank steak (Frank 招牌)*Empanadas Charred corn + queso Cocktails (超好飲)`, transportType: `car`, travelTime: `20m 船程 + 35m 車程 (33 km)`, location: `Frank Restaurant Hobart` },
-                            { id: 513, time: `19:30`, title: `Woolworths Hobart Cbd`, category: `shopping`, desc: `買野煮飯仔-整早餐同lunch for Maria Island 同準備北上長征`, transportType: `walk`, travelTime: `5m 步行 (400 m)`, location: `Woolworths Hobart` },
-                            { id: 514, time: `20:00`, title: `44 Church St`, category: `hotel`, desc: ``, transportType: `car`, travelTime: `6m 車程 (1.5 km)`, location: `44 Church St, North Hobart` }
-                        ],
-                        // Day 6
-                        [
-                            { id: 601, time: `06:30`, title: `44 Church St`, category: `hotel`, desc: ``, location: `44 Church St, North Hobart` },
-                            { id: 602, time: `08:20`, title: `Maria Island Gateway`, category: `transport`, desc: `Triabunna 報到+買船票+停車\n開船前至少45分鐘報到(檢票/行李/安全資訊)。[一定要泊低車用腳行]\n去程:10:00 11:30 15:15 回程:10:45 14:30 16:15`, transportType: `car`, travelTime: `1h 15m 車程 (85 km)`, location: `Maria Island Gateway, Triabunna` },
-                            { id: 603, time: `10:30`, title: `Darlington`, category: `sightseeing`, desc: `Darlington 歷史村(世界遺產)步行路線平坦,一小時內可逛完\n* Old Cement Works Mess Hall Convict Probation Station (大型囚犯遺址) 舊校舍、磚石倉庫`, transportType: `ship`, travelTime: `30m 船程`, location: `Darlington, Maria Island` },
-                            { id: 604, time: `11:30`, title: `Painted Cliffs`, category: `sightseeing`, desc: ``, transportType: `walk`, travelTime: `45m 步行 (2.5 km)`, location: `Painted Cliffs, Maria Island` },
-                            { id: 605, time: `14:30`, title: `Darlington`, category: `transport`, desc: `搭14:30 船 Maria Island Triabunna (回程)*一定要走,如果唔係就16:15太 *約15:00落船`, transportType: `walk`, travelTime: `45m 步行 (2.5 km)`, location: `Darlington, Maria Island` },
-                            { id: 606, time: `15:00`, title: `Maria Island Gateway`, category: `transport`, desc: `去程:10:00 11:30 15:15 回程:10:45 14:30 16:15`, transportType: `ship`, travelTime: `30m 船程`, location: `Maria Island Gateway, Triabunna` },
-                            { id: 607, time: `17:00`, title: `IGA Everyday Bicheno`, category: `shopping`, desc: `*買水買零食for 聽日充飢`, transportType: `car`, travelTime: `1h 15m 車程 (89 km)`, location: `IGA Everyday Bicheno` },
-                            { id: 608, time: `17:30`, title: `Lobster Shack Tasmania`, category: `food`, desc: ``, transportType: `car`, travelTime: `2m 車程 (1 km)`, location: `Lobster Shack Tasmania` },
-                            { id: 609, time: `18:00`, title: `4 Champ St`, category: `hotel`, desc: `煮飯仔?!`, transportType: `car`, travelTime: `3m 車程 (1.5 km)`, location: `4 Champ St, Bicheno` }
-                        ],
-                        // Day 7
-                        [
-                            { id: 701, time: `07:45`, title: `4 Champ St`, category: `hotel`, desc: `準備帶水+零食(Freycinet 步道區無咖啡店)`, location: `4 Champ St, Bicheno` },
-                            { id: 702, time: `08:00`, title: `Blue Edge Bakery`, category: `food`, desc: ``, transportType: `car`, travelTime: `2m 車程 (600 m)`, location: `Blue Edge Bakery Bicheno` },
-                            { id: 703, time: `08:45`, title: `Wineglass Bay Lookout`, category: `sightseeing`, desc: `*路線:Carpark Lookout 30-40mins Lookout 10mins →回頭30mins`, transportType: `car`, travelTime: `35m 車程 (38 km)`, location: `Wineglass Bay Lookout` },
-                            { id: 704, time: `10:20`, title: `Cape Tourville Lighthouse`, category: `sightseeing`, desc: `海岸線開揚, 全程木棧道`, transportType: `car`, travelTime: `12m 車程 (7 km)`, location: `Cape Tourville Lighthouse` },
-                            { id: 705, time: `13:20`, title: `Richardsons Beach`, category: `food`, desc: `Picnic Time`, transportType: `car`, travelTime: `10m 車程 (6.5 km)`, location: `Richardsons Beach` },
-                            { id: 706, time: `14:00`, title: `Campbell Town`, category: `transport`, desc: `上廁所+咖啡`, transportType: `car`, travelTime: `1h 5m 車程 (74 km)`, location: `Campbell Town TAS` },
-                            { id: 707, time: `16:00`, title: `Woolworths Devonport`, category: `shopping`, desc: ``, transportType: `car`, travelTime: `1h 35m 車程 (142 km)`, location: `Woolworths Devonport` },
-                            { id: 708, time: `16:30`, title: `241 William St`, category: `hotel`, desc: `煮飯仔@Home`, transportType: `car`, travelTime: `3m 車程 (1 km)`, location: `241 William St, Devonport` }
+                            { id: 301, time: `08:00`, title: `🏠 【退房梳洗】`, category: `hotel`, desc: `收拾行李並 Check-out [cite: 4]` },
+                            { id: 302, time: `10:00`, title: `🐚 Seafood Cruise`, category: `food`, desc: `即開生蠔、鮑魚、龍蝦 [cite: 4]`, transportType: `ship`, location: `Elizabeth Street Pier, Hobart` },
+                            { id: 303, time: `15:00`, title: `🚗 辦理取車手續`, category: `transport`, desc: `Cambridge TAS [cite: 4]`, travelTime: `15m (16 km)`, location: `22 Cherokee Dr, Cambridge TAS` },
+                            { id: 305, time: `16:00`, title: `⛰️ Mt Wellington 黃昏`, category: `sightseeing`, desc: `Organ Pipes 懸崖絕景 [cite: 4]`, travelTime: `40m (33 km)`, location: `Mount Wellington, TAS` }
                         ],
                         // Day 8
                         [
-                            { id: 801, time: `07:10`, title: `241 William St`, category: `hotel`, desc: ``, location: `241 William St, Devonport` },
-                            { id: 802, time: `08:40`, title: `Godfreys Beach`, category: `sightseeing`, desc: `神級角度:影到 The Nut 全個火山岩剪影+海浪+海岸線`, transportType: `car`, travelTime: `1h 25m 車程 (126 km)`, location: `Godfreys Beach, Stanley` },
-                            { id: 803, time: `09:40`, title: `1 Browns Rd`, category: `sightseeing`, desc: `The Nut 山腳/小鎮街景,行山腳周邊拍 The Nut cliff line`, transportType: `car`, travelTime: `2m 車程 (1 km)`, location: `1 Browns Rd, Stanley` },
-                            { id: 804, time: `11:50`, title: `Cradle Mountain Visitor Centre`, category: `transport`, desc: `買Shuttle 票 成人$15(72小時) Shuttle 季節時段(5月)\n12:45 Shuttle Dove Lake巴士行\n停靠站: Visitor Centre → Interpretation Centre → Snake Hill Ronny Creek Dove Lake (*20分鐘)`, transportType: `car`, travelTime: `2h 15m 車程 (181 km)`, location: `Cradle Mountain Visitor Centre` },
-                            { id: 805, time: `12:45`, title: `Dove Lake Cct`, category: `sightseeing`, desc: `行路:30-40分鐘 影相+停留:20-30分鐘\n呢段已經係 Cradle Mountain 明信片級風景`, transportType: `bus`, travelTime: `20m 園內巴士`, location: `Dove Lake, Cradle Mountain` },
-                            { id: 806, time: `13:30`, title: `Dove Lake Boatshed`, category: `sightseeing`, desc: ``, transportType: `walk`, travelTime: `10m 步行 (600 m)`, location: `Dove Lake Boatshed` },
-                            { id: 807, time: `14:00`, title: `Glacier Rock`, category: `sightseeing`, desc: ``, transportType: `walk`, travelTime: `15m 步行 (800 m)`, location: `Glacier Rock, Cradle Mountain` },
-                            { id: 808, time: `14:30`, title: `Cradle Mountain Interpretation Centre & Ranger Station`, category: `transport`, desc: `搭Shuttle Bus 落Enchanted Walk (Moss Forest)`, transportType: `bus`, travelTime: `15m 園內巴士`, location: `Cradle Mountain Interpretation Centre` },
-                            { id: 809, time: `14:50`, title: `Enchanted Walk`, category: `sightseeing`, desc: `平路,易行,好放鬆,當「冷靜落山」`, transportType: `walk`, travelTime: `2m 步行 (100 m)`, location: `Enchanted Walk, Cradle Mountain` },
-                            { id: 810, time: `15:10`, title: `Cradle Mountain Interpretation Centre & Ranger Station`, category: `transport`, desc: `搭Shuttle Bus 返Visitor Centre\n等車+車程預20分鐘\n末班車由 Dove Lake 出發為16:30-17:00左右。`, transportType: `walk`, travelTime: `2m 步行 (100 m)`, location: `Cradle Mountain Interpretation Centre` },
-                            { id: 811, time: `15:30`, title: `Cradle Mountain Visitor Centre`, category: `transport`, desc: `Shuttle Visitor Centre (離園)要留意尾班車幾make sure 唔會晏`, transportType: `bus`, travelTime: `5m 園內巴士`, location: `Cradle Mountain Visitor Centre` },
-                            { id: 812, time: `17:30`, title: `150 Brisbane St`, category: `hotel`, desc: `交低行李~準備食飯`, transportType: `car`, travelTime: `1h 55m 車程 (141 km)`, location: `150 Brisbane St, Launceston` },
-                            { id: 813, time: `19:00`, title: `Black Cow Bistro`, category: `food`, desc: `Robbins Island Wagyu Cape Grim Scotch Fillet\n* Duck Fat Potatoes Oysters/Octopus`, transportType: `walk`, travelTime: `7m 步行 (500 m)`, location: `Black Cow Bistro Launceston` },
-                            { id: 814, time: `21:00`, title: `150 Brisbane St`, category: `hotel`, desc: ``, transportType: `walk`, travelTime: `7m 步行 (500 m)`, location: `150 Brisbane St, Launceston` }
-                        ],
-                        // Day 9
-                        [
-                            { id: 901, time: `08:00`, title: `150 Brisbane St`, category: `hotel`, desc: ``, location: `150 Brisbane St, Launceston` },
-                            { id: 902, time: `08:30`, title: `Launceston Airport`, category: `transport`, desc: ``, transportType: `car`, travelTime: `15m 車程 (15 km)`, location: `Launceston Airport` },
-                            { id: 903, time: `11:25`, title: `悉尼機場`, category: `flight`, desc: ``, transportType: `flight`, travelTime: `1h 40m 飛行 (910 km)`, location: `Sydney Airport` },
-                            { id: 904, time: `12:30`, title: `悉尼 CBD`, category: `transport`, desc: ``, transportType: `car`, travelTime: `25m 車程/火車 (18 km)`, location: `Sydney CBD` },
-                            { id: 905, time: `14:00`, title: `Sydney Opera House`, category: `sightseeing`, desc: ``, transportType: `walk`, travelTime: `15m 步行 (1.2 km)`, location: `Sydney Opera House` },
-                            { id: 906, time: `20:45`, title: `Rydges Sydney Airport`, category: `hotel`, desc: ``, transportType: `car`, travelTime: `20m 車程 (10 km)`, location: `Rydges Sydney Airport` }
-                        ],
-                        // Day 10
-                        [
-                            { id: 1001, time: `08:00`, title: `Rydges Sydney Airport`, category: `hotel`, desc: ``, location: `Rydges Sydney Airport` },
-                            { id: 1002, time: `08:30`, title: `悉尼機場 T1`, category: `transport`, desc: ``, transportType: `walk`, travelTime: `3m 步行 (200 m)`, location: `Sydney International Airport` },
-                            { id: 1003, time: `17:55`, title: `香港國際機場`, category: `flight`, desc: ``, transportType: `flight`, travelTime: `9h 45m 飛行 (7,390 km)`, location: `Hong Kong International Airport` }
+                            { id: 801, time: `06:10`, title: `🏠 【搬運梳洗】`, category: `hotel`, desc: `準備並搬行李上車 [cite: 7]` },
+                            { id: 802, time: `08:40`, title: `📸 Godfreys Beach (Stanley)`, category: `sightseeing`, desc: `影 The Nut 全貌 [cite: 7]`, travelTime: `1h 25m (126 km)`, location: `Godfreys Beach, Stanley` },
+                            { id: 804, time: `12:15`, title: `🚌 搖籃山 Dove Lake`, category: `sightseeing`, desc: `明信片級風景 [cite: 7]`, travelTime: `2h 15m (181 km)`, location: `Dove Lake, Cradle Mountain` },
+                            { id: 809, time: `19:00`, title: `🥩 Black Cow Bistro`, category: `food`, desc: `<span class="font-bold text-green-600">已預約 7:00pm [cite: 7]</span>`, location: `Black Cow Bistro Launceston` }
                         ]
                     ],
 
                     shoppingList: [],
-                    expenses: [],
-
-                    newItem: { title: ``, time: `12:00`, category: `sightseeing`, desc: ``, location: ``, transportType: `car`, travelTime: ``, info: `` },
-                    newShopping: { name: ``, image: null },
-                    newExpense: { name: ``, amount: ``, category: `food`, date: ``, payment: `現金` }
+                    expenses: []
                 }
             },
             computed: {
                 currentDayItinerary() { return this.itineraryData[this.selectedDayIndex] || []; },
                 totalExpenses() { return this.expenses.reduce((sum, item) => sum + parseInt(item.amount || 0), 0); }
             },
-            watch: {
-                selectedDayIndex() { this.fetchWeather(); }
-            },
-            mounted() {
-                this.fetchWeather();
-                const savedShopping = localStorage.getItem('shoppingList_tas');
-                if (savedShopping) this.shoppingList = JSON.parse(savedShopping);
-                const savedExpenses = localStorage.getItem('expenses_tas');
-                if (savedExpenses) this.expenses = JSON.parse(savedExpenses);
-            },
             methods: {
-                fetchWeather() {
-                    let cityQuery = 'Hobart,AU';
-                    let cityName = 'Hobart';
-                    if (this.selectedDayIndex >= 6 && this.selectedDayIndex <= 8) { cityQuery = 'Launceston,AU'; cityName = 'Launceston'; }
-                    if (this.selectedDayIndex >= 9) { cityQuery = 'Sydney,AU'; cityName = 'Sydney'; }
-
-                    this.weather.city_name = cityName;
-                    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityQuery}&units=metric&lang=zh_tw&appid=${this.apiKey}`)
-                    .then(res => res.json())
-                    .then(data => {
-                        this.weather.temp = Math.round(data.main.temp);
-                        this.weather.feels_like = Math.round(data.main.feels_like);
-                        const id = data.weather[0].id;
-                        if (id === 800) this.weather.icon = 'fa-sun';
-                        else if (id >= 801) this.weather.icon = 'fa-cloud';
-                        else if (id >= 500) this.weather.icon = 'fa-cloud-rain';
-                        else this.weather.icon = 'fa-cloud-sun';
-                    })
-                    .catch(() => { this.weather.temp = 12; this.weather.icon = 'fa-cloud'; });
-                },
-                convert(type) {
-                    if (type === 'aud') this.calcHkd = (this.calcAud * this.exchangeRate).toFixed(1);
-                    else this.calcAud = (this.calcHkd / this.exchangeRate).toFixed(2);
-                },
-                // ✅ V53: 獨立的雙地圖開啟功能
                 openMap(loc, provider) { 
                     if(!loc) return;
-                    if(provider === 'apple') {
-                        window.open(`http://maps.apple.com/?q=` + encodeURIComponent(loc), '_blank'); 
-                    } else {
-                        window.open(`https://www.google.com/maps/search/?api=1&query=` + encodeURIComponent(loc), '_blank'); 
-                    }
+                    if(provider === 'apple') { window.open(`http://maps.apple.com/?q=` + encodeURIComponent(loc), '_blank'); }
+                    else { window.open(`https://www.google.com/maps/search/?api=1&query=` + encodeURIComponent(loc), '_blank'); }
                 },
-                openImage(src) { this.currentImageSrc = src; this.showImageModal = true; },
                 formatText(text) { return text ? String(text).replace(/\n/g, '<br>') : ''; },
-                tabClass(tab) { return this.currentTab === tab ? 'bg-tas-600 text-white w-12 h-12 rounded-full shadow-lg flex items-center justify-center transform scale-110 transition-all' : 'bg-white/90 text-tas-600 w-10 h-10 rounded-full shadow flex items-center justify-center transition-all'; },
-                getCategoryIcon(cat) { const map = { food: 'fa-utensils', transport: 'fa-car', shopping: 'fa-bag-shopping', ticket: 'fa-ticket', hotel: 'fa-bed', flight: 'fa-plane' }; return `fa-solid ${map[cat] || 'fa-circle'}`; },
-                getTransportIcon(type) { const map = { walk: 'fa-person-walking', train: 'fa-train', car: 'fa-car', bus: 'fa-bus', flight: 'fa-plane', ship: 'fa-ship' }; return `fa-solid ${map[type] || 'fa-arrow-right'}`; },
-                itemCategoryName(cat) { const map = { sightseeing: '景點', food: '美食', shopping: '購物', transport: '交通', hotel: '住宿', flight: '航班' }; return map[cat] || '其他'; },
-                openAddModal() { this.showModal = true; },
-                handleImageUpload(e) { const f = e.target.files[0]; if(f) { const r = new FileReader(); r.onload = (e) => this.newShopping.image = e.target.result; r.readAsDataURL(f); } },
-                confirmAdd() { 
-                    if (this.currentTab === 'itinerary' && this.newItem.title) {
-                        this.itineraryData[this.selectedDayIndex].push({...this.newItem, id: Date.now()});
-                        this.itineraryData[this.selectedDayIndex].sort((a,b) => a.time.localeCompare(b.time));
-                    } else if (this.currentTab === 'shopping' && this.newShopping.name) {
-                        this.shoppingList.push({...this.newShopping, id: Date.now()});
-                        localStorage.setItem('shoppingList_tas', JSON.stringify(this.shoppingList));
-                    } else if (this.currentTab === 'expenses' && this.newExpense.amount) {
-                        this.expenses.push({...this.newExpense, id: Date.now()});
-                        localStorage.setItem('expenses_tas', JSON.stringify(this.expenses));
-                    }
-                    this.showModal = false; 
-                },
-                deleteItem(id) { if(confirm('確定要刪除嗎?')) this.itineraryData[this.selectedDayIndex] = this.itineraryData[this.selectedDayIndex].filter(i => i.id !== id); },
-                removeShoppingItem(id) { this.shoppingList = this.shoppingList.filter(i => i.id !== id); localStorage.setItem('shoppingList_tas', JSON.stringify(this.shoppingList)); },
-                deleteExpense(id) { if(confirm('確定要刪除嗎?')) { this.expenses = this.expenses.filter(i => i.id !== id); localStorage.setItem('expenses_tas', JSON.stringify(this.expenses)); } },
-                moveItem(idx, dir) { 
-                    const list = this.itineraryData[this.selectedDayIndex];
-                    const target = idx + dir;
-                    if(target >= 0 && target < list.length) [list[idx], list[target]] = [list[target], list[idx]];
-                }
+                tabClass(tab) { return this.currentTab === tab ? 'bg-tas-600 text-white w-12 h-12 rounded-full shadow-lg flex items-center justify-center transform scale-110' : 'bg-white/90 text-tas-600 w-10 h-10 rounded-full shadow flex items-center justify-center'; },
+                getTransportIcon(type) { const map = { walk: 'fa-person-walking', car: 'fa-car', flight: 'fa-plane', ship: 'fa-ship' }; return `fa-solid ${map[type] || 'fa-arrow-right'}`; },
+                itemCategoryName(cat) { const map = { sightseeing: '景點', food: '美食', shopping: '購物', transport: '交通', hotel: '住宿', flight: '航班' }; return map[cat] || '其他'; }
             }
         }).mount('#app');
     </script>
